@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from testapp.views import TestappGet # 주소등록
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('API/testapp/', TestappGet , name='test')
 ]

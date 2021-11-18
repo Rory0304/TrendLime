@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-qr^2lcd39^3+cf%z@43_yosl7(ne9b=%(@boh&yi_=(0jgimf1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = '*'
 
 # Application definition
 
@@ -37,9 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',  #CORS 관련 추가
+    'testapp.apps.TestappConfig', #testapp 등록
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',    #CORS 관련 추가
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +54,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Config.urls'
+
+#CORS 관련 추가
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:3000' ,
+    'http://localhost:3000'
+] 
+
+CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {
