@@ -1,11 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect } from "react";
 
 function App() {
+
+  useEffect(() => {
+     try {
+            const res = await fetch('http://127.0.0.1:8000/api/');
+       console.log(res);
+        } catch (e) {
+            console.log(e);
+        }
+  }, [])
+  
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
