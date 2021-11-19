@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
 
-function Option({ options }) {
-    console.log(options);
+function Options({ options }) {
     return (
         <>
             {options.map((contents) => (
-                <li>{contents}</li>
+                <li>{contents.label}</li>
             ))}
         </>
     );
 }
 
-Option.propTypes = {
+Options.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default Option;
+export default Options;
