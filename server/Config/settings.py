@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',  #CORS 관련 추가
     'testapp.apps.TestappConfig', #testapp 등록
-
+    'survey.apps.SurveyConfig', #servey 등록
 ]
 
 MIDDLEWARE = [
