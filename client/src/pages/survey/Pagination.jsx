@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Pagination({ page, setPage }) {
+function Pagination({ page, setPage, isChoosed }) {
     const onClickNext = () => {
         setPage({
             ...page,
@@ -16,14 +16,18 @@ function Pagination({ page, setPage }) {
     };
 
     if (page.current === 0) {
-        return <button onClick={onClickNext}>다음</button>;
-    } else if (page.current === page.end) {
-        return <button>완료</button>;
+        return (
+            <button onClick={onClickNext} disabled={isChoosed ? false : true}>
+                다음
+            </button>
+        );
     } else {
         return (
             <>
                 <button onClick={onClickPrev}>이전</button>
-                <button onClick={onClickNext}>다음</button>
+                <button onClick={onClickNext} disabled={isChoosed ? false : true}>
+                    다음
+                </button>
             </>
         );
     }
