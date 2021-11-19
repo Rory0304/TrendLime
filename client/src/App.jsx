@@ -4,6 +4,7 @@ import axios from 'axios';
 import Router from './routers/Router';
 
 function App() {
+    /* 테스트 용도 */
     useEffect(() => {
         const test = async () => {
             try {
