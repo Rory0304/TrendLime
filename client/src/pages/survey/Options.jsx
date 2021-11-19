@@ -4,7 +4,7 @@ function Options({ options }) {
     return (
         <>
             {options.map((contents) => (
-                <li>{contents.label}</li>
+                <li key={contents.key}>{contents.label}</li>
             ))}
         </>
     );

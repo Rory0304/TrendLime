@@ -17,7 +17,7 @@ function Survey() {
     useLayoutEffect(() => {
         const getSurveySheet = async () => {
             try {
-                const res = await axios.get('http://127.0.0.1:8000/api/survey/');
+                const res = await axios.get('/api/survey/');
                 setSurveySheet(res.data);
                 setCurrent(res.data.require[0]);
                 setPage({ ...page, end: res.data.require.length });
