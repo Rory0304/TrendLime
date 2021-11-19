@@ -6,7 +6,7 @@ import json
 # Create your views here.
 @csrf_exempt
 def get(request):
-  music_style_answers = [{0: "신나는"}, {1: "발라드한"}, {2: "그루브한"},]
+  music_style_answers = [{'key': 0 ,'label': "신나는"}, {'key': 1, 'label': "발라드한"}, {'key': 2, "label": "그루브한"},]
 
   if request.method == 'GET':
     surveySheet = {
@@ -15,19 +15,19 @@ def get(request):
             {
                 "category": '뮤직 스타일',
                 "question": '당신이 선호하는 음악 스타일은 무엇인가요?',
-                "answers": [{ 0: '신나는' }, { 1: '발라드한' }, { 2: '그루브한' }],
+                "answers": music_style_answers,
                 "require": True,
             },
             {
                 "category": '장소/상황',
                 "question": '당신은 지금 어느 상황/장소에 있나요?',
-                "answers": [{ 0: '' }, { 1: '' }, { 2: '' }],
+                "answers": music_style_answers,
                 "require": True,
             },
             {
                 "category": '감정',
                 "question": '당신은 지금 어떤 감정을 가지고 있나요?',
-                "answers": [{ 0: '' }, { 1: '' }, { 2: '' }],
+                "answers": music_style_answers,
                 "require": True,
             },
         ],
@@ -35,19 +35,19 @@ def get(request):
             {
                 "category": '계절',
                 "question": '선호하는/지금 계절은 무엇인가요?',
-                "answers": [{ 0: '' }, { 1: '' }, { 2: '' }],
+                "answers": music_style_answers,
                 "require": False,
             },
             {
                 "category": '시간',
                 "question": '선호하는/지금 시간은 언제인가요?',
-                "answers": [{ 0: '' }, { 1: '' }, { 2: '' }],
+                "answers": music_style_answers,
                 "require": False,
             },
             {
                 "category": '날씨',
                 "question": '선호하는/지금 날씨는 무엇인가요?',
-                "answers": [{ 0: '' }, { 1: '' }, { 2: '' }],
+                "answers": music_style_answers,
                 "require": False,
             },
         ],
