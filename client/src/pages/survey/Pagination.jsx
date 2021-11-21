@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-
-import SurveyBtn from '../../common/Button/SurveyBtn';
+import { css, jsx } from '@emotion/react';
+import SurveyBtn from '../../common/Button';
 import { PaginationContext } from './Survey';
 
 /*
@@ -42,22 +42,27 @@ function Pagination({ isChoosed }) {
         });
     };
 
-    if (page.current === 0) {
-        return (
-            <SurveyBtn onClick={onClickNext} disabled={isChoosed ? false : true}>
-                다음
-            </SurveyBtn>
-        );
-    } else {
-        return (
-            <>
-                <SurveyBtn onClick={onClickPrev}>이전</SurveyBtn>
+    return (
+        <div css={PaginationWrapper}>
+            {page.current === 0 ? (
                 <SurveyBtn onClick={onClickNext} disabled={isChoosed ? false : true}>
                     다음
                 </SurveyBtn>
-            </>
-        );
-    }
+            ) : (
+                <>
+                    <SurveyBtn onClick={onClickPrev}>이전</SurveyBtn>
+                    <SurveyBtn onClick={onClickNext} disabled={isChoosed ? false : true}>
+                        다음
+                    </SurveyBtn>
+                </>
+            )}
+        </div>
+    );
 }
+
+const PaginationWrapper = css`
+    display: flex;
+    justify-content: center;
+`;
 
 export default Pagination;

@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
+import { css, jsx } from '@emotion/react';
 import PropTypes from 'prop-types';
 
+import Checkbox from '../../common/Checkbox/index';
 import { SurveyContext } from './Survey';
 
 /*
@@ -36,16 +38,18 @@ function Options({ options }) {
     };
 
     return (
-        <>
-            {options.map((contents) => (
-                <li key={contents.key} onClick={() => onChooseOption(contents.key)}>
-                    <label>
-                        <input type="checkbox" />
-                        {contents.label}
-                    </label>
-                </li>
-            ))}
-        </>
+        <div css={OptionsWrapperStyle}>
+            <ul>
+                {options.map((contents) => (
+                    <li
+                        key={`${contents.label}-${contents.key}`}
+                        onClick={() => onChooseOption(contents.key)}
+                    >
+                        <Checkbox>{contents.label}</Checkbox>
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 }
 
@@ -53,4 +57,12 @@ Options.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
+const OptionsWrapperStyle = css`
+    ul {
+        display: flex;
+        justify-content: center;
+        width: 70%;
+        margin: 0 auto;
+    }
+`;
 export default Options;

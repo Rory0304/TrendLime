@@ -7,7 +7,7 @@ import Question from './Question';
 import Options from './Options';
 import Pagination from './Pagination';
 import route from '../../routers/routeConstants';
-import useAsync from '../../hooks/useAsync';
+import useAsync from '../../common/utils/hooks/useAsync';
 
 export const SurveyContext = React.createContext();
 export const PaginationContext = React.createContext();
@@ -73,22 +73,28 @@ function Survey() {
                 <Categories category={category} />
                 {page.current < page.end && (
                     <>
-                        <SurveyContext.Provider value={[answerSheet, currentPage, setAnswerSheet]}>
-                            <Question question={currentPage.question} />
-                            <Options options={currentPage.answers} />
-                        </SurveyContext.Provider>
-                        <PaginationContext.Provider
-                            value={[
-                                page,
-                                setPage,
-                                setCurrentPage,
-                                surveySheet,
-                                setCategory,
-                                category,
-                            ]}
-                        >
-                            <Pagination isChoosed={isChoosed() === 0 ? false : true} />
-                        </PaginationContext.Provider>
+                        <div>
+                            <div>
+                                <SurveyContext.Provider
+                                    value={[answerSheet, currentPage, setAnswerSheet]}
+                                >
+                                    <Question question={currentPage.question} />
+                                    <Options options={currentPage.answers} />
+                                </SurveyContext.Provider>
+                            </div>
+                            <PaginationContext.Provider
+                                value={[
+                                    page,
+                                    setPage,
+                                    setCurrentPage,
+                                    surveySheet,
+                                    setCategory,
+                                    category,
+                                ]}
+                            >
+                                <Pagination isChoosed={isChoosed() === 0 ? false : true} />
+                            </PaginationContext.Provider>
+                        </div>
                     </>
                 )}
                 {page.current === page.end && (
