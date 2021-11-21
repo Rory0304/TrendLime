@@ -3,7 +3,7 @@ const route = {
     LOGIN: '/login',
     NOTFOUND: '/notfound',
     SURVEY: '/survey',
-    SURVEYRESULT: '/result',
+    SURVEYRESULT: '/survey/result',
 };
 
 export default route;
