@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import Categories from './Categories';
 import Question from './Question';
 import Options from './Options';
 import Pagination from './Pagination';
@@ -16,8 +18,10 @@ async function getSurveyData() {
 }
 
 function Survey() {
-    const [currentPage, setCurrentPage] = useState({});
+    const [surveySheet, setSurveySheet] = useState([]);
     const [answerSheet, setAnswerSheet] = useState([]);
+    const [category, setCategory] = useState({});
+    const [currentPage, setCurrentPage] = useState({});
     const [page, setPage] = useState({
         start: 0,
         current: 0,
@@ -30,12 +34,18 @@ function Survey() {
 
     useEffect(() => {
         if (data !== null) {
+            setSurveySheet([...state.data.require, ...state.data.optional]); //todo : 필수 설문과 선택 설문 분리
             setCurrentPage(state.data.require[0]);
-            setPage({ ...page, end: data.require.length });
+            setPage({ ...page, end: data.require.length + data.optional.length });
+            const newCategories = {};
+            state.data.category.map((c, index) => {
+                newCategories[c] = index === 0 ? true : false;
+            });
+            setCategory(newCategories);
         }
     }, [state]);
 
-    /* currentPage가 이미 선택을 했던  페이지인지 확인하는 함수 */
+    /* currentPage가 이미 선택을 했던 페이지인지 확인하는 함수 */
     const isChoosed = () => {
         const isChoosed = answerSheet.filter(
             (answer) => answer.categoryKey === currentPage.category,
@@ -60,21 +70,33 @@ function Survey() {
     } else {
         return (
             <>
+                <Categories category={category} />
                 {page.current < page.end && (
                     <>
                         <SurveyContext.Provider value={[answerSheet, currentPage, setAnswerSheet]}>
                             <Question question={currentPage.question} />
                             <Options options={currentPage.answers} />
                         </SurveyContext.Provider>
-                        <PaginationContext.Provider value={[page, setPage, setCurrentPage, data]}>
+                        <PaginationContext.Provider
+                            value={[
+                                page,
+                                setPage,
+                                setCurrentPage,
+                                surveySheet,
+                                setCategory,
+                                category,
+                            ]}
+                        >
                             <Pagination isChoosed={isChoosed() === 0 ? false : true} />
                         </PaginationContext.Provider>
                     </>
                 )}
                 {page.current === page.end && (
-                    <Link to={route.SURVEYRESULT}>
-                        <button onClick={submitAnswers}>추천 결과 보기</button>
-                    </Link>
+                    <>
+                        <Link to={route.SURVEYRESULT}>
+                            <button onClick={submitAnswers}>추천 결과 보기</button>
+                        </Link>
+                    </>
                 )}
             </>
         );
