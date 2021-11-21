@@ -1,23 +1,41 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
 import Question from './Question';
 import Options from './Options';
 import Pagination from './Pagination';
 import route from '../../routers/routeConstants';
+import useAsync from '../../hooks/useAsync';
+
+export const SurveyContext = React.createContext();
+export const PaginationContext = React.createContext();
+
+async function getSurveyData() {
+    const res = await axios.get('/api/survey');
+    return res.data;
+}
 
 function Survey() {
-    const [surveySheet, setSurveySheet] = useState({});
-    const [currentPage, setCurrent] = useState({});
+    const [currentPage, setCurrentPage] = useState({});
+    const [answerSheet, setAnswerSheet] = useState([]);
     const [page, setPage] = useState({
         start: 0,
         current: 0,
         end: 0,
     });
-    const [answerSheet, setAnswerSheet] = useState([]);
 
-    /* 이미 선택한 질문인지 확인하는 함수 */
+    /* 백엔드에 설문지를 요청 */
+    const [state, fetchData] = useAsync(getSurveyData);
+    const { loading, data, error } = state;
+
+    useEffect(() => {
+        if (data !== null) {
+            setCurrentPage(state.data.require[0]);
+            setPage({ ...page, end: data.require.length });
+        }
+    }, [state]);
+
+    /* currentPage가 이미 선택을 했던  페이지인지 확인하는 함수 */
     const isChoosed = () => {
         const isChoosed = answerSheet.filter(
             (answer) => answer.categoryKey === currentPage.category,
@@ -25,24 +43,7 @@ function Survey() {
         return isChoosed.length;
     };
 
-    /* 선택지를 클릭할 때 이벤트 */
-    const onChooseOption = (optionKey) => {
-        const newChoice = {
-            categoryKey: currentPage.category,
-            answer: optionKey,
-        };
-
-        if (isChoosed() !== 0) {
-            const newAnswerSheet = answerSheet.map((answer) =>
-                answer.categoryKey === currentPage.category ? newChoice : answer,
-            );
-
-            setAnswerSheet(newAnswerSheet);
-        } else {
-            setAnswerSheet([...answerSheet, newChoice]);
-        }
-    };
-
+    /* 최종 answerSheet를 백엔드로 보내는 함수*/
     const submitAnswers = async () => {
         try {
             const res = await axios.post('/api/survey/result/', answerSheet);
@@ -52,48 +53,32 @@ function Survey() {
         }
     };
 
-    /* 백엔드에 질문지 요청 */
-    useLayoutEffect(() => {
-        const getSurveySheet = async () => {
-            try {
-                const res = await axios.get('/api/survey');
-                setSurveySheet(res.data);
-                setCurrent(res.data.require[0]);
-                setPage({ ...page, end: res.data.require.length });
-            } catch (e) {
-                console.log(e);
-            }
-        };
-        getSurveySheet();
-    }, []);
-
-    /* 페이지네이션 클릭시, 질문과 선택지 구성을 업데이트 */
-    useEffect(() => {
-        if (surveySheet.require) {
-            setCurrent(surveySheet.require[page.current]);
-        }
-    }, [page.current]);
-
-    return (
-        <div>
-            {page.current < page.end && (
-                <>
-                    <Question question={currentPage.question} />
-                    <Options options={currentPage.answers} onChooseOption={onChooseOption} />
-                    <Pagination
-                        page={page}
-                        setPage={setPage}
-                        isChoosed={isChoosed() === 0 ? false : true}
-                    />
-                </>
-            )}
-            {page.current === page.end && (
-                <Link to={route.SURVEYRESULT}>
-                    <button onClick={submitAnswers}>추천 결과 보기</button>
-                </Link>
-            )}
-        </div>
-    );
+    if (loading || data === null) {
+        return <div>Loading...</div>;
+    } else if (error) {
+        return <span>Error: {error.message}</span>;
+    } else {
+        return (
+            <>
+                {page.current < page.end && (
+                    <>
+                        <SurveyContext.Provider value={[answerSheet, currentPage, setAnswerSheet]}>
+                            <Question question={currentPage.question} />
+                            <Options options={currentPage.answers} />
+                        </SurveyContext.Provider>
+                        <PaginationContext.Provider value={[page, setPage, setCurrentPage, data]}>
+                            <Pagination isChoosed={isChoosed() === 0 ? false : true} />
+                        </PaginationContext.Provider>
+                    </>
+                )}
+                {page.current === page.end && (
+                    <Link to={route.SURVEYRESULT}>
+                        <button onClick={submitAnswers}>추천 결과 보기</button>
+                    </Link>
+                )}
+            </>
+        );
+    }
 }
 
 export default Survey;
