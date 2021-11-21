@@ -29,7 +29,6 @@ function Options({ options }) {
             const newAnswerSheet = answerSheet.map((answer) =>
                 answer.categoryKey === currentPage.category ? newChoice : answer,
             );
-
             setAnswerSheet(newAnswerSheet);
         } else {
             setAnswerSheet([...answerSheet, newChoice]);
@@ -40,7 +39,10 @@ function Options({ options }) {
         <>
             {options.map((contents) => (
                 <li key={contents.key} onClick={() => onChooseOption(contents.key)}>
-                    {contents.label}
+                    <label>
+                        <input type="checkbox" />
+                        {contents.label}
+                    </label>
                 </li>
             ))}
         </>
