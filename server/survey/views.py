@@ -5,7 +5,7 @@ import json
 
 from django.contrib.auth.models import User, Group
 from survey.models import Question, Option, User_history, Recommendation_result, Song
-# from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets
 # from survey.serializers import UserSerializer, GroupSerializer
 
 # Create your views here.
