@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from django.contrib.auth.models import User, Group
+from survey.models import Question, Option, User_history, Recommendation_result, Song
 # from rest_framework import permissions, viewsets
 # from survey.serializers import UserSerializer, GroupSerializer
 
