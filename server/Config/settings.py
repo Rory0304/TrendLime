@@ -20,13 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qr^2lcd39^3+cf%z@43_yosl7(ne9b=%(@boh&yi_=(0jgimf1'
+SECRET_KEY = 'django-insecure-zg%8_l^khhwp*s)6bqv^+ketd1i-m(6x2!kuzn*b&^x8*^k-&y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
 ALLOWED_HOSTS = '*'
+
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',  #CORS 관련 추가
     'testapp.apps.TestappConfig', #testapp 등록
     'survey.apps.SurveyConfig', #servey 등록
+    'rest_framework', # restframwork 등록
 ]
 
 MIDDLEWARE = [
@@ -54,14 +55,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Config.urls'
-
-#CORS 관련 추가
-CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1:3000' ,
-    'http://localhost:3000'
-] 
-
-CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {
@@ -85,13 +78,21 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'test_db',
+        'HOST': '127.0.0.1',
+        'PORT': 27017,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -115,15 +116,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
+# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'ko-kr'
 
+# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

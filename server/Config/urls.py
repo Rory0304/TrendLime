@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
 from testapp.views import TestappGet # 주소등록
 from survey.views import get, post
@@ -25,3 +25,25 @@ urlpatterns = [
     path('api/survey/', get, name='get'),
     path('api/survey/result/', post, name='post'),
 ]
+
+# from django.contrib import admin
+# from django.urls import path, include
+# from rest_framework import routers
+# from survey import views
+
+# from testapp.views import TestappGet # 주소등록
+# from survey.views import get, post
+
+# router = routers.DefaultRouter()
+# router.register(r'users', views.UserViewSet)
+# router.register(r'groups', views.GroupViewSet)
+
+# urlpatterns = [
+#     path('', include(router.urls)),
+#     path('admin/', admin.site.urls),
+#     path('API/testapp/', TestappGet , name='test'),
+#     path('api/survey/', get, name='get'),
+#     path('api/survey/result/', post, name='post'),
+#     path('api/auth/', include('rest_framework.urls', namespace='rest_framework'))
+# ]
+
