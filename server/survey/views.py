@@ -3,17 +3,52 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from rest_framework import permissions, viewsets
 from django.contrib.auth.models import User, Group
 from survey.models import Question, Option, User_history, Recommendation_result, Song
-from rest_framework import permissions, viewsets
-# from survey.serializers import UserSerializer, GroupSerializer
+from survey.serializers import QuestionSerializer, OptionSerializer, User_historySerializer, Recommendation_resultSerializer, SongSerializer, UserSerializer, GroupSerializer
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 @csrf_exempt
 def get(request):
+  """
+    필수질문 세 개와 비필수질문을 사용자에게 출제하는데
+    카테고리에 맞는 선택지를 랜덤으로 골라서 사용자에게 보여줌
+  """
   music_style_answers = [{ "key": 0, "label": '신나는' }, { "key": 0, "label": '그루브한' }, { "key": 0, "label": '슬픈' }],
 
   if request.method == 'GET':
+    # require = []
+    # for i in range(3):
+    #   question_queryset = Question.objects.all().filter(category_id == i)
+    #   option_queryset = Option.objects.all().filter(category_id == i).  # 아직 작성 다 안함
+    #   require.append({
+    #     "category": question_queryset.category,
+    #     "cateogory_key": question_queryset.category_id,
+    #     "question": question_queryset.question,
+    #     "options": option_queryset, # 아직 작성 다 안함
+    #     "require": True
+    #   })
+    # optional = []
+    # for i in range(3,6,1):       # 아직 작성 다 안함
+    #   question_queryset = Question.objects.get(category_id == i)
+    #   option_queryset = Option.objects.get(category_id == i).  # 아직 작성 다 안함
+    #   optional.append({
+    #     "category": question_queryset.category,
+    #     "cateogory_key": question_queryset.category_id,
+    #     "question": question_queryset.question,
+    #     "options": option_queryset, # 아직 작성 다 안함
+    #     "require": False
+    #   })
+
+    # surveySheet = {
+    #   "require": require,
+    #   "optional": optional
+    # }
+
     surveySheet = {
         "category": ['뮤직 스타일', '장소/상황', '감정', '계절', '시간', '날씨'],
         "require": [
@@ -70,12 +105,12 @@ def get(request):
 
 @csrf_exempt
 def post(request):
+  """
+    설문결과를 받으면 저장하고 그 결과에 맞는 노래를 추천함 그리고 그 추천결과도 저장함
+  """
   if request.method == 'POST':
-    # data = json.loads.str(request.body)
     data = (request.body)
     print('answer', data)
-    # for n in data:
-    #   print(n)
     context = {"result": "data sent"}
     return JsonResponse(context, status=200)#, safe=False)
   else:
@@ -83,21 +118,88 @@ def post(request):
     return JsonResponse(context, status=209)#, safe=False)
 
 
-# @csrf_exempt
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = User.objects.all().order_by('-date_joined')
-#     serializer_class = UserSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+
+@csrf_exempt
+class QuestionViewSet(viewsets.ModelViewSet): 
+  queryset = Question.objects.all() 
+  serializer_class = QuestionSerializer
 
 
-# @csrf_exempt
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+@csrf_exempt
+class OptionViewSet(viewsets.ModelViewSet): 
+  queryset = Option.objects.all() 
+  serializer_class = OptionSerializer
+
+
+@csrf_exempt
+@login_required
+class User_historyViewSet(viewsets.ModelViewSet): 
+  queryset = User_history.objects.all().order_by('-survey_date')
+  serializer_class = User_historySerializer
+
+
+@csrf_exempt
+class Recommendation_resultViewSet(viewsets.ModelViewSet): 
+  queryset = Recommendation_result.objects.all().order_by('-result_date') 
+  serializer_class = Recommendation_resultSerializer
+
+
+@csrf_exempt
+class SongViewSet(viewsets.ModelViewSet): 
+  queryset = Song.objects.all() 
+  serializer_class = SongSerializer
+
+
+@csrf_exempt
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+@csrf_exempt
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+##  사용자를 로그인, 로그아웃
+
+# def my_view(request):
+#     username = request.POST['username']
+#     password = request.POST['password']
+#     user = authenticate(request, username=username, password=password)
+#     if user is not None:
+#         login(request, user)
+#         # Redirect to a success page.
+#         ...
+#     else:
+#         # Return an 'invalid login' error message.
+#         ...
+
+
+# def logout_view(request):
+#     logout(request)
+#     # Redirect to a success page.
+
+
+## 로그인 데코레이션
+# @login_required
+
+
+## 사용자 등록 
+# >>> from django.contrib.auth.models import User
+# >>> user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+
+# # At this point, user is a User object that has already been saved
+# # to the database. You can continue to change its attributes
+# # if you want to change other fields.
+# >>> user.last_name = 'Lennon'
+# >>> user.save()

@@ -1,16 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import User
 # from django.url import reverse
 
 # Create your models here.
 
 class Question(models.Model):
-  '''
-  category_id
-  카테고리 cateogry
-  질문 question
-  필수질문여부 required
-  '''
-  category_id = models.CharField(max_length=50) #int [pk, increment] //auto-increment
+  """
+    Attributes:
+        * category_id (int) : 카테고리 id (F.K - )
+        * category (string) : 카테고리
+        * question (string) : 질문
+        * required (boolean) : 필수질문여부
+  """
+  category_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='CATEGORY_ID') #int [pk, increment] //auto-increment
   category = models.CharField(max_length=50)
   question = models.CharField(max_length=200)
   required = models.BooleanField(max_length=50)
@@ -26,13 +28,15 @@ class Question(models.Model):
 
 
 class Option(models.Model):
-  '''
-  option_id
-  카테고리 아이디 category_id
-  옵션 아이디 option
-  '''
-  option_id = models.CharField(max_length=50)
+  """
+    Attributes:
+        * option_id (int) : 선택지 ID
+        * category_id (string) : 카테고리 ID (F.K - Question.category_id)
+        * option (string) : 선택지
+  """
+  option_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='OPTION_ID')
   category_id = models.CharField(max_length=50)
+  # category_id = models.ForeignKey(Question)
   option = models.CharField(max_length=50)
 
   class Meta:
@@ -46,136 +50,135 @@ class Option(models.Model):
 
 
 class User_history(models.Model):
-  '''
-  history_id
-  설문응답날짜시간 survey_date
-  사영자id user_id
-  질문id category_id
-  답변id option_id
-  '''
-  history_id = models.CharField(max_length=50)
-  survey_date = models.DateField(auto_now_add=True)
+  """
+    Attributes:
+        * history_id (string) : 설문결과 ID
+        * survey_date (datetime) : 설문응답날짜시간
+        * user_id (string) : 사용자 ID (F.K - User.id)
+        * category_id (string) : 질문 ID
+        * option_id (string) : 선택지 ID
+  """
+  history_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='HISTORY_ID')
+  survey_date = models.DateTimeField(auto_now_add=True)
   user_id = models.CharField(max_length=50)
+  # user_id = models.ForeignKey(User, on_delete=models.CASCADE) # User 모델을 ForeignKey로 적용하여 선언. on_delete=models.CASCADE는 계정이 삭제되면 이 계정이 작성한 질문을 모두 삭제하라는 의미
   category_id = models.CharField(max_length=50)
   option_id = models.CharField(max_length=50)
 
   class Meta:
     verbose_name = 'user_history'
     db_table = 'tb_user_history'
-    # ordering = 'category_id'
+    # ordering = 'survey_date'
 
   def __str__(self):
     return self.survey_date
 
 
 class Recommendation_result(models.Model):
-  '''
-  result_id
-  survey_date
-  result_date
-  user_id
-  recommed_song
-  '''
-  result_id = models.CharField(max_length=50)
-  survey_date = models.DateField(auto_now_add=False)
-  result_date = models.DateField(auto_now_add=True)
+  """
+    Attributes:
+        * result_id (string) : 추천결과 ID
+        * survey_date (datetime) : 설문날짜시각
+        * result_date (datetime) : 결과날짜시각
+        * user_id (string) : 사용자 ID (F.K - User.id)
+        * recommed_song (string) : 추천곡
+  """
+  result_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='RESULT_ID')
+  survey_date = models.DateTimeField(auto_now_add=False)
+  result_date = models.DateTimeField(auto_now_add=True)
   user_id = models.CharField(max_length=50)
+  # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
   recommed_song = models.CharField(max_length=50)
 
   class Meta:
     verbose_name = 'recommendation_result'
     db_table = 'tb_recommendation_result'
-    # ordering = 'category_id'
+    # ordering = 'result_date'
 
   def __str__(self):
     return self.result_date
 
 
-class Song(models.Model):   
-  '''         
-  song_id 
-  노래제목         song_name
-  가수            artist
-  앨범            album
-  좋아요수         Like_Count
-  가사            Lyric
-  앨범커버         cover_url
-  단어            words
-  유튜브주소        youtube_url
-  - 뮤직 스타일         
-  신나는           exciting
-  발라드한         ballad 
-  그루브한         grooved  
-  감성적인         emotional  
-  어쿠스틱한       acoustic    
-  일렉트로닉       electronic     
-  달달한          sweet  
-  몽환적인         dreamy
-  강한            strong  
-  잔잔한           windless   
-  올디스          oldies 
-  애절한          sad
-  감각적인         sensual 
-  섹시한          sexy
-  쓸쓸한          lonesome
-  소울풀한         soulful
-  청량한          refreshing
-  - 계절          
-  봄             spring
-  여름            summer
-  가을            autumn
-  겨울            winter
-  - 시간          
-  아침            morning
-  오후            afternoon
-  저녁            dinner
-  밤/새벽         night_dawn
-  - 날씨          
-  화창한날         sunny
-  비/흐림         rain_cloudy
-  눈오는날         snowy
-  비온후/맑게갠     after_rain_clear   
-  선선한          cool
-  쌀쌀한          chilly
-  - 상황/장소         
-  드라이브         drive
-  운동/헬스        exercise_health 
-  등교/출근길       on_the_way_to_school  
-  하교/퇴근길       on_the_way_home  
-  휴식/명상         relaxation_meditation
-  클럽/파티         club_party
-  카페            cafe
-  노래방          karaoke
-  산책/여행        in_the_reading_room 
-  사무실          walk_trip
-  편집숍/매장      office   
-  독서방안에서      select_shop_store    
-  호텔/바         hotel_bar
-  잠들기전         before_sleeping 
-  결혼            marriage
-  페스티벌         festival 
-  패션쇼          fashion_show
-  혼술혼밥         eat_alone 
-  공부할때         when_studying 
-  - 감정/기분         
-  사랑/기쁨        love_joy 
-  이별/슬픔         farewell_sad
-  스트레스/짜증      stress_irritability   
-  우울할때          when_depressed
-  지치고힘들때       when_you_are_tired   
-  멘붕/불안        mental_anxiety 
-  그리움          longing
-  외로울때         when_youre_lonely 
-  썸탈때          something
-  고백            ask_out
-  울고싶을때        when_you_want_to_cry
-  새벽감성          dawn
-  싱숭생숭          bubbly
-  설렘/심쿵         excitement_heart
-  기분전환          diversion
-  힐링          healing
-  '''         
-  song_id = models.CharField(max_length=50)
+class Song(models.Model):  
+  """
+    Attributes:
+        * song_id (string) : song_id
+        * song_name (string) : 노래제목
+        * artist (string) : 가수
+        * album (string) : 앨범
+        * Like_Count (string) : 좋아요수
+        * Lyric (string) : 가사
+        * cover_url (string) : 앨범커버
+        * words (string) : 단어
+        * youtube_url (string) : 유튜브주소
+        * exciting (string) : 신나는
+        * ballad (string) : 발라드한
+        * grooved (string) : 그루브한
+        * emotional (string) : 감성적인
+        * acoustic (string) : 어쿠스틱한
+        * electronic (string) : 일렉트로닉
+        * sweet (string) : 달달한
+        * dreamy (string) : 몽환적인
+        * strong (string) : 강한
+        * windless (string) : 잔잔한
+        * oldies (string) : 올디스
+        * sad (string) : 애절한
+        * sensual (string) : 감각적인
+        * sexy (string) : 섹시한
+        * lonesome (string) : 쓸쓸한
+        * soulful (string) : 소울풀한
+        * refreshing (string) : 청량한
+        * spring (string) : 봄
+        * summer (string) : 여름
+        * autumn (string) : 가을
+        * winter (string) : 겨울
+        * morning (string) : 아침
+        * afternoon (string) : 오후
+        * dinner (string) : 저녁
+        * night_dawn (string) : 밤/새벽
+        * sunny (string) : 화창한날
+        * rain_cloudy (string) : 비/흐림
+        * snowy (string) : 눈오는날
+        * after_rain_clear (string) : 비온후/맑게갠
+        * cool (string) : 선선한
+        * chilly (string) : 쌀쌀한
+        * drive (string) : 드라이브
+        * exercise_health (string) : 운동/헬스
+        * on_the_way_to_school (string) : 등교/출근길
+        * on_the_way_home (string) : 하교/퇴근길
+        * relaxation_meditation (string) : 휴식/명상
+        * club_party (string) : 클럽/파티
+        * cafe (string) : 카페
+        * karaoke (string) : 노래방
+        * in_the_reading_room (string) : 산책/여행
+        * walk_trip (string) : 사무실
+        * office (string) : 편집숍/매장
+        * select_shop_store (string) : 독서방안에서
+        * hotel_bar (string) : 호텔/바
+        * before_sleeping (string) : 잠들기전
+        * marriage (string) : 결혼
+        * festival (string) : 페스티벌
+        * fashion_show (string) : 패션쇼
+        * eat_alone (string) : 혼술혼밥
+        * when_studying (string) : 공부할때
+        * love_joy (string) : 사랑/기쁨
+        * farewell_sad (string) : 이별/슬픔
+        * stress_irritability (string) : 스트레스/짜증
+        * when_depressed (string) : 우울할때
+        * when_you_are_tired (string) : 지치고힘들때
+        * mental_anxiety (string) : 멘붕/불안
+        * longing (string) : 그리움
+        * when_youre_lonely (string) : 외로울때
+        * something (string) : 썸탈때
+        * ask_out (string) : 고백
+        * when_you_want_to_cry (string) : 울고싶을때
+        * dawn (string) : 새벽감성
+        * bubbly (string) : 싱숭생숭
+        * excitement_heart (string) : 설렘/심쿵
+        * diversion (string) : 기분전환
+        * healing (string) : 힐링
+  """     
+  song_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='SONG_ID')
   song_name = models.CharField(max_length=50)
   artist = models.CharField(max_length=50)
   album = models.CharField(max_length=50)
@@ -183,7 +186,6 @@ class Song(models.Model):
   Lyric = models.CharField(max_length=50)
   cover_url = models.CharField(max_length=50)
   words = models.CharField(max_length=50)
-  label = models.CharField(max_length=50)
   youtube_url = models.CharField(max_length=50)
   exciting = models.CharField(max_length=50)
   ballad = models.CharField(max_length=50)
@@ -260,3 +262,20 @@ class Song(models.Model):
 
   def __str__(self):
     return self.song_id
+
+'''
+-User-
+id
+password
+last_login
+is_superuser
+username
+first_name
+last_name
+email
+is_staff
+is_active
+date_joined
+groups
+user_permissions
+'''

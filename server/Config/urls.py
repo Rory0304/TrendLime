@@ -14,36 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
 from testapp.views import TestappGet # 주소등록
-from survey.views import get, post
+from survey.views import get, post, QuestionViewSet, OptionViewSet, User_historyViewSet, Recommendation_resultViewSet, SongViewSet, UserViewSet, GroupViewSet
+from django.contrib.auth import views as auth_views
+
+# router = routers.DefaultRouter()
+# router.register(r'users', UserViewSet)
+# router.register(r'groups', GroupViewSet)
+# router.register(r'questions', QuestionViewSet)
+# router.register(r'options', OptionViewSet)
+# router.register(r'histories', User_historyViewSet)
+# router.register(r'results', Recommendation_resultViewSet)
+# router.register(r'songs', SongViewSet)
+
 
 urlpatterns = [
+    # path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('API/testapp/', TestappGet , name='test'),
     path('api/survey/', get, name='get'),
     path('api/survey/result/', post, name='post'),
+    path('api/login/',auth_views.LoginView, name='login'),
+    path('api/logout/',auth_views.LogoutView, name='logout'),
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
-
-# from django.contrib import admin
-# from django.urls import path, include
-# from rest_framework import routers
-# from survey import views
-
-# from testapp.views import TestappGet # 주소등록
-# from survey.views import get, post
-
-# router = routers.DefaultRouter()
-# router.register(r'users', views.UserViewSet)
-# router.register(r'groups', views.GroupViewSet)
-
-# urlpatterns = [
-#     path('', include(router.urls)),
-#     path('admin/', admin.site.urls),
-#     path('API/testapp/', TestappGet , name='test'),
-#     path('api/survey/', get, name='get'),
-#     path('api/survey/result/', post, name='post'),
-#     path('api/auth/', include('rest_framework.urls', namespace='rest_framework'))
-# ]
-
