@@ -33,6 +33,8 @@ def get(request):
             "options": data.option,
             "require": True
           })
+  
+    # 선택 설문에 대한 갯수 출제 방식이 정확하지 않음
     optional = []
     # for i in range(3,6):       # 아직 작성 다 안함
     a = random.randint(3,6)
@@ -71,7 +73,17 @@ def post(request):
     # 받은 설문 파일로 알맞은 음악 검색 및 결과 저장- 
     # recommend_result = Song.objects.filter()
     # Recommendation_result.objects.create(survey_date,user_id,recommed_song)
-    # context = {"result": recommend_result}
+    # recommend = []
+    # if recommend_result:
+    #   for data in recommend_result:
+    #     recommend.append({
+    #       'result_id' : result_id,
+    #       'survey_date' : survey_date,
+    #       'result_date' : result_date,
+    #       'user_id' : user_id,
+    #       'recommed_song' : recommed_song
+    #     })
+    # context = {"result": recommend}
     context = {"result": "data sent"}
     return JsonResponse(context, status=200)#, safe=False)
   else:
