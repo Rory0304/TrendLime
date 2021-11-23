@@ -18,7 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from testapp.views import TestappGet # 주소등록
-from survey.views import get, post, QuestionViewSet, OptionViewSet, User_historyViewSet, Recommendation_resultViewSet, SongViewSet, UserViewSet, GroupViewSet
+from survey.views import get, post, QuestionViewSet, User_historyViewSet, Recommendation_resultViewSet, SongViewSet, UserViewSet, GroupViewSet
 from django.contrib.auth import views as auth_views
 
 # router = routers.DefaultRouter()

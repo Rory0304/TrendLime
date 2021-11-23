@@ -10,11 +10,13 @@ class Question(models.Model):
         * category_id (int) : 카테고리 id (F.K - )
         * category (string) : 카테고리
         * question (string) : 질문
+        * option (string) : 선택지
         * required (boolean) : 필수질문여부
   """
   category_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='CATEGORY_ID') #int [pk, increment] //auto-increment
   category = models.CharField(max_length=50)
   question = models.CharField(max_length=200)
+  option = models.CharField(max_length=50)
   required = models.BooleanField(max_length=50)
 
   class Meta:
@@ -27,26 +29,26 @@ class Question(models.Model):
     return self.category
 
 
-class Option(models.Model):
-  """
-    Attributes:
-        * option_id (int) : 선택지 ID
-        * category_id (string) : 카테고리 ID (F.K - Question.category_id)
-        * option (string) : 선택지
-  """
-  option_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='OPTION_ID')
-  category_id = models.CharField(max_length=50)
-  # category_id = models.ForeignKey(Question)
-  option = models.CharField(max_length=50)
+# class Option(models.Model):
+#   """
+#     Attributes:
+#         * option_id (int) : 선택지 ID
+#         * category_id (string) : 카테고리 ID (F.K - Question.category_id)
+#         * option (string) : 선택지
+#   """
+#   option_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='OPTION_ID')
+#   category_id = models.CharField(max_length=50)
+#   # category_id = models.ForeignKey(Question)
+#   option = models.CharField(max_length=50)
 
-  class Meta:
-    verbose_name = 'option'
-    verbose_name_plural = 'options'
-    db_table = 'tb_option'
-    # ordering = 'category_id'
+#   class Meta:
+#     verbose_name = 'option'
+#     verbose_name_plural = 'options'
+#     db_table = 'tb_option'
+#     # ordering = 'category_id'
 
-  def __str__(self):
-    return self.option
+#   def __str__(self):
+#     return self.option
 
 
 class User_history(models.Model):
@@ -109,7 +111,6 @@ class Song(models.Model):
         * Like_Count (string) : 좋아요수
         * Lyric (string) : 가사
         * cover_url (string) : 앨범커버
-        * words (string) : 단어
         * youtube_url (string) : 유튜브주소
         * exciting (string) : 신나는
         * ballad (string) : 발라드한
@@ -185,7 +186,6 @@ class Song(models.Model):
   Like_Count = models.CharField(max_length=50)
   Lyric = models.CharField(max_length=50)
   cover_url = models.CharField(max_length=50)
-  words = models.CharField(max_length=50)
   youtube_url = models.CharField(max_length=50)
   exciting = models.CharField(max_length=50)
   ballad = models.CharField(max_length=50)

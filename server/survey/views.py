@@ -5,8 +5,8 @@ import json
 
 from rest_framework import permissions, viewsets
 from django.contrib.auth.models import User, Group
-from survey.models import Question, Option, User_history, Recommendation_result, Song
-from survey.serializers import QuestionSerializer, OptionSerializer, User_historySerializer, Recommendation_resultSerializer, SongSerializer, UserSerializer, GroupSerializer
+from survey.models import Question, User_history, Recommendation_result, Song
+from survey.serializers import QuestionSerializer, User_historySerializer, Recommendation_resultSerializer, SongSerializer, UserSerializer, GroupSerializer
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -24,18 +24,18 @@ def get(request):
     # require = []
     # for i in range(3):
     #   question_queryset = Question.objects.all().filter(category_id == i)
-    #   option_queryset = Option.objects.all().filter(category_id == i).  # 아직 작성 다 안함
+    # #  option_queryset = Option.objects.all().filter(category_id == i) #삭제됨
     #   require.append({
     #     "category": question_queryset.category,
     #     "cateogory_key": question_queryset.category_id,
     #     "question": question_queryset.question,
-    #     "options": option_queryset, # 아직 작성 다 안함
+    #     "options": question_queryset.option,
     #     "require": True
     #   })
     # optional = []
     # for i in range(3,6,1):       # 아직 작성 다 안함
     #   question_queryset = Question.objects.get(category_id == i)
-    #   option_queryset = Option.objects.get(category_id == i).  # 아직 작성 다 안함
+    #   option_queryset = Option.objects.get(category_id == i)
     #   optional.append({
     #     "category": question_queryset.category,
     #     "cateogory_key": question_queryset.category_id,
@@ -125,10 +125,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
   serializer_class = QuestionSerializer
 
 
-@csrf_exempt
-class OptionViewSet(viewsets.ModelViewSet): 
-  queryset = Option.objects.all() 
-  serializer_class = OptionSerializer
+# @csrf_exempt
+# class OptionViewSet(viewsets.ModelViewSet): 
+#   queryset = Option.objects.all() 
+#   serializer_class = OptionSerializer
 
 
 @csrf_exempt
