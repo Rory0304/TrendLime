@@ -265,17 +265,18 @@ class Song(models.Model):
 
 '''
 -User-
-id
-password
-last_login
-is_superuser
-username
-first_name
-last_name
-email
-is_staff
-is_active
-date_joined
-groups
-user_permissions
+
+{ 
+  "_id" : ObjectId("619c7b9dea1a98014163fdac"), 
+  "id" : 1, 
+  "password" : "pbkdf2_sha256$260000$m4cAhqddW0OcKdQftP94ad$jRWaz9zKIQGWrEqSDzc/cFAr/qw37/acAhPHxxXioW0=", 
+  "last_login" : ISODate("2021-11-23T14:27:07.667Z"), 
+  "is_superuser" : true, 
+  "username" : "admin", 
+  "first_name" : "", 
+  "last_name" : "", 
+  "email" : "", 
+  "is_staff" : true, 
+  "is_active" : true, 
+  "date_joined" : ISODate("2021-11-23T14:26:53.696Z") }
 '''
