@@ -30,22 +30,21 @@ def users_logout(request):
   return JsonResponse(result, status=201)
 
 
-## 로그인 데코레이션
-# @login_required
-
-
 @csrf_exempt
 def users_signup(request):
   print(request.POST)
-  if request.method=="POST":
+  if request.method == "POST":
     print(request.POST)
-    first_name=request.POST["first_name"]
-    email=request.POST["email"]
-    password=request.POST["password"]
+    
+    username = request.POST["username"]
+    password = request.POST["password"]
+    email = request.POST["email"]
+    first_name = request.POST["first_name"]
 
-    user=User.objects.create_user(username,email,password)
-    user.first_name = first_name
-    user.save()
+    user = User.objects.create_user(username, email, password)
+    if first_name:
+      user.first_name = first_name
+      user.save()
     result={"result" : "회원가입 성공"}
 
   return JsonResponse(result, status=201)
