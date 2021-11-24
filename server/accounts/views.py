@@ -38,11 +38,13 @@ def users_logout(request):
 def users_signup(request):
   print(request.POST)
   if request.method=="POST":
-    id=request.POST["id"]
-    username=request.POST["username"]
+    print(request.POST)
+    first_name=request.POST["first_name"]
+    email=request.POST["email"]
     password=request.POST["password"]
 
     user=User.objects.create_user(username,email,password)
+    user.first_name = first_name
     user.save()
     result={"result" : "회원가입 성공"}
 
