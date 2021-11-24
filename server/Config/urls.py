@@ -21,7 +21,7 @@ from testapp.views import TestappGet # 주소등록
 from survey.views import get, post, QuestionViewSet, User_historyViewSet, Recommendation_resultViewSet, SongViewSet, UserViewSet, GroupViewSet
 from django.contrib.auth import views as auth_views
 
-# router = routers.DefaultRouter()
+router = routers.DefaultRouter()
 # router.register(r'users', UserViewSet)
 # router.register(r'groups', GroupViewSet)
 # router.register(r'questions', QuestionViewSet)
@@ -32,12 +32,11 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    # path('', include(router.urls)),
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('API/testapp/', TestappGet , name='test'),
     path('api/survey/', get, name='get'),
     path('api/survey/result/', post, name='post'),
-    path('api/login/',auth_views.LoginView, name='login'),
-    path('api/logout/',auth_views.LogoutView, name='logout'),
+    path('auth/', include('accounts.urls')),
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

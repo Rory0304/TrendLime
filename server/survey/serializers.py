@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from survey.models import Question, User_history, Recommendation_result, Song
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+from accounts.models import User
 
 class QuestionSerializer(serializers.ModelSerializer):
   class Meta: 

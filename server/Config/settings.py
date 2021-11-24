@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'testapp.apps.TestappConfig', #testapp 등록
     'survey.apps.SurveyConfig', #servey 등록
     'rest_framework', # restframwork 등록
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,9 @@ DATABASES = {
         'PORT': 27017,
     }
 }
+
+#AUTH_USER_MODEL = '앱이름.모델이름'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

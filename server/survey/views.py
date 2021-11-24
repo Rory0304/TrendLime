@@ -5,11 +5,11 @@ import json
 import random
 
 from rest_framework import permissions, viewsets
-from django.contrib.auth.models import User, Group
 from survey.models import Question, User_history, Recommendation_result, Song
 from survey.serializers import QuestionSerializer, User_historySerializer, Recommendation_resultSerializer, SongSerializer, UserSerializer, GroupSerializer
-
+from accounts.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -141,44 +141,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-##  사용자를 로그인, 로그아웃
-
-# def my_view(request):
-#     username = request.POST['username']
-#     password = request.POST['password']
-#     user = authenticate(request, username=username, password=password)
-#     if user is not None:
-#         login(request, user)
-#         # Redirect to a success page.
-#         ...
-#     else:
-#         # Return an 'invalid login' error message.
-#         ...
-
-
-# def logout_view(request):
-#     logout(request)
-#     # Redirect to a success page.
-
-
-## 로그인 데코레이션
-# @login_required
-
-
-## 사용자 등록 
-# >>> from django.contrib.auth.models import User
-# >>> user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-
-# # At this point, user is a User object that has already been saved
-# # to the database. You can continue to change its attributes
-# # if you want to change other fields.
-# >>> user.last_name = 'Lennon'
-# >>> user.save()
-
-
-
 
 
 
