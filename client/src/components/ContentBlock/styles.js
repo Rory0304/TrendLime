@@ -31,7 +31,7 @@ Styled.Content = styled.p`
 `;
 
 Styled.Button = styled.button`
-    background: rgb(46, 24, 106);
+    background-color: rgb(46, 24, 106);
     color: rgb(255, 255, 255);
     font-size: 1rem;
     font-weight: 700;
@@ -42,6 +42,6 @@ Styled.Button = styled.button`
     cursor: pointer;
     margin-top: 0.625rem;
     max-width: 180px;
-    transition: all 0.3s ease-in-out 0s;
+    transition: background-color 0.3s ease-in-out 0s;
     box-shadow: rgb(23 31 114 / 20%) 0px 16px 30px;
 `;

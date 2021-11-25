@@ -7,17 +7,16 @@ Styled.ScrollUpBox = styled.div`
     position: fixed;
     right: 30px;
     bottom: 30px;
-    z-index: 10;
     cursor: pointer;
-    background: rgb(241, 242, 243);
+    background-color: rgb(241, 242, 243);
     text-align: center;
-    align-items: center;
     border-radius: 4px;
-    transition: all 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+    z-index: 1;
 
     &:hover,
     &:active,
     &:focus {
-        background: rgb(224, 224, 224);
+        background-color: rgb(224, 224, 224);
     }
 `;
