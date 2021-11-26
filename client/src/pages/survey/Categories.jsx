@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { primaryColor } from '../../common/Styles';
+import { primaryColor } from '../../common/constants/Styles';
 
 function Categories({ category }) {
     return (

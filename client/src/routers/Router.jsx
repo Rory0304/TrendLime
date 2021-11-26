@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import route from './routeConstants';
-import Header from '../components/Header';
+import Header from '../components/Header/index';
 import MainPage from '../pages/main/MainPage';
 import Survey from '../pages/survey/Survey';
 import SurveyResult from '../pages/surveyResult/SurveyResult';
