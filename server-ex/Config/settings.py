@@ -9,19 +9,30 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
-from pathlib import Path
 import os
+import json
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+secret_file = os.path.join(BASE_DIR, "secrets.json")
+secrets = None
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nf%^0t%il88g2ffi*ujx3mhy^%q8#)b^(ov5&t8j34krgb1vo('
+SECRET_KEY = 'django-insecure-zg%8_l^khhwp*s)6bqv^+ketd1i-m(6x2!kuzn*b&^x8*^k-&y'
+
+# KAKAO OAUTH인증을 위한 키
+SOCIAL_OUTH_CONFIG = {
+    "KAKAO_REST_API_KEY": secrets['KAKAO_REST_API_KEY'],
+    "KAKAO_REDIRECT_URI": secrets['KAKAO_REDIRECT_URI'],
+    "KAKAO_SECRET_KEY": secrets['KAKAO_SECRET_KEY']
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,9 +49,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'corsheaders',  #CORS 관련 추가
-    'search.apps.SearchConfig', # search 앱 추가
+    'rest_framework', # restframework 등록
+    'testapp.apps.TestappConfig', #testapp 등록
+    'survey.apps.SurveyConfig', #servey 등록
+    'accounts.apps.AccountsConfig',
+    'django.contrib.sites', # kakao Oauth를 위한 등록
+    'ranking.apps.RankingCongig', # ranking 등록
 ]
 
 MIDDLEWARE = [
@@ -55,14 +70,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Config.urls'
-
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
 
 TEMPLATES = [
     {
@@ -96,11 +103,14 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'lyric_trend_db',
+        'NAME': 'musiclog_db',
         'HOST': '127.0.0.1',
         'PORT': 27017,
     }
 }
+
+#AUTH_USER_MODEL = '앱이름.모델이름'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -142,8 +152,6 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # 추가
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

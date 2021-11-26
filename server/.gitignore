@@ -1,7 +1,1 @@
-# Environments
-.env
-.venv
-env/
 venv/
-ENV/
-
