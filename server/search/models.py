@@ -89,7 +89,7 @@ class Song(models.Model):
   Lyric = models.CharField(max_length=500)
   cover_url = models.CharField(max_length=200)
   # youtube_url = models.CharField(max_length=200)
-  tags = models.CharField(max_length=500)
+  # tags = models.CharField(max_length=500)
 
   class Meta:
     verbose_name = 'song'

@@ -12,9 +12,11 @@ from search.serializers import UserSerializer, SongSerializer
 
 def search(request):
   search_word = json.loads(request.body)
+  print(search_word)
+  # search_word를 확인 하고 검색어 특정할 것
   result_list=[]
 
-  queryset = Song.objects.filter(컬럼명__icontains=search_word)[0:20]
+  queryset = Song.objects.filter(song_name__icontains=search_word)[0:20]
   if queryset:
     for data in queryset:
       result_list.append({
