@@ -80,9 +80,10 @@ class Song(models.Model):
             - excitement_heart (string) : 설렘/심쿵
             - diversion (string) : 기분전환
             - healing (string) : 힐링
+        * year : 발매년도
   """     
   song_id = models.CharField(max_length=100)
-  song_name = models.CharField(max_length=100)
+  song_name = models.TextField#CharField(max_length=100)
   artist = models.CharField(max_length=100)
   album = models.CharField(max_length=100)
   Like_Count = models.CharField(max_length=50)
@@ -90,12 +91,13 @@ class Song(models.Model):
   cover_url = models.CharField(max_length=200)
   # youtube_url = models.CharField(max_length=200)
   tags = models.CharField(max_length=500)
+  year = models.CharField(max_length=4)
 
   class Meta:
     verbose_name = 'song'
     verbose_name_plural = 'songs'
     db_table = 'tb_song'
-    # ordering = 'category_id'
+    # ordering = 'song_name'
 
   def __str__(self):
     return self.song_id
