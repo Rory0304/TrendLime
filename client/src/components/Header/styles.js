@@ -3,9 +3,7 @@ import styled from '@emotion/styled';
 export const Styled = {};
 
 Styled.Header = styled.header`
-    padding: 1rem 0.5rem;
-    width: 100%;
-    max-width: 1200px;
+    padding: 1.5rem 3rem 3rem 3rem;
     margin: 0 auto;
 `;
 
@@ -25,9 +23,14 @@ Styled.HeaderWrapper = styled.div`
 
 Styled.HeaderLogo = styled.div``;
 
-Styled.HeaderMenu = styled.div`
+Styled.HeaderMenu = styled.nav`
+    width: 15%;
+`;
+
+Styled.HeaderMenuWrapper = styled.ul`
     display: flex;
     align-items: center;
+    justify-content: space-between;
 `;
 
 Styled.LoginBtn = styled.div`
