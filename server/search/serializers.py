@@ -7,10 +7,10 @@ from search.models import Song
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        fields = ['url', "id", "username", "password", "email", "first_name", "last_name", "is_active", "last_login", "is_superuser", "date_joined", "is_staff"]
 
 
 class SongSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Song
-        fields = ['song_id', 'song_name', 'artist', 'album', 'Like_Count', 'Lyric', 'cover_url'] #, 'tags']
+        fields = ['song_id', 'song_name', 'artist', 'album', 'Like_Count', 'Lyric', 'cover_url', 'tags']
