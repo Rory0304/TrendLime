@@ -13,17 +13,22 @@ from search.serializers import UserSerializer, SongSerializer
 # Create your views here.
 
 def search(request):
+  # a = json.loads(request.body)
+  # print('a',a)
   search_word = json.loads(request.body)['q']
 
   # 다른 옵션을 추가로 검색을 할 경우
-  # selected_tag = json.loads(request.body)['tag']
-  # tag_content = json.loads(request.body)['tag_content']
-
+  selected_tag = json.loads(request.body)['selected_tag']
+  fieldname_icontains = selected_tag + '__icontains'
+  print('fieldname_icontains',fieldname_icontains)
+  tag_content = json.loads(request.body)['tag_content']
   # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
   # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
-  
+
   result_list=[]
-  queryset_list = Song.objects.filter(song_name__icontains = f'{search_word}')
+  queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+  queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  queryset_list =queryset_list1 & queryset_list2
 
   if queryset_list.exists():
     for queryset in queryset_list:
