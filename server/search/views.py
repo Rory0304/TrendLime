@@ -23,25 +23,33 @@ def search(request):
   print('queryset_list',queryset_list)
 
   # 1 안
-  if Song.objects.filter(song_name__contains= '${search_word}').exists():
-    # queryset_list = Song.objects.all()
-    queryset_list = Song.objects.filter(song_name__contains= '${search_word}')
-    print('queryset_list',queryset_list)
+  if queryset_list.exists():
     for queryset in queryset_list:
-      print('queryset',queryset)
-      for data in queryset:
-        print('data',data)
-        result_list.append({
-          'song_id' : data[0],
-          'song_name' : data[1],
-          'artist' : data[2],
-          'album' : data[3],
-          'Like_Count' : data[4],
-          'Lyric' : data[5],
-          'cover_url' : data[6],
-          'tags' : data[7],
-          'year' : data[8]
+      # print('queryset',queryset.song_name)
+      result_list.append({
+          'song_id' : queryset.song_id,
+          'song_name' : queryset.song_name,
+          'artist' : queryset.artist,
+          'album' : queryset.album,
+          'Like_Count' : queryset.Like_Count,
+          'Lyric' : queryset.Lyric,
+          'cover_url' : queryset.cover_url,
+          'tags' : queryset.tags,
+          'year' : queryset.year,
         })
+      # for data in queryset:
+      #   print('data',data.song_id)
+        # result_list.append({
+        #   'song_id' : queryset[0],
+        #   'song_name' : queryset[1],
+        #   'artist' : queryset[2],
+        #   'album' : queryset[3],
+        #   'Like_Count' : queryset[4],
+        #   'Lyric' : queryset[5],
+        #   'cover_url' : queryset[6],
+        #   'tags' : queryset[7],
+        #   'year' : queryset[8]
+        # })
   else:
     print('2')
     result_list.append(None) 

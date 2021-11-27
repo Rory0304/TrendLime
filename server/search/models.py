@@ -83,7 +83,7 @@ class Song(models.Model):
         * year : 발매년도
   """     
   song_id = models.CharField(max_length=100)
-  song_name = models.TextField#CharField(max_length=100)
+  song_name = models.CharField(max_length=100)
   artist = models.CharField(max_length=100)
   album = models.CharField(max_length=100)
   Like_Count = models.CharField(max_length=50)
