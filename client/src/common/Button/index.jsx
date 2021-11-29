@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Styled } from './styles';
 
-function SurveyBtn({ onClick, children, disabled = false }) {
+function Button({ type = 'outline', link, text }) {
     return (
-        <Styled.Button onClick={onClick} disabled={disabled}>
-            {children}
-        </Styled.Button>
+        <Link to={link}>
+            <Styled.Button type={type}>{text}</Styled.Button>
+        </Link>
     );
 }
 
-export default SurveyBtn;
+export default Button;
