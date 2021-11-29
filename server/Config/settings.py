@@ -97,8 +97,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'lyric_trend_db',
-        'HOST': '127.0.0.1',
-        'PORT': 27017,
+        'HOST': '0.0.0.0',
+        'PORT': 21,
     }
 }
 
