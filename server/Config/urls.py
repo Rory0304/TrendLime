@@ -36,6 +36,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('api/search/', search, name='search'),
-    path('api/get_tags/', get_category_and_tags, name='get_category_and_tags')
+    # path('api/tags/', get_category_and_tags, name='get_category_and_tags')
 
 ]

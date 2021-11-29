@@ -1,4 +1,4 @@
-id.auto(),tag_id.string(),tag_name.string(),variable_id.string(),variable_name.string(),variable_name_en.string()
+id.auto(),category_id.string(),category_name.string(),tag_id.string(),tag_name.string(),tag_name_en.string()
 0,1,뮤직 스타일,0,신나는,exciting,
 1,1,뮤직 스타일,1,발라드한,ballad,
 2,1,뮤직 스타일,2,그루브한,grooved,

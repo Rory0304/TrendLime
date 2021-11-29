@@ -23,7 +23,7 @@ class Song_without_yearSerializer(serializers.HyperlinkedModelSerializer):
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
-        fields = ['url', 'tag_id', 'tag_name', 'variable_id', 'variable_name', 'variable_name_en']
+        fields = ['url', 'category_id', 'category_name', 'tag_id', 'tag_name', 'tag_name_en']
 
 # class Tag_variableSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:

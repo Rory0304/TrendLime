@@ -156,16 +156,16 @@ class Song_without_year(models.Model):
 class Tag(models.Model):  
   """
     Attributes:
-      * tag_id : 상위 태그(카테고리) id 
-      * tag_name : 상위 태그(카테고리) 이름
+      * category_id : 상위 태그(카테고리) id 
+      * category_name : 상위 태그(카테고리) 이름
         - 뮤직 스타일 : 1
         - 계절 : 2
         - 시간 : 3
         - 날씨 : 4
         - 상황/장소 : 5
         - 감정/기분 : 6
-      * variable_id : 태그 id
-      * variable_name : 태그이름
+      * tag_id : 태그 id
+      * tag_name : 태그이름
         - 뮤직 스타일
           - exciting (string) : 신나는 
           - ballad (string) : 발라드한
@@ -244,11 +244,11 @@ class Tag(models.Model):
           - diversion (string) : 기분전환
           - healing (string) : 힐링
   """     
+  category_id = models.CharField(max_length=100)
+  category_name = models.CharField(max_length=100)
   tag_id = models.CharField(max_length=100)
   tag_name = models.CharField(max_length=100)
-  variable_id = models.CharField(max_length=100)
-  variable_name = models.CharField(max_length=100)
-  variable_name_en = models.CharField(max_length=100)
+  tag_name_en = models.CharField(max_length=100)
 
   class Meta:
     verbose_name = 'tag'
