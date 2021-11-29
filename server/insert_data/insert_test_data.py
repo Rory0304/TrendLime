@@ -1,5 +1,6 @@
 
-mongoimport --db=lyric_trend_db --collection=tb_song --type=csv --headerline --file=years.csv --columnsHaveTypes
+mongoimport --db=lyric_trend_db --collection=tb_song --type=csv --headerline --file=songs_with_years.csv --columnsHaveTypes
+mongoimport --db=lyric_trend_db --collection=tb_song --type=csv --headerline --file=songs_without_year.csv --columnsHaveTypes
 mongoimport --db=lyric_trend_db --collection=tb_tag --type=csv --headerline --file=tags.csv --columnsHaveTypes
 ## 인서트 에러날 경우 mongodb에서 db.my_coll.dropIndexes() 하고 위의 명령어 다시 실행하면 됨
 

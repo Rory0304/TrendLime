@@ -15,9 +15,9 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 def search(request):
   search_word = json.loads(request.body)['q']
   # 다른 옵션을 추가로 검색을 할 경우
-  selected_tag = json.loads(request.body)['selected_tag']
+  selected_tag = json.loads(request.body)['category']
   fieldname_icontains = selected_tag + '__icontains'
-  tag_content = json.loads(request.body)['tag_content']
+  tag_content = json.loads(request.body)['tag']
   # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
   # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
@@ -48,24 +48,24 @@ def search(request):
   context = {"result" : result_list}
   return JsonResponse(context, status = 200)
 
-def get_category_and_tags(request):
-  selected_category = json.loads(request.body)['select_category']
-  print('selected_category',selected_category)
-  result_list=[]
+# def get_category_and_tags(request):
+#   selected_category = json.loads(request.body)['select_category']
+#   print('selected_category',selected_category)
+#   result_list=[]
 
-  queryset_list = Tag.objects.filter(tag_name__icontains = f'{selected_category}')
-  print('queryset_list',queryset_list)
-  if queryset_list.exists:
-    for queryset in queryset_list:
-      result_list.append({
-        'tag_name' : queryset.tag_name,
-        'variable_name' : queryset.variable_name
-      })
-  else:
-    result_list.append(None) 
+#   queryset_list = Tag.objects.filter(tag_name__icontains = f'{selected_category}')
+#   print('queryset_list',queryset_list)
+#   if queryset_list.exists:
+#     for queryset in queryset_list:
+#       result_list.append({
+#         'tag_name' : queryset.tag_name,
+#         'variable_name' : queryset.variable_name
+#       })
+#   else:
+#     result_list.append(None) 
 
-  context = {"result" : result_list}
-  return JsonResponse(context, status = 200)
+#   context = {"result" : result_list}
+#   return JsonResponse(context, status = 200)
 
 
 # DRF views
