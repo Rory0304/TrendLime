@@ -24,7 +24,7 @@ from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_year
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'songs', SongViewSet)
-router.register(r'songs_without_yearViewSet', Song_without_yearViewSet)
+router.register(r'songs_without_year', Song_without_yearViewSet)
 router.register(r'tags', TagViewSet)
 # router.register(r'variables', Tag_variableViewSet)
 

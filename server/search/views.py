@@ -16,19 +16,24 @@ def search(request):
   search_word = json.loads(request.body)['q']
   # 다른 옵션을 추가로 검색을 할 경우
   selected_tag = json.loads(request.body)['category']
+  if not selected_tag:
+    selected_tag = "tags"
+
   fieldname_icontains = selected_tag + '__icontains'
   tag_content = json.loads(request.body)['tag']
   # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
   # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
   result_list=[]
-  queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-  queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+  # queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
+  queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
 
   if queryset_list2:
-    queryset_list = queryset_list1 & queryset_list2
+    queryset_list = (queryset_list3 & queryset_list4).order_by('-Like_Count')#, 'year')
   else : 
-    queryset_list = queryset_list1
+    queryset_list = queryset_list3.order_by('-Like_Count')#, 'year')
 
   if queryset_list.exists():
     for queryset in queryset_list:
@@ -41,7 +46,7 @@ def search(request):
         'Lyric' : queryset.Lyric,
         'cover_url' : queryset.cover_url,
         'tags' : queryset.tags,
-        'year' : queryset.year,
+        # 'year' : queryset.year,
       })
   else:
     result_list.append(None) 
