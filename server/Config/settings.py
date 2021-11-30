@@ -96,15 +96,9 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-<<<<<<< HEAD
         'NAME': 'trend_lime_db',
         'HOST': '0.0.0.0',
         'PORT': 27017,
-=======
-        'NAME': 'lyric_trend_db',
-        'HOST': '0.0.0.0',
-        'PORT': 21,
->>>>>>> feature/docker
     }
 }
 
