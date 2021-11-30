@@ -1,5 +1,4 @@
 FROM nginx:latest
-  
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-app.conf /etc/nginx/sites-available/
 
