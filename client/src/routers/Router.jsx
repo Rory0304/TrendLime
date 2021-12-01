@@ -7,7 +7,7 @@ import SignupPage from '../pages/login/SignupPage';
 import Survey from '../pages/survey/Survey';
 import SurveyResult from '../pages/surveyResult/SurveyResult';
 import SearchPage from '../pages/search/SearchPage';
-import SongDetailPage from '../pages/search/SongDetailPage';
+import SongInfoPage from '../pages/songInfo/SongInfoPage';
 import AboutPage from '../pages/about/AboutPage';
 
 function Router() {
@@ -22,7 +22,7 @@ function Router() {
                 <Route exact path={route.SURVEYRESULT} element={<SurveyResult />} />
                 <Route exact path={route.ABOUT} element={<AboutPage />} />
                 <Route path={route.SEARCH} element={<SearchPage />} />
-                <Route path={route.DETAIL} element={<SongDetailPage />} />
+                <Route path={route.DETAIL} element={<SongInfoPage />} />
             </Routes>
         </BrowserRouter>
     );
