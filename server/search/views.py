@@ -6,9 +6,9 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Tag, Song_without_year
+from search.models import Song, Tag, Song_without_year, Top11, Top11_like100
 
-from search.serializers import UserSerializer, SongSerializer, TagSerializer, Song_without_yearSerializer
+from search.serializers import UserSerializer, SongSerializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer
 
 # Create your views here.
 
@@ -25,16 +25,16 @@ def search(request):
   # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
   result_list=[]
-  # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-  # queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
-  queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
-  queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
+  queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+  queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
+  # queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
 
   if queryset_list2:
-    queryset_list = (queryset_list3 & queryset_list4).order_by('-Like_Count')#, 'year')
+    queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
   else : 
-    queryset_list = queryset_list3.order_by('-Like_Count')#, 'year')
-
+    queryset_list = queryset_list1.order_by('-Like_Count')#, 'year')
+  print(queryset_list.count())
   if queryset_list.exists():
     for queryset in queryset_list:
       result_list.append({
@@ -46,7 +46,7 @@ def search(request):
         'Lyric' : queryset.Lyric,
         'cover_url' : queryset.cover_url,
         'tags' : queryset.tags,
-        # 'year' : queryset.year,
+        'year' : queryset.year,
       })
   else:
     result_list.append(None) 
@@ -90,6 +90,14 @@ class Song_without_yearViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
   queryset = Tag.objects.all()
   serializer_class = TagSerializer
+
+class Top11ViewSet(viewsets.ModelViewSet):
+  queryset = Top11.objects.all().order_by('id')
+  serializer_class = Top11Serializer
+
+class Top11_like100ViewSet(viewsets.ModelViewSet):
+  queryset = Top11_like100.objects.all().order_by('id')
+  serializer_class = Top11_like100Serializer
 
 
 # class Tag_variableViewSet(viewsets.ModelViewSet):
