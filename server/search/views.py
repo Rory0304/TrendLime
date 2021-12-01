@@ -16,11 +16,20 @@ def search(request):
   search_word = json.loads(request.body)['q']
   # 다른 옵션을 추가로 검색을 할 경우
   selected_tag = json.loads(request.body)['category']
-  if not selected_tag:
-    selected_tag = "tags"
-
-  fieldname_icontains = selected_tag + '__icontains'
   tag_content = json.loads(request.body)['tag']
+
+  if selected_tag == "트렌드":
+    queryset_list1 = Top11.objects.filter(year__icontains = f'{tag}') 
+  elif not selected_tag:
+    selected_tag = "tags"
+    queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+    queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  else : 
+    fieldname_icontains = selected_tag + '__icontains'
+
+    queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+    queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+  
   # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
   # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
