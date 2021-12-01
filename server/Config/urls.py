@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, search
+from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, Top11ViewSet, Top11_like100ViewSet, search
 
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -26,6 +26,8 @@ router.register(r'users', UserViewSet)
 router.register(r'songs', SongViewSet)
 router.register(r'songs_without_year', Song_without_yearViewSet)
 router.register(r'tags', TagViewSet)
+router.register(r'top11', Top11ViewSet)
+router.register(r'top11_like100', Top11_like100ViewSet)
 # router.register(r'variables', Tag_variableViewSet)
 
 

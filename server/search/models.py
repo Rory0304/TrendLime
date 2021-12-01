@@ -174,6 +174,43 @@ class Tag(models.Model):
   def __str__(self):
     return self.tag_id
 
+class Top11(models.Model):
+  """
+    Attributes:
+      * word : 단어
+      * freq : 빈도
+      * year : 발매년도
+  """
+
+  word = models.CharField(max_length=100)
+  freq = models.CharField(max_length=100)
+  year = models.CharField(max_length=4)
+  class Meta:
+    verbose_name = 'top11'
+    db_table = 'tb_top11'
+
+  def __str__(self):
+    return self.word
+
+
+class Top11_like100(models.Model):
+  """
+    Attributes:
+      * word : 단어
+      * freq : 빈도
+      * year : 발매년도
+  """
+
+  word = models.CharField(max_length=100)
+  freq = models.CharField(max_length=100)
+  year = models.CharField(max_length=4)
+  class Meta:
+    verbose_name = 'top11_like100'
+    db_table = 'tb_top11_like100'
+
+  def __str__(self):
+    return self.word
+
 '''
 -User-
 
