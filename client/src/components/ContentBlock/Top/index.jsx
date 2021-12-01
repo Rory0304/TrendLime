@@ -1,13 +1,20 @@
+import React from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { Styled } from '../styles';
 
-const TopContentBlock = ({ content, children }) => {
+const TopContentBlock = ({ contents, children }) => {
     return (
         <Styled.ContentSection>
             <Styled.Row top={true}>
                 <Fade direction="top">
                     <Styled.ContentWrapper>
-                        <Styled.Content>{content}</Styled.Content>
+                        <Styled.Content>
+                            {contents.map((content) => (
+                                <>
+                                    {content} <br />
+                                </>
+                            ))}
+                        </Styled.Content>
                         {children}
                     </Styled.ContentWrapper>
                 </Fade>
