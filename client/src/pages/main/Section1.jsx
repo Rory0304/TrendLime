@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/react';
 
 import route from '../../routers/routeConstants';
 import Banner from '../../components/Banner/index';
-import WaveBackground from '../../assets/layered-waves-haikei.svg';
+import WaveBackground from '../../assets/images/layered-waves-haikei.svg';
 
 function Section1() {
     return (

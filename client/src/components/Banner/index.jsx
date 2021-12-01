@@ -1,6 +1,6 @@
 import Button from '../../common/Button/index';
 import { Styled } from './styles';
-import lime from '../../assets/lime.png';
+// import lime from '../../assets/lime.png';
 
 const Banner = ({ title, subtitle, button }) => {
     return (

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { css, jsx } from '@emotion/react';
-import { primaryColor } from '../../common/constants/Styles';
 
 function SearchCategories({ searchOptions }) {
     const categories = Array.from(new Set(searchOptions.map((option) => option.category_name)));
@@ -31,7 +30,7 @@ function SearchCategories({ searchOptions }) {
             <div css={OptionsWrapper}>
                 <div css={OptionsSlider} ref={slideRef}>
                     {categories.map((category) => (
-                        <ul css={OptionsList({ primaryColor: primaryColor })} ref={slideWrapperRef}>
+                        <ul css={OptionsList} ref={slideWrapperRef}>
                             {searchOptions.map(
                                 (option, index) =>
                                     option.category_name === category && <li>{option.tag_name}</li>,
@@ -74,7 +73,7 @@ const OptionsSlider = css`
     flex-direction: row;
 `;
 
-const OptionsList = (props) => css`
+const OptionsList = css`
     width: 100%;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -89,7 +88,7 @@ const OptionsList = (props) => css`
         margin: 10px;
 
         &:hover {
-            border-color: ${props.primaryColor};
+            border-color: ${(props) => props.theme.primaryColor};
         }
     }
 `;

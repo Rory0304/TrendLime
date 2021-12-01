@@ -2,8 +2,6 @@ import React from 'react';
 import { css, jsx } from '@emotion/react';
 
 import ContentBlock from '../../components/ContentBlock/index';
-import ChartBox from '../../components/ChartBox/index';
-import ChartGraph from '../../components/ChartGraph/index';
 import Slider from '../../components/Slider/index';
 import TFChart from '../../components/TFChart/index';
 
@@ -154,17 +152,6 @@ function Section3() {
 
 const Section3Wrapper = css`
     padding: 8rem 2rem;
-`;
-
-const Top10DataWrapper = css`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    @media only screen and (max-width: 768px) {
-        flex-direction: column;
-        justify-content: center;
-    }
 `;
 
 export default Section3;
