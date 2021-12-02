@@ -1,6 +1,6 @@
 import React from 'react';
-import route from '../../routers/routeConstants';
 
+import route from '../../routers/routeConstants';
 import ContentBlock from '../../components/ContentBlock/index';
 import Container from '../../components/Container/index';
 import ScrollToTop from '../../common/ScrollToTop/index';
@@ -13,7 +13,7 @@ function AboutPage() {
                 type="right"
                 title="인트로"
                 content="인트로"
-                button={{ text: '오늘의 곡 추천', link: route.SURVEY }}
+                button={{ text: '오늘의 곡 추천', link: route.SEARCH }}
             />
             <ContentBlock type="left" title="서비스1" content="서비스1" />
             <ContentBlock type="right" title="서비스2" content="서비스2" />

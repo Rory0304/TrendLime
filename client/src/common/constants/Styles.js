@@ -1,6 +1,3 @@
-export const primaryColor = '#00DD00';
-export const secondaryColor = '#445580';
-
 export const size = {
     large: '64em', // 1024px
     medium: '48em', // 768px
@@ -8,6 +5,8 @@ export const size = {
 };
 
 export const theme = {
+    primaryColor: '#00DD00',
+    secondaryColor: '#445580',
     mq: {
         laptop: `@media only screen and (max-width: ${size.large})`,
         tablet: `@media only screen and (max-width: ${size.medium})`,

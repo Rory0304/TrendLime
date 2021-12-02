@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { primaryColor } from '../../common/constants/Styles';
 
 export const Styled = {};
 
@@ -21,7 +20,7 @@ Styled.TFChartHead = styled.thead`
 Styled.Rank = styled.span`
     display: block;
     width: 20%;
-    background-color: ${(props) => (props.top ? primaryColor : 'gray')};
+    background-color: ${(props) => (props.top ? props.theme.primaryColor : 'gray')};
     color: #fff;
     padding: 0.5rem;
     border-radius: 50%;
@@ -35,7 +34,7 @@ Styled.Word = styled.span`
 `;
 
 Styled.Bar = styled.div`
-    background-color: ${(props) => (props.top ? primaryColor : 'gray')};
+    background-color: ${(props) => (props.top ? props.theme.primaryColor : 'gray')};
     height: 60%;
     p {
         text-align: right;

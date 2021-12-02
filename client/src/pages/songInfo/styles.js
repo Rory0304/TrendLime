@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import { primaryColor } from '../../common/constants/Styles';
-
 export const Styled = {};
 
 Styled.SummaryInfo = styled.section`
@@ -41,6 +39,8 @@ Styled.AlbumCover = styled.div`
 `;
 
 Styled.SongInfo = styled.div`
+    width: 100%;
+
     h2 {
         font-size: 1.7rem;
         font-weight: bold;
@@ -64,7 +64,7 @@ Styled.MainInfo = styled.section`
     h3 {
         font-size: 1.6rem;
         font-weight: bold;
-        color: ${primaryColor};
+        color: ${(props) => props.theme.primaryColor};
         padding-bottom: 1rem;
     }
 
@@ -124,7 +124,7 @@ Styled.LyricsWrapper = styled.div`
 
 Styled.Topic = styled.div`
     background-color: #fff;
-    width: 65%;
+    width: 62%;
     padding: 1rem;
 
     div {

@@ -7,22 +7,34 @@ Styled.HeaderWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 1.5rem 3rem;
+    padding: 1rem 2.5rem;
     align-items: center;
 
-    @media only screen and (max-width: 768px) {
+    ${(props) => props.theme.mq.tablet} {
         padding: 1rem 2rem;
         flex-direction: column;
         align-items: flex-start;
     }
 `;
 
-Styled.HeaderLogo = styled.div``;
+Styled.HeaderLogo = styled.div`
+    width: 20%;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    ${(props) => props.theme.mq.tablet} {
+        width: 30%;
+    }
+`;
 
 Styled.HeaderMenu = styled.nav`
     width: auto;
     margin-top: 0;
-    @media only screen and (max-width: 768px) {
+
+    ${(props) => props.theme.mq.tablet} {
         width: 100%;
         margin-top: 1rem;
     }
@@ -40,10 +52,10 @@ Styled.HeaderMenuWrapper = styled.ul`
     }
 
     li:hover a {
-        color: #0e0;
+        color: ${(props) => props.theme.primaryColor};
     }
 
-    @media only screen and (max-width: 768px) {
+    ${(props) => props.theme.mq.tablet} {
         display: ${(props) => (props.menuStatus ? 'flex' : 'none')};
         flex-direction: column;
         align-content: flex-start;
@@ -52,7 +64,8 @@ Styled.HeaderMenuWrapper = styled.ul`
 
 Styled.MenuIcon = styled.div`
     display: none;
-    @media only screen and (max-width: 768px) {
+
+    ${(props) => props.theme.mq.tablet} {
         position: absolute;
         display: block;
         top: 1rem;

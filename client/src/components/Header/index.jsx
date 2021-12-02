@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import route from '../../routers/routeConstants';
 import { Styled } from './styles';
 import { MenuOutlined } from '@ant-design/icons';
+import trendLimeLogo from '../../assets/images/trend_lime_logo.PNG';
 
 function Header() {
     const [menuStatus, setMenuStatus] = useState(false);
@@ -12,7 +13,7 @@ function Header() {
                 <Styled.HeaderLogo>
                     <Link to={route.MAIN}>
                         <h1>
-                            <img src="#" alt="트렌드 라임" />
+                            <img src={trendLimeLogo} alt="트렌드 라임" />
                         </h1>
                     </Link>
                 </Styled.HeaderLogo>
