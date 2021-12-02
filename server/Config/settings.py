@@ -97,8 +97,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'trend_lime_db',
-        'HOST': '0.0.0.0',
-        'PORT': 27017,
+        'CLIENT': {
+            'host': '172.17.0.1',
+            'port': 3306
+         }
+
+#        'HOST': '127.17.0.1',
+#:        'PORT': 3306,
     }
 }
 
