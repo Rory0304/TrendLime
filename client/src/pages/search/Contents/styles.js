@@ -20,6 +20,7 @@ Styled.SubContentArea = styled.div`
 
 Styled.AblumList = styled.ul`
     display: flex;
+    flex-wrap: wrap;
     margin-top: 5rem;
 
     li {

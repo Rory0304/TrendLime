@@ -31,25 +31,27 @@ Styled.OptionsSlider = styled.div`
     transition: all 0.5s ease-in-out;
 `;
 
-Styled.OptionList = styled.ul`
+Styled.OptionListWrapper = styled.ul`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
     width: 100%;
     flex-shrink: 0;
+`;
 
-    li {
-        width: 15%;
-        height: 2.5rem;
-        padding: 10px;
-        border: 1px solid #0000009c;
-        box-shadow: 1px 1px 3px transparent;
-        border-radius: 5px;
-        margin: 10px;
+Styled.OptionList = styled.ul`
+    width: 15%;
+    height: 2.5rem;
+    padding: 10px;
+    border: 1px solid #0000009c;
+    box-shadow: 1px 1px 3px transparent;
+    border-radius: 5px;
+    margin: 10px;
 
-        &:hover {
-            border-color: ${(props) => props.theme.primaryColor};
-        }
+    color: ${(props) => (props.active ? props.theme.primaryColor : 'black')};
+
+    &:hover {
+        border-color: ${(props) => props.theme.primaryColor};
     }
 `;
