@@ -73,9 +73,9 @@ def search(request):
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-    print('q1',queryset_list1)
+    # print('q1',queryset_list1)
     queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
-    print('q2',queryset_list2)
+    # print('q2',queryset_list2)
     # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
     # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
