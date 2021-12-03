@@ -12,10 +12,13 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 
 # Create your views here.
 
+@csrf_exempt
 def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
-  search_word =request.GET.get("q")
+  # search_word = json.loads(request.params)
+  search_word = request.GET.get("q")
+  print('search_word', search_word)
   # 다른 옵션을 추가 선택
   selected_tag = request.GET.get("category") 
   tag_content = request.GET.get("tag") 
@@ -79,7 +82,8 @@ def search(request):
   else:
     queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
     # print('q1',queryset_list1)
-    queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+    queryset_list2 = Song.objects.filter(tags__icontains = f'{tag_content}') 
+    # queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
     # print('q2',queryset_list2)
     # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
     # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
