@@ -15,6 +15,8 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
+  aaa = json.loads(request.body)
+  print('aaa',aaa)
   search_word = json.loads(request.body)['q']
   # 다른 옵션을 추가 선택
   selected_tag = json.loads(request.body)['category']
@@ -38,23 +40,48 @@ def search(request):
       #     'year' : queryset.year
       #   })
 
-    # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트= 대표곡 출력
     else:
-      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
+    # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
+      words_and_freq = []
+      represent_songs = []
 
+      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
       for queryset in queryset_list:
-        result_list.append({
+        words_and_freq.append({
           'word' : queryset.word,
           'freq' : queryset.freq,
           'year' : queryset.year
         })
 
+      # 연도별 대표곡 출력 -> 좋아요 순으로 출력되게 하려면 데이터 수정 필요!
+      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}') #.sort_by('-Like_Count')
+      if represent_song_queryset_list.exists():
+        for queryset in represent_song_queryset_list:
+          represent_songs.append({
+            'song_id' : queryset.song_id,
+            'song_name' : queryset.song_name,
+            'artist' : queryset.artist,
+            'album' : queryset.album,
+            'Like_Count' : queryset.Like_Count,
+            'Lyric' : queryset.Lyric,
+            'cover_url' : queryset.cover_url,
+            'tags' : queryset.tags,
+            'year' : queryset.year,
+          })
+      else:
+        represent_songs.append(None) 
+
+    context = { 
+      'words_and_freq' : words_and_freq,
+      'represent_songs' : represent_songs 
+    }
+    print('1111111',context)
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-    print('q1',queryset_list1)
+    # print('q1',queryset_list1)
     queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
-    print('q2',queryset_list2)
+    # print('q2',queryset_list2)
     # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
     # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
@@ -85,8 +112,9 @@ def search(request):
         })
     else:
       result_list.append(None) 
-  context = {"result" : result_list}
+    context = {"result" : result_list}
   return JsonResponse(context, status = 200)
+
 
 def categories_and_tags(request):
   result_list = []
