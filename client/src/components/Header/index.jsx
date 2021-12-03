@@ -1,42 +1,39 @@
-import React from 'react';
-import { css, jsx } from '@emotion/react';
+import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import route from '../../routers/routeConstants';
 import { Styled } from './styles';
+import { MenuOutlined } from '@ant-design/icons';
+import trendLimeLogo from '../../assets/images/trend_lime_logo.PNG';
 
 function Header() {
+    const [menuStatus, setMenuStatus] = useState(false);
     return (
-        <Styled.Header>
+        <header>
             <Styled.HeaderWrapper>
                 <Styled.HeaderLogo>
                     <Link to={route.MAIN}>
                         <h1>
-                            <img src="#" alt="가사 트렌드" />
+                            <img src={trendLimeLogo} alt="트렌드 라임" />
                         </h1>
                     </Link>
                 </Styled.HeaderLogo>
                 <Styled.HeaderMenu>
-                    <Styled.HeaderMenuWrapper>
-                        <li css={ListStyle}>
+                    <Styled.HeaderMenuWrapper menuStatus={menuStatus}>
+                        <li>
                             <NavLink to={route.SEARCH}>곡 검색</NavLink>
                         </li>
-                        <li css={ListStyle}>
+                        <li>
                             <NavLink to={route.ABOUT}>서비스 소개</NavLink>
                         </li>
                     </Styled.HeaderMenuWrapper>
+                    <Styled.MenuIcon>
+                        <MenuOutlined onClick={() => setMenuStatus(!menuStatus)} />
+                        <span className="visually-hidden">메뉴</span>
+                    </Styled.MenuIcon>
                 </Styled.HeaderMenu>
             </Styled.HeaderWrapper>
-        </Styled.Header>
+        </header>
     );
 }
-
-const ListStyle = css`
-    a {
-        display: block;
-        color: black;
-        text-decoration: none;
-        font-weight: bold;
-    }
-`;
 
 export default Header;

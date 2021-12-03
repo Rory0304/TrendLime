@@ -6,72 +6,112 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Tag, Song_without_year, Top11, Top11_like100
+from search.models import Song, Category, Tag, Song_without_year, Top11, Top11_like100
 
 from search.serializers import UserSerializer, SongSerializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer
 
 # Create your views here.
 
 def search(request):
+  result_list=[]
+  # 제목 관련 키워드 입력
   search_word = json.loads(request.body)['q']
-  # 다른 옵션을 추가로 검색을 할 경우
+  # 다른 옵션을 추가 선택
   selected_tag = json.loads(request.body)['category']
+  tag_content = json.loads(request.body)['tag']
+  # 카테고리 선택을 하지 않은 경우 임의로 카테고리 선택(에러 방지)
   if not selected_tag:
     selected_tag = "tags"
-
   fieldname_icontains = selected_tag + '__icontains'
-  tag_content = json.loads(request.body)['tag']
-  # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
-  # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
 
-  result_list=[]
-  queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-  queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
-  # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
-  # queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
+  # 트렌드/연도 카테고리를 선택하면 트렌드 + 1940~2010년대 태그가 나오고 
+  if selected_tag == "트렌드/연도":
+    # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
+    if tag_content == "트렌드":
+      # 트렌드 관련된 데이터 보여주기
+      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
 
-  if queryset_list2:
-    queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
-  else : 
-    queryset_list = queryset_list1.order_by('-Like_Count')#, 'year')
-  print(queryset_list.count())
-  if queryset_list.exists():
-    for queryset in queryset_list:
-      result_list.append({
-        'song_id' : queryset.song_id,
-        'song_name' : queryset.song_name,
-        'artist' : queryset.artist,
-        'album' : queryset.album,
-        'Like_Count' : queryset.Like_Count,
-        'Lyric' : queryset.Lyric,
-        'cover_url' : queryset.cover_url,
-        'tags' : queryset.tags,
-        'year' : queryset.year,
-      })
+      # for queryset in queryset_list:
+      #   result_list.append({
+      #     'word' : queryset.word,
+      #     'freq' : queryset.freq,
+      #     'year' : queryset.year
+      #   })
+
+    # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트= 대표곡 출력
+    else:
+      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
+
+      for queryset in queryset_list:
+        result_list.append({
+          'word' : queryset.word,
+          'freq' : queryset.freq,
+          'year' : queryset.year
+        })
+
+  # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
-    result_list.append(None) 
+    queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+    print('q1',queryset_list1)
+    queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+    print('q2',queryset_list2)
+    # 아래의 queryset_list와 and 혹은 or로 붙여서 검색
+    # Song.objects.filter(f'{selected_tag}'__icontains = f'{tag_content}')
+
+    # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+    # queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
+    # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
+    # queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
+
+    if queryset_list2:
+      queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
+    else : 
+      queryset_list = queryset_list1.order_by('-Like_Count')#, 'year')
+    print('result_count', queryset_list.count())
+    print('result', queryset_list)
+
+    if queryset_list.exists():
+      for queryset in queryset_list:
+        result_list.append({
+          'song_id' : queryset.song_id,
+          'song_name' : queryset.song_name,
+          'artist' : queryset.artist,
+          'album' : queryset.album,
+          'Like_Count' : queryset.Like_Count,
+          'Lyric' : queryset.Lyric,
+          'cover_url' : queryset.cover_url,
+          'tags' : queryset.tags,
+          'year' : queryset.year,
+        })
+    else:
+      result_list.append(None) 
   context = {"result" : result_list}
   return JsonResponse(context, status = 200)
 
-# def get_category_and_tags(request):
-#   selected_category = json.loads(request.body)['select_category']
-#   print('selected_category',selected_category)
-#   result_list=[]
-
-#   queryset_list = Tag.objects.filter(tag_name__icontains = f'{selected_category}')
-#   print('queryset_list',queryset_list)
-#   if queryset_list.exists:
-#     for queryset in queryset_list:
-#       result_list.append({
-#         'tag_name' : queryset.tag_name,
-#         'variable_name' : queryset.variable_name
-#       })
-#   else:
-#     result_list.append(None) 
-
-#   context = {"result" : result_list}
-#   return JsonResponse(context, status = 200)
-
+def categories_and_tags(request):
+  result_list = []
+  category_list = []
+  tag_list =[]
+  category_queryset = Category.objects.all()
+  for data in category_queryset:
+    category_list.append({
+      'category_id' : data.category_id,
+      'category_name' : data.category_name
+    })
+  tag_queryset = Tag.objects.all()
+  for data in tag_queryset:
+    tag_list.append({
+      'category_id' : data.category_id,
+      'category_name' : data.category_name,
+      'tag_id' : data.tag_id,
+      'tag_name' : data.tag_name,
+      'tag_name_en' : data.tag_name_en,
+    })
+  result_list = { 
+    'categories' : category_list,
+    'tags' : tag_list
+  }
+  return JsonResponse(result_list, status=200)
 
 # DRF views
 # ViewSets define the view behavior.
@@ -98,8 +138,3 @@ class Top11ViewSet(viewsets.ModelViewSet):
 class Top11_like100ViewSet(viewsets.ModelViewSet):
   queryset = Top11_like100.objects.all().order_by('id')
   serializer_class = Top11_like100Serializer
-
-
-# class Tag_variableViewSet(viewsets.ModelViewSet):
-#   queryset = Tag_variable.objects.all()
-#   serializer_class = Tag_variableSerializer
