@@ -19,6 +19,7 @@ from rest_framework import routers
 
 from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags
 from detail.views import detail
+from total.views import total
 
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -44,4 +45,5 @@ urlpatterns = [
     path('api/search', search, name='search'),
     path('api/tags', categories_and_tags, name='categories_and_tags'),
     path('api/detail', detail, name='detail'),
+    path('api/search/total', total, name='total'),
 ]
