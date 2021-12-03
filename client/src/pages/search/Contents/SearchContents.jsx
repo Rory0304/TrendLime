@@ -1,6 +1,17 @@
 import React from 'react';
 import { Styled } from './styles';
-function SearchContents() {
+import { useQuery } from 'react-query';
+
+import { fetchSearchKey } from '../../../utils/api/queryKeys';
+import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
+
+function SearchContents({ searchOption }) {
+    const { isLoading, error, data, refetch } = useQuery(
+        [fetchSearchKey, searchOption],
+        useQueryFetch,
+        { refetchOnWindowFocus: false },
+    );
+
     return (
         <div>
             <Styled.SubContentsWrapper>
@@ -13,11 +24,20 @@ function SearchContents() {
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>대표곡</Styled.SubTitle>
                 <Styled.AblumList>
-                    <li>대표곡1</li>
-                    <li>대표곡2</li>
-                    <li>대표곡3</li>
-                    <li>대표곡4</li>
-                    <li>대표곡5</li>
+                    {isLoading ? (
+                        <div>loading...</div>
+                    ) : data.result === null || data.result.length === 0 ? (
+                        <div>데이터가 없습니다. </div>
+                    ) : (
+                        data.result.splice(0, 5).map((song) => (
+                            <li>
+                                <div>
+                                    {song && <img src={song.cover_url} alt={song.song_name} />}
+                                    {song && <p>{song.song_name}</p>}
+                                </div>
+                            </li>
+                        ))
+                    )}
                 </Styled.AblumList>
             </Styled.SubContentsWrapper>
         </div>
