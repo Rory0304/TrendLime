@@ -1,4 +1,4 @@
-id.auto(),word.string(),freq.int32(),year.string()
+id,word,freq,year
 1,사랑,344,1990
 2,그대,104,1990
 3,눈물,72,1990

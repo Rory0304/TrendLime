@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  #CORS 관련 추가
     'search.apps.SearchConfig', # search 앱 추가
+    'detail.apps.DetailConfig', # detail 앱 추가
 ]
 
 MIDDLEWARE = [
@@ -92,15 +93,26 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
+# mongoDB 서버에 맞게 설정
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'trend_lime_db',
-        'HOST': '0.0.0.0',
-        'PORT': 27017,
+        'CLIENT': {
+            'HOST': '127.17.0.1',
+            'PORT': 3306
+        }
     }
 }
+# 로컬용 설정
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'trend_lime_db',
+#         'HOST': '0.0.0.0',
+#         'PORT': 27071,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
