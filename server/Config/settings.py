@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',  #CORS 관련 추가
     'search.apps.SearchConfig', # search 앱 추가
     'detail.apps.DetailConfig', # detail 앱 추가
+    'total.apps.TotalConfig',
 ]
 
 MIDDLEWARE = [
