@@ -17,22 +17,22 @@ def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
   # search_word = json.loads(request.params)
-  search_word = request.GET.get("q")
-  print('search_word', search_word)
+  # search_word = request.GET.get("q")
+  # print('search_word', search_word)
   # 다른 옵션을 추가 선택
   selected_tag = request.GET.get("category") 
   tag_content = request.GET.get("tag") 
 
   # 카테고리 선택을 하지 않은 경우 임의로 카테고리 선택(에러 방지)
-  if not selected_tag:
-    selected_tag = "tags"
-  fieldname_icontains = selected_tag + '__icontains'
+  # if not selected_tag:
+  #   selected_tag = "tags"
+  # fieldname_icontains = selected_tag + '__icontains'
 
   # 트렌드/연도 카테고리를 선택하면 트렌드 + 1940~2010년대 태그가 나오고 
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-      # 트렌드 관련된 데이터 보여주기
+      # 트렌드 관련된 데이터 보여주기 수정할 곳!!!!!!!!!!!!!
       queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
 
       for queryset in queryset_list:
@@ -77,10 +77,10 @@ def search(request):
       'words_and_freq' : words_and_freq,
       'represent_songs' : represent_songs 
     }
-    print('1111111',context)
+    # print('1111111',context)
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
-    queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
+    # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
     # print('q1',queryset_list1)
     queryset_list2 = Song.objects.filter(tags__icontains = f'{tag_content}') 
     # queryset_list2 = Song.objects.filter(**{fieldname_icontains : tag_content})
@@ -93,12 +93,13 @@ def search(request):
     # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
     # queryset_list4 = Song_without_year.objects.filter(**{fieldname_icontains : tag_content})
 
-    if queryset_list2:
-      queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
-    else : 
-      queryset_list = queryset_list1.order_by('-Like_Count')#, 'year')
-    print('result_count', queryset_list.count())
-    print('result', queryset_list)
+    # if queryset_list2:
+    #   queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
+    # else : 
+    #   queryset_list = queryset_list1.order_by('-Like_Count')#, 'year')
+    queryset_list = queryset_list2.order_by('-Like_Count')#, 'year')
+    # print('result_count', queryset_list.count())
+    # print('result', queryset_list)
 
     if queryset_list.exists():
       for queryset in queryset_list:
