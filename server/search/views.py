@@ -15,31 +15,31 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
-  aaa = json.loads(request.body)
+  aaa = json.loads(request.params)
   print('aaa',aaa)
-  search_word = json.loads(request.body)['q']
+  search_word = json.loads(request.params)['q']
   # 다른 옵션을 추가 선택
-  selected_tag = json.loads(request.body)['category']
-  tag_content = json.loads(request.body)['tag']
+  selected_tag = json.loads(request.params)['category']
+  tag_content = json.loads(request.params)['tag']
   # 카테고리 선택을 하지 않은 경우 임의로 카테고리 선택(에러 방지)
   if not selected_tag:
     selected_tag = "tags"
   fieldname_icontains = selected_tag + '__icontains'
 
   # 트렌드/연도 카테고리를 선택하면 트렌드 + 1940~2010년대 태그가 나오고 
-  if selected_tag == "트렌드/연도":
+  if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
-    if tag_content == "트렌드":
+    if tag_content == "trend":
       # 트렌드 관련된 데이터 보여주기
-      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
+      queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
 
-      # for queryset in queryset_list:
-      #   result_list.append({
-      #     'word' : queryset.word,
-      #     'freq' : queryset.freq,
-      #     'year' : queryset.year
-      #   })
-
+      for queryset in queryset_list:
+        result_list.append({
+          'word' : queryset.word,
+          'freq' : queryset.freq,
+          'year' : queryset.year
+        })
+      context = { result_list}
     else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
       words_and_freq = []
