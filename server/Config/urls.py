@@ -39,7 +39,7 @@ router.register(r'top11_like100', Top11_like100ViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('admin', admin.site.urls),
-    path('api', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth', include('rest_framework.urls')),
     path('api/search', search, name='search'),
     path('api/tags', categories_and_tags, name='categories_and_tags'),
