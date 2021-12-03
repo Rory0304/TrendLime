@@ -15,6 +15,8 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
+  aaa = json.loads(request.body)
+  print('aaa',aaa)
   search_word = json.loads(request.body)['q']
   # 다른 옵션을 추가 선택
   selected_tag = json.loads(request.body)['category']
@@ -39,9 +41,10 @@ def search(request):
       #   })
 
     else:
-      # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
+    # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
       words_and_freq = []
       represent_songs = []
+
       queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
       for queryset in queryset_list:
         words_and_freq.append({
@@ -49,6 +52,7 @@ def search(request):
           'freq' : queryset.freq,
           'year' : queryset.year
         })
+
       # 연도별 대표곡 출력 -> 좋아요 순으로 출력되게 하려면 데이터 수정 필요!
       represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}') #.sort_by('-Like_Count')
       if represent_song_queryset_list.exists():
@@ -66,10 +70,12 @@ def search(request):
           })
       else:
         represent_songs.append(None) 
-      result_list = { 
-        'words_and_freq' : words_and_freq,
-        'represent_songs' : represent_songs 
-      }
+
+    context = { 
+      'words_and_freq' : words_and_freq,
+      'represent_songs' : represent_songs 
+    }
+    print('1111111',context)
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
@@ -106,8 +112,9 @@ def search(request):
         })
     else:
       result_list.append(None) 
-  context = {"result" : result_list}
+    context = {"result" : result_list}
   return JsonResponse(context, status = 200)
+
 
 def categories_and_tags(request):
   result_list = []
