@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Fade } from 'react-awesome-reveal';
 import { Styled } from '../styles';
+import MainButton from '../../../common/Button/index';
 
 const RightContentBlock = ({ title, content, button, src }) => {
     return (
@@ -13,13 +14,7 @@ const RightContentBlock = ({ title, content, button, src }) => {
                             <Styled.Title>{title}</Styled.Title>
                             <Styled.Content>{content}</Styled.Content>
                         </div>
-                        <div>
-                            {button && (
-                                <Link to={button.link}>
-                                    <Styled.Button>{button.text}</Styled.Button>
-                                </Link>
-                            )}
-                        </div>
+                        <div>{button && <MainButton link={button.link} text={button.text} />}</div>
                     </Styled.ContentWrapper>
 
                     <div>

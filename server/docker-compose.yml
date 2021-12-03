@@ -19,7 +19,7 @@ services:
   #     - POSTGRES_USER=leffe
   #     - POSTGRES_PASSWORD=leffe
   #     - POSTGRES_INITDB_ARGS=--encoding=UTF-8
-
+      
 
   # nginx
   nginx:
@@ -43,9 +43,9 @@ services:
     # docker build 옵션
     build:
       # # docker build 명령어를 실행할 디렉토리 경로
-      context: .
-      # # 지정할 Dockerfile 경로
-      dockerfile: ./Dockerfile
+       context: .
+       # # 지정할 Dockerfile 경로
+       dockerfile: ./Dockerfile
     image: backend/django
     # 환경 변수 설정 
     # environment: 
@@ -59,11 +59,11 @@ services:
     # 실행할 명령어
     command: uwsgi --ini uwsgi.ini
     # 현재 디렉토리를 컨테이너 내의 /home/에 mount
-    volumes:
+    volumes: 
       - ./:/server
-      - ./log:/var/log/uwsgi
+      - ./log:/var/log/uwsgis
     # 호스트 OS와 컨테이너의 포트를 바인딩 
-    ports:
+    ports: 
       - "8000:8000"
     #depends_on:
     #   - django
