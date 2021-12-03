@@ -38,17 +38,38 @@ def search(request):
       #     'year' : queryset.year
       #   })
 
-    # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트= 대표곡 출력
     else:
+      # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
+      words_and_freq = []
+      represent_songs = []
       queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
-
       for queryset in queryset_list:
-        result_list.append({
+        words_and_freq.append({
           'word' : queryset.word,
           'freq' : queryset.freq,
           'year' : queryset.year
         })
-
+      # 연도별 대표곡 출력 -> 좋아요 순으로 출력되게 하려면 데이터 수정 필요!
+      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}') #.sort_by('-Like_Count')
+      if represent_song_queryset_list.exists():
+        for queryset in represent_song_queryset_list:
+          represent_songs.append({
+            'song_id' : queryset.song_id,
+            'song_name' : queryset.song_name,
+            'artist' : queryset.artist,
+            'album' : queryset.album,
+            'Like_Count' : queryset.Like_Count,
+            'Lyric' : queryset.Lyric,
+            'cover_url' : queryset.cover_url,
+            'tags' : queryset.tags,
+            'year' : queryset.year,
+          })
+      else:
+        represent_songs.append(None) 
+      result_list = { 
+        'words_and_freq' : words_and_freq,
+        'represent_songs' : represent_songs 
+      }
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
