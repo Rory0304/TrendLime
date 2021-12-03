@@ -17,27 +17,31 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, Top11ViewSet, Top11_like100ViewSet, search
+from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags
+from detail.views import detail
 
 
 # Routers provide an easy way of automatically determining the URL conf.
+upperrouter = routers.DefaultRouter()
+# upperrouter.register()
+# upperrouter.register()
 router = routers.DefaultRouter()
+# router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 router.register(r'songs', SongViewSet)
 router.register(r'songs_without_year', Song_without_yearViewSet)
-router.register(r'tags', TagViewSet)
+# router.register(r'tags', TagViewSet)
 router.register(r'top11', Top11ViewSet)
 router.register(r'top11_like100', Top11_like100ViewSet)
-# router.register(r'variables', Tag_variableViewSet)
 
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/search/', search, name='search'),
-    # path('api/tags/', get_category_and_tags, name='get_category_and_tags')
-
+    path('admin', admin.site.urls),
+    path('api', include(router.urls)),
+    path('api-auth', include('rest_framework.urls')),
+    path('api/search', search, name='search'),
+    path('api/tags', categories_and_tags, name='categories_and_tags'),
+    path('api/detail', detail, name='detail'),
 ]
