@@ -15,12 +15,11 @@ from search.serializers import UserSerializer, SongSerializer, TagSerializer, So
 def search(request):
   result_list=[]
   # 제목 관련 키워드 입력
-  aaa = json.loads(request.params)
-  print('aaa',aaa)
-  search_word = json.loads(request.params)['q']
+  search_word =request.GET.get("q")
   # 다른 옵션을 추가 선택
-  selected_tag = json.loads(request.params)['category']
-  tag_content = json.loads(request.params)['tag']
+  selected_tag = request.GET.get("category") 
+  tag_content = request.GET.get("tag") 
+
   # 카테고리 선택을 하지 않은 경우 임의로 카테고리 선택(에러 방지)
   if not selected_tag:
     selected_tag = "tags"
