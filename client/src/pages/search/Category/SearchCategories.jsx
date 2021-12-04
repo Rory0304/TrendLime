@@ -30,7 +30,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
     const categories = useMemo(() => (!data ? [] : data.categories), [data]);
 
     const tags = useMemo(() => {
-        if (data) {
+        if (data?.tags) {
             const filteredTags = data.tags.filter(
                 (tag) => tag.category_name === searchOption.category,
             );
