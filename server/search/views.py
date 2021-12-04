@@ -32,17 +32,17 @@ def search(request):
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-      # 트렌드 관련된 데이터 보여주기 수정할 곳!!!!!!!!!!!!!
-      queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
+    #   # 트렌드 관련된 데이터 보여주기 수정할 곳!!!!!!!!!!!!!
+    #   queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
 
-      for queryset in queryset_list:
-        result_list.append({
-          'word' : queryset.word,
-          'freq' : queryset.freq,
-          'year' : queryset.year
-        })
-      context = { result_list}
-    else:
+    #   for queryset in queryset_list:
+    #     result_list.append({
+    #       'word' : queryset.word,
+    #       'freq' : queryset.freq,
+    #       'year' : queryset.year
+    #     })
+    #   context = { result_list}
+    # else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
       words_and_freq = []
       represent_songs = []
