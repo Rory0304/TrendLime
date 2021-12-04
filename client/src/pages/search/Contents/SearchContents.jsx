@@ -7,7 +7,7 @@ import route from '../../../routers/routeConstants';
 import { fetchSearchKey } from '../../../utils/api/queryKeys';
 import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
 
-import Wordcloud from '../../../components/WordCloud/index';
+// import Wordcloud from '../../../components/WordCloud/index';
 import BarChart from '../../../components/BarChart/index';
 
 function SearchContents({ searchOption }) {
@@ -62,7 +62,7 @@ function SearchContents({ searchOption }) {
                 <Styled.SubTitle>가사 속 표현 분석</Styled.SubTitle>
                 <Styled.SubContentArea>
                     <div>
-                        <Wordcloud />
+                        {/* <Wordcloud /> */}
                     </div>
                     <div>
                         <BarChart />
