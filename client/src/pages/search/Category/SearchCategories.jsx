@@ -14,7 +14,9 @@ import { Styled } from './styles';
 function SearchCategories({ searchOption, setSearchOption }) {
     const slideWrapperRef = useRef(null);
     const slideRef = useRef(null);
-    const { isLoading, error, data } = useQuery([fetchCategoryKey], useQueryFetch);
+    const { isLoading, error, data } = useQuery([fetchCategoryKey], useQueryFetch, {
+        refetchOnWindowFocus: false,
+    });
 
     /* 캐러샐은 제거될 예정입니다.*/
     // useEffect(() => {
@@ -53,7 +55,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
             <Styled.CategoryList>
                 {categories.map((category) => (
                     <Styled.Category
-                        active={category.category_id === searchOption.category}
+                        active={category.category_name === searchOption.category}
                         onClick={() =>
                             setSearchOption({
                                 ...searchOption,
