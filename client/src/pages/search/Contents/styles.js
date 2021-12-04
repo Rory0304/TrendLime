@@ -18,15 +18,24 @@ Styled.SubContentArea = styled.div`
     }
 `;
 
+Styled.AlbumListCarousel = styled.div`
+    overflow-x: auto;
+    overflow-y: hidden;
+`;
+
 Styled.AblumList = styled.ul`
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 5rem;
+    width: 100%;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    transition: all 0.8s ease-in-out;
 
     li {
+        /* display: inline-block; */
         width: 200px;
         height: 200px;
         border: 1px solid black;
+        margin-left: 11px;
     }
 `;
 
