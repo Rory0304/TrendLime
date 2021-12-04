@@ -1,7 +1,7 @@
 from rest_framework import routers, serializers, viewsets
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Tag, Song_without_year, Top11, Top11_like100
+from search.models import Song, Latest_100, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,7 +18,12 @@ class SongSerializer(serializers.HyperlinkedModelSerializer):
 class Latest_100Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Latest_100
-        fields = ['url', 'Topic', 'Percentage', 'song_id', 'song_name', 'artist', 'album', 'Like_Count', 'Lyric', 'cover_url', 'tags', 'year', ]
+        fields = ['url', 'Topic', 'Percentage', 'song_id', 'song_name', 'artist', 'album', 'Like_Count', 'Lyric', 'cover_url', 'tags', 'year']
+
+class Song_with_meta_emotionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Song_with_meta_emotion
+        fields = ['emotion', 'percentage', 'song_id', 'song_name', 'artist', 'album', 'Like_Count', 'Lyric', 'cover_url', 'tags', 'year']
 
 class Song_without_yearSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
