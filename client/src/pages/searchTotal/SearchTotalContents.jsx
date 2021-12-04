@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 import { featchTotalSearchKey } from '../../utils/api/queryKeys';
 import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
@@ -45,13 +46,31 @@ function SearchTotalContents({ searchKeyword }) {
     const [selectedOption, setOption] = useState('');
 
     const { isLoading, error, data } = useQuery(
-        [featchTotalSearchKey, { q: searchKeyword }],
-        useQueryFetch,
+        ['fetchTotalSearch'],
+
+        () =>
+            axios
+                .get(featchTotalSearchKey, { params: { q: searchKeyword } })
+                .then((response) => response.data),
         {
             refetchOnWindowFocus: false,
-            enabled: !!searchKeyword,
+            refetchOnmount: false,
+            refetchOnReconnect: false,
+            retry: false,
         },
     );
+
+    /* 자동완성을 위한 데이터 패칭과 분리 필요 */
+    // const { isLoading, error, data } = useQuery(
+    //     [featchTotalSearchKey, { q: searchKeyword }],
+    //     useQueryFetch,
+    //     {
+    //         refetchOnWindowFocus: false,
+    //         refetchOnmount: false,
+    //         refetchOnReconnect: false,
+    //         retry: false,
+    //     },
+    // );
 
     const [{ searchInput }, onChange, reset] = useInput({
         q: searchKeyword,
