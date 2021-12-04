@@ -56,10 +56,12 @@ Styled.SearchBtn = styled.span`
 
 /* 나중에 ant design auto complete으로 수정 */
 Styled.AutoCompleteArea = styled.div`
+    width: 450px;
+    height: 400px;
+    overflow: scroll;
     display: ${(props) => (props.isEmpty ? 'none' : 'block')};
     position: absolute;
     background-color: gray;
-    width: 450px;
     top: 50px;
     margin: -7px auto;
     border: 1px solid #00dd00;
@@ -74,5 +76,27 @@ Styled.AutoCompleteResult = styled.div`
         p {
             font-weight: bold;
         }
+    }
+`;
+
+Styled.AutoCompleteItem = styled.li`
+    div {
+        display: inline-block;
+    }
+
+    div:first-of-type {
+        height: 44px;
+        width: 44px;
+        vertical-align: middle;
+        margin-right: 10px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &:hover {
+        background-color: #80808012;
     }
 `;
