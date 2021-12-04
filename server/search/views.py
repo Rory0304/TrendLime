@@ -6,9 +6,9 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Category, Tag, Song_without_year, Top11, Top11_like100
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100
 
-from search.serializers import UserSerializer, SongSerializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer
+from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer
 
 # Create your views here.
 
@@ -154,6 +154,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class SongViewSet(viewsets.ModelViewSet):
   queryset = Song.objects.all()
   serializer_class = SongSerializer
+
+class Latest_100ViewSet(viewsets.ModelViewSet):
+  queryset = Latest_100.objects.all()
+  serialzer_class = Latest_100Serializer
 
 class Song_without_yearViewSet(viewsets.ModelViewSet):
   queryset = Song_without_year.objects.all()

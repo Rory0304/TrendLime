@@ -6,70 +6,41 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Category, Tag, Song_without_year, Top11, Top11_like100
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100
 # Create your views here.
 
 def total(request):
   search_word = request.GET.get("q")
-
-  title_result_list = []
-  artist_result_list = []
-  album_result_list = []
-
-  queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-  if queryset_list1.exists():
-      for queryset in queryset_list1:
-        title_result_list.append({
-          'song_id' : queryset.song_id,
-          'song_name' : queryset.song_name,
-          'artist' : queryset.artist,
-          'album' : queryset.album,
-          'Like_Count' : queryset.Like_Count,
-          'Lyric' : queryset.Lyric,
-          'cover_url' : queryset.cover_url,
-          'tags' : queryset.tags,
-          'year' : queryset.year,
-        })
-  else:
-    title_result_list.append(None) 
-
-  queryset_list2 = Song.objects.filter(artist__icontains = f'{search_word}') 
-  if queryset_list2.exists():
-      for queryset in queryset_list2:
-        artist_result_list.append({
-          'song_id' : queryset.song_id,
-          'song_name' : queryset.song_name,
-          'artist' : queryset.artist,
-          'album' : queryset.album,
-          'Like_Count' : queryset.Like_Count,
-          'Lyric' : queryset.Lyric,
-          'cover_url' : queryset.cover_url,
-          'tags' : queryset.tags,
-          'year' : queryset.year,
-        })
-  else:
-    artist_result_list.append(None) 
-
-  queryset_list3 = Song.objects.filter(album__icontains = f'{search_word}') 
-  if queryset_list3.exists():
-      for queryset in queryset_list3:
-        album_result_list.append({
-          'song_id' : queryset.song_id,
-          'song_name' : queryset.song_name,
-          'artist' : queryset.artist,
-          'album' : queryset.album,
-          'Like_Count' : queryset.Like_Count,
-          'Lyric' : queryset.Lyric,
-          'cover_url' : queryset.cover_url,
-          'tags' : queryset.tags,
-          'year' : queryset.year,
-        })
-  else:
-    album_result_list.append(None) 
+  variable = ['song_name', 'artist', 'album']
 
   context = {
-    "song_name" :  title_result_list,
-    "artist" : artist_result_list,
-    "album" : album_result_list
+    "song_name" :  make_json(variable[0], search_word),
+    "artist" : make_json(variable[1], search_word),
+    "album" : make_json(variable[2], search_word)
   }
+
   return JsonResponse(context , status = 200)
+
+
+def make_json(listname, search_word):
+  result_list = []
+  fieldname_icontains = listname + '__icontains'
+  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word})
+
+  if queryset_list.exists():
+      for queryset in queryset_list:
+        result_list.append({
+          'song_id' : queryset.song_id,
+          'song_name' : queryset.song_name,
+          'artist' : queryset.artist,
+          'album' : queryset.album,
+          'Like_Count' : queryset.Like_Count,
+          'Lyric' : queryset.Lyric,
+          'cover_url' : queryset.cover_url,
+          'tags' : queryset.tags,
+          'year' : queryset.year,
+        })
+  else:
+    result_list.append(None) 
+
+  return result_list

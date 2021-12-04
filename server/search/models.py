@@ -37,7 +37,7 @@ class Song(models.Model):
     return self.song_id
 
 
-class latest_100(models.Model):
+class Latest_100(models.Model):
   Topic = models.CharField(max_length=100)
   Percentage = models.CharField(max_length=100)
   song_id = models.CharField(max_length=100)
