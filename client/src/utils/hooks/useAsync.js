@@ -30,6 +30,8 @@ function reducer(state, action) {
 }
 
 function useAsync(callbackFunc, deps = []) {
+    console.log(typeof callbackFunc);
+
     const [state, dispatch] = useReducer(reducer, {
         loading: false,
         data: null,
