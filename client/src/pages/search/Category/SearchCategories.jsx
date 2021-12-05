@@ -15,22 +15,13 @@ function SearchCategories({ searchOption, setSearchOption }) {
     const slideWrapperRef = useRef(null);
     const slideRef = useRef(null);
     const { isLoading, error, data } = useQuery([fetchCategoryKey], useQueryFetch, {
+        initialData: [],
         refetchOnWindowFocus: false,
     });
 
-    /* 캐러샐은 제거될 예정입니다.*/
-    // useEffect(() => {
-    // if (slideRef.current !== null && slideWrapperRef.current !== null) {
-    //     slideRef.current.style.transform = `translateX(-${
-    //         slideWrapperRef.current.clientWidth * selectedCategoryIdx
-    //     }px)`;
-    // }
-    // }, [selectedCategoryIdx]);
-
-    const categories = useMemo(() => (!data ? [] : data.categories), [data]);
-
+    const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
     const tags = useMemo(() => {
-        if (data?.tags) {
+        if (data.length !== 0) {
             const filteredTags = data.tags.filter(
                 (tag) => tag.category_name === searchOption.category,
             );
@@ -38,7 +29,6 @@ function SearchCategories({ searchOption, setSearchOption }) {
                 ...searchOption,
                 tag: filteredTags[0].tag_name,
             });
-
             return filteredTags;
         } else {
             return [];
@@ -53,37 +43,45 @@ function SearchCategories({ searchOption, setSearchOption }) {
     return (
         <Styled.CategoryWrapper>
             <Styled.CategoryList>
-                {categories.map((category) => (
-                    <Styled.Category
-                        active={category.category_name === searchOption.category}
-                        onClick={() =>
-                            setSearchOption({
-                                ...searchOption,
-                                category: category.category_name,
-                            })
-                        }
-                    >
-                        {category.category_name}
-                    </Styled.Category>
-                ))}
+                {isLoading ? (
+                    <div>loading...</div>
+                ) : (
+                    categories.map((category) => (
+                        <Styled.Category
+                            active={category.category_name === searchOption.category}
+                            onClick={() =>
+                                setSearchOption({
+                                    ...searchOption,
+                                    category: category.category_name,
+                                })
+                            }
+                        >
+                            {category.category_name}
+                        </Styled.Category>
+                    ))
+                )}
             </Styled.CategoryList>
             <Styled.OptionsWrapper>
                 <Styled.OptionsSlider ref={slideRef}>
                     {
                         <Styled.OptionListWrapper ref={slideWrapperRef}>
-                            {tags.map((tag) => (
-                                <Styled.OptionList
-                                    active={tag.tag_name === searchOption.tag}
-                                    onClick={() =>
-                                        setSearchOption({
-                                            ...searchOption,
-                                            tag: tag.tag_name,
-                                        })
-                                    }
-                                >
-                                    {tag.tag_name}
-                                </Styled.OptionList>
-                            ))}
+                            {isLoading ? (
+                                <div>Loading....</div>
+                            ) : (
+                                tags.map((tag) => (
+                                    <Styled.OptionList
+                                        active={tag.tag_name === searchOption.tag}
+                                        onClick={() =>
+                                            setSearchOption({
+                                                ...searchOption,
+                                                tag: tag.tag_name,
+                                            })
+                                        }
+                                    >
+                                        {tag.tag_name}
+                                    </Styled.OptionList>
+                                ))
+                            )}
                         </Styled.OptionListWrapper>
                     }
                 </Styled.OptionsSlider>
