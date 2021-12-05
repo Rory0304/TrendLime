@@ -19,9 +19,12 @@ function SearchCategories({ searchOption, setSearchOption }) {
         refetchOnWindowFocus: false,
     });
 
+    console.log(data);
+
     const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
     const tags = useMemo(() => {
         if (data.length !== 0) {
+            console.log(data);
             const filteredTags = data.tags.filter(
                 (tag) => tag.category_name === searchOption.category,
             );
