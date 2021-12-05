@@ -19,20 +19,11 @@ def detail(request):
 
   if single_song_info_queryset.exists:
     for data in single_song_info_queryset:
-      single_song_info = {
-        'song_id' : data.song_id,
-        'song_name' : data.song_name,
-        'artist' : data.artist,
-        'album' : data.album,
-        'Like_Count' : data.Like_Count,
-        'Lyric' : data.Lyric,
-        'cover_url' : data.cover_url,
-        'tags' : data.tags,
-      }
+      single_song_info = make_song_info_to_json(data)
   else:
     single_song_info = None
-  return JsonResponse(single_song_info , status = 200)
 
+  return JsonResponse(single_song_info , status = 200)
 
 
 ### 아직 미작성된 부분!
@@ -43,6 +34,7 @@ def recommend_song_info(request):
   # single_song_info_queryset = Song_without_year.objects.filter(song_id__icontains = f'{song_id}')
 
   return JsonResponse(context , status = 200)
+
 
 ### 데이가 일부 없어서 구현 못한 부분 있음
 # 토픽 모델링 기반 노래 정보 제공
@@ -56,24 +48,15 @@ def topic_based_info(request):
     for data in topic_based_info_queryset:
       topic_type = data.Topic
 
-      topic_info = Label.objects.filter(label_id = topic_type)
-      for data in topic_info:
-        topic_name = data.label_name
+  topic_info = Label.objects.filter(label_id = topic_type)
+  for data in topic_info:
+    topic_name = data.label_name
     
   topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)
 
   if topic_related_song_info_list.exists:
     for topic_related_song_info in topic_related_song_info_list:
-      topic_related_song.append({
-        'song_id' : topic_related_song_info.song_id,
-        'song_name' : topic_related_song_info.song_name,
-        'artist' : topic_related_song_info.artist,
-        'album' : topic_related_song_info.album,
-        'Like_Count' : topic_related_song_info.Like_Count,
-        'Lyric' : topic_related_song_info.Lyric,
-        'cover_url' : topic_related_song_info.cover_url,
-        'tags' : topic_related_song_info.tags,
-      })
+      topic_related_song.append(make_song_info_to_json(topic_related_song_info))
   else:
     topic_related_song.append({None})
 
@@ -94,7 +77,7 @@ def topic_based_info(request):
 def emotion_based_info(request):
   song_id = request.GET.get("song_id")
 
-  emotion_based_info_queryset = Song_with_meta_emotion.objects.filter(song_id__icontains = f'{song_id}')
+  emotion_based_info_queryset = Song_with_meta_emotion.objects.filter(song_id = song_id)
   print('emotion_based_info_queryset',emotion_based_info_queryset)
 
   if emotion_based_info_queryset.exists:
@@ -109,3 +92,17 @@ def emotion_based_info(request):
     "emotion" : emotion_based_song_info
   }
   return JsonResponse(context , status = 200)
+
+
+def make_song_info_to_json(listname):
+  output = {
+      'song_id' : listname.song_id,
+      'song_name' : listname.song_name,
+      'artist' : listname.artist,
+      'album' : listname.album,
+      'Like_Count' : listname.Like_Count,
+      'Lyric' : listname.Lyric,
+      'cover_url' : listname.cover_url,
+      'tags' : listname.tags,
+    }
+  return output
