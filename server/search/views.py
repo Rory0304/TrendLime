@@ -159,6 +159,10 @@ class Latest_100ViewSet(viewsets.ModelViewSet):
   queryset = Latest_100.objects.all()
   serialzer_class = Latest_100Serializer
 
+class Song_with_meta_emotionViewSet(viewsets.ModelViewSet):
+  queryset = Song_with_meta_emotion.objects.all()
+  serialzer_class = Song_with_meta_emotionSerializer
+
 class Song_without_yearViewSet(viewsets.ModelViewSet):
   queryset = Song_without_year.objects.all()
   serializer_class = Song_without_yearSerializer
