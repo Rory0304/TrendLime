@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from search.views import UserViewSet, SongViewSet, TagViewSet, Song_without_yearViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags
+from search.views import UserViewSet, SongViewSet, Latest_100ViewSet, Song_with_meta_emotionViewSet, Song_without_yearViewSet, TagViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags
 from detail.views import detail
 from total.views import total
 
@@ -27,10 +27,12 @@ upperrouter = routers.DefaultRouter()
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'songs', SongViewSet)
+router.register(r'latest_100', Latest_100ViewSet)
+router.register(r'song_with_meta_emotion', Song_with_meta_emotionViewSet)
 router.register(r'songs_without_year', Song_without_yearViewSet)
-# router.register(r'tags', TagViewSet)
 router.register(r'top11', Top11ViewSet)
 router.register(r'top11_like100', Top11_like100ViewSet)
+# router.register(r'tags', TagViewSet)
 
 
 # Wire up our API using automatic URL routing.
