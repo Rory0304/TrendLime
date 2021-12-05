@@ -16,6 +16,8 @@ class Song(models.Model):
         * tags : 태그들 
         * year : 발매년도
   """     
+  Topic = models.CharField(max_length=100)
+  Percentage = models.CharField(max_length=100)
   song_id = models.CharField(max_length=100)
   song_name = models.CharField(max_length=100)
   artist = models.CharField(max_length=100)
@@ -80,6 +82,7 @@ class Song_with_meta_emotion(models.Model):
 
   def __str__(self):
     return self.song_id
+
 
 class Song_without_year(models.Model):  
   """
@@ -236,6 +239,25 @@ class Tag(models.Model):
 
   def __str__(self):
     return self.tag_id
+
+
+class Label(models.Model):
+  """
+    Attributes:
+      * label_id : 라벨아이디
+      * label_name : 라벨명
+  """
+
+  label_id = models.CharField(max_length=100)
+  label_name = models.CharField(max_length=100)
+  
+  class Meta:
+    verbose_name = 'label'
+    db_table = 'tb_label'
+
+  def __str__(self):
+    return self.label_id
+
 
 class Top11(models.Model):
   """
