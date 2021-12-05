@@ -16,6 +16,8 @@ class Song(models.Model):
         * tags : 태그들 
         * year : 발매년도
   """     
+  Topic = models.CharField(max_length=100)
+  Percentage = models.CharField(max_length=100)
   song_id = models.CharField(max_length=100)
   song_name = models.CharField(max_length=100)
   artist = models.CharField(max_length=100)
