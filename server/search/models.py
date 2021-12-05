@@ -36,9 +36,56 @@ class Song(models.Model):
   def __str__(self):
     return self.song_id
 
+
+class Latest_100(models.Model):
+  Topic = models.CharField(max_length=100)
+  Percentage = models.CharField(max_length=100)
+  song_id = models.CharField(max_length=100)
+  song_name = models.CharField(max_length=100)
+  artist = models.CharField(max_length=100)
+  album = models.CharField(max_length=100)
+  Like_Count = models.CharField(max_length=100)
+  Lyric = models.CharField(max_length=100)
+  cover_url = models.CharField(max_length=100)
+  tags = models.CharField(max_length=100)
+  year = models.CharField(max_length=100)
+
+
+  class Meta:
+    verbose_name = 'latest_100'
+    db_table = 'tb_latest_100'
+    # ordering = 'song_name'
+
+  def __str__(self):
+    return self.song_id
+
+
+class Song_with_meta_emotion(models.Model):
+  emotion = models.CharField(max_length=100)
+  percentage = models.CharField(max_length=100)
+  song_id = models.CharField(max_length=100)
+  song_name = models.CharField(max_length=100)
+  artist = models.CharField(max_length=100)
+  album = models.CharField(max_length=100)
+  Like_Count = models.CharField(max_length=100)
+  Lyric = models.CharField(max_length=100)
+  cover_url = models.CharField(max_length=100)
+  tags = models.CharField(max_length=100)
+  year = models.CharField(max_length=100)
+
+  class Meta:
+    verbose_name = 'song_with_meta_emotion'
+    db_table = 'tb_song_with_meta_emotion'
+    # ordering = 'song_name'
+
+  def __str__(self):
+    return self.song_id
+
 class Song_without_year(models.Model):  
   """
     Attributes:
+        * Topic :
+        * Percentage : 
         * song_id (string) : song_id
         * song_name (string) : 노래제목
         * artist (string) : 가수
@@ -49,6 +96,8 @@ class Song_without_year(models.Model):
         * youtube_url (string) : 유튜브주소
         * tags : 태그들 
   """     
+  Topic = models.CharField(max_length=100)
+  Percentage = models.CharField(max_length=100)
   song_id = models.CharField(max_length=100)
   song_name = models.CharField(max_length=100)
   artist = models.CharField(max_length=100)

@@ -24,10 +24,7 @@ from total.views import total
 
 # Routers provide an easy way of automatically determining the URL conf.
 upperrouter = routers.DefaultRouter()
-# upperrouter.register()
-# upperrouter.register()
 router = routers.DefaultRouter()
-# router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 router.register(r'songs', SongViewSet)
 router.register(r'songs_without_year', Song_without_yearViewSet)

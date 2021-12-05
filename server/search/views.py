@@ -6,9 +6,9 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Category, Tag, Song_without_year, Top11, Top11_like100
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion
 
-from search.serializers import UserSerializer, SongSerializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer
+from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer, Song_with_meta_emotionSerializer
 
 # Create your views here.
 
@@ -32,17 +32,17 @@ def search(request):
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-      # 트렌드 관련된 데이터 보여주기 수정할 곳!!!!!!!!!!!!!
-      queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
+    #   # 트렌드 관련된 데이터 보여주기 수정할 곳!!!!!!!!!!!!!
+    #   queryset_list = Top11_like100.objects.all() #filter(year__icontains = f'{tag_content}') 
 
-      for queryset in queryset_list:
-        result_list.append({
-          'word' : queryset.word,
-          'freq' : queryset.freq,
-          'year' : queryset.year
-        })
-      context = { result_list}
-    else:
+    #   for queryset in queryset_list:
+    #     result_list.append({
+    #       'word' : queryset.word,
+    #       'freq' : queryset.freq,
+    #       'year' : queryset.year
+    #     })
+    #   context = { result_list}
+    # else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
       words_and_freq = []
       represent_songs = []
@@ -154,6 +154,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class SongViewSet(viewsets.ModelViewSet):
   queryset = Song.objects.all()
   serializer_class = SongSerializer
+
+class Latest_100ViewSet(viewsets.ModelViewSet):
+  queryset = Latest_100.objects.all()
+  serialzer_class = Latest_100Serializer
 
 class Song_without_yearViewSet(viewsets.ModelViewSet):
   queryset = Song_without_year.objects.all()
