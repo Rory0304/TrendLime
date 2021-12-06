@@ -13,8 +13,8 @@ function SearchPage() {
     /* default로 설정하는 category와 tag명 */
     const [searchOption, setSearchOption] = useState({
         q: '',
-        category: '트렌드/연도',
-        tag: '트렌드',
+        category: 'trend',
+        tag: 'trend',
     });
 
     /* 추후 추가될 string으로 음악 검색하는 기능 */
