@@ -26,7 +26,7 @@ def total(request):
 def make_json(listname, search_word):
   result_list = []
   fieldname_icontains = listname + '__icontains'
-  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word}).sort_by('-Like_Count')
+  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word})
 
   if queryset_list.exists():
       for queryset in queryset_list:
