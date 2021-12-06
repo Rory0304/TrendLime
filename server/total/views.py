@@ -22,11 +22,24 @@ def total(request):
 
   return JsonResponse(context , status = 200)
 
+@csrf_exempt
+def total3(request):
+  search_word = request.GET.get("q")
+  variable = ['song_name', 'artist', 'album']
 
-def make_json(listname, search_word):
+  context = {
+    "song_name" :  make_json(variable[0], search_word, 3),
+    "artist" : make_json(variable[1], search_word, 3),
+    "album" : make_json(variable[2], search_word, 3)
+  }
+
+  return JsonResponse(context , status = 200)
+
+
+def make_json(listname, search_word, number):
   result_list = []
   fieldname_icontains = listname + '__icontains'
-  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word})
+  queryset_list = Song_without_year.objects.filter(**{fieldname_icontains : search_word})[:number]
 
   if queryset_list.exists():
       for queryset in queryset_list:
@@ -39,7 +52,7 @@ def make_json(listname, search_word):
           'Lyric' : queryset.Lyric,
           'cover_url' : queryset.cover_url,
           'tags' : queryset.tags,
-          'year' : queryset.year,
+          # 'year' : queryset.year,
         })
   else:
     result_list.append(None) 
