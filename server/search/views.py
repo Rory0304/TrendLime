@@ -6,7 +6,7 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label, Song_lyric_based_recommend10
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label, Song_lyric_based_recommend10, Word_info_each_category
 from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer, Song_with_meta_emotionSerializer, LabelSerializer, Song_lyric_based_recommend10Serializer
 # from detail.views import make_song_info_to_json
 
@@ -40,12 +40,12 @@ def search(request):
       print('trend')
       ## 토픽 정보 추가 하기!
       # 변경될 부분!!!!!!!!
-      queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
+      queryset_list = Top11_like100.objects.filter(year__icontains = 2010) 
       for queryset in queryset_list:
         total_words_and_freq.append(make_json_word_and_freq(queryset))
       
       # 트렌드 대표곡 출력 
-      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').order_by('-Like_Count')
+      represent_song_queryset_list = Song.objects.filter(year__icontains = 2010).order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
           songs.append(make_song_info_to_json_contains_year(queryset))
@@ -84,7 +84,7 @@ def search(request):
     queryset_list2 = Song.objects.filter(tags__icontains = f'{tag_content}') 
     # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
     # queryset_list4 = Song_without_year.objects.filter(tags__icontains = f'{tag_content}') 
-
+    queryset_list3 = Word_info_each_category.objects.filter(tags__icontains = f'{tag_content}') 
     # if queryset_list1.exists and queryset_list2.exists:
     #   queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
     # elif not queryset_list1.exists:
@@ -98,7 +98,22 @@ def search(request):
         result_list.append(make_song_info_to_json_contains_year(queryset))
     else:
       result_list.append(None) 
-    context = {"result" : result_list}
+
+    if queryset_list3.exists():
+      for queryset in queryset_list3:
+        words_and_freq_list.append(
+          {
+            "word" : queryset.word,
+            "freq" : queryset.freq
+          }
+        )
+    else:
+      words_and_freq_list.append(None) 
+
+    context = {
+      "represnt_songs" : result_list,
+      "words_and_freq" : words_and_freq_list
+    }
   return JsonResponse(context, status = 200)
 
 @csrf_exempt
