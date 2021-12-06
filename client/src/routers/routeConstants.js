@@ -3,7 +3,8 @@ const route = {
     NOTFOUND: '/notfound',
     ABOUT: '/about',
     SEARCH: '/search',
-    DETAIL: '/search/song/',
+    SEARCHTOTAL: '/search/total',
+    DETAIL: '/song',
 };
 
 export default route;

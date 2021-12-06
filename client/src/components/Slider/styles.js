@@ -3,14 +3,14 @@ import styled from '@emotion/styled';
 export const Styled = {};
 
 Styled.SliderContainer = styled.div`
-    max-width: ${(props) => props.items * 190}px;
+    /* max-width: ${(props) => props.items * 190}px; */
     margin: 0 auto;
-    overflow-x: hidden;
+    overflow: hidden;
     padding: 0 2rem;
 
-    @media only screen and (max-width: 768px) {
+    /* @media only screen and (max-width: 768px) {
         max-width: ${(props) => props.items * 160}px;
-    }
+    } */
 `;
 
 Styled.PaginationButtons = styled.div`
@@ -27,13 +27,15 @@ Styled.PaginationButtons = styled.div`
     }
 `;
 
-Styled.SliderWrapper = styled.div`
+Styled.SliderWrapper = styled.ul`
     width: 100%;
     display: flex;
     gap: 1.3rem;
+    transition: all 0.5s ease-in-out;
+    transform: ${(props) => `translateX(-${props.slideIdx}00%)`};
 `;
 
-Styled.Slide = styled.div`
+Styled.Slide = styled.li`
     box-shadow: -1px 6px 9px 0px #00000036;
     padding: 10px;
     border-radius: 10px;
