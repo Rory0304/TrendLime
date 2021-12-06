@@ -16,38 +16,64 @@ function BarChart() {
         '단어9',
         '단어10',
     ];
-    const data = {
+
+    const sortbyDecrease = (arr) => {
+        return arr.sort(function (a, b) {
+            return b - a;
+        });
+    };
+
+    const data = [65, 59, 80, 81, 56, 55, 40, 100, 120, 200];
+
+    const backgroundColor = [];
+    const borderColor = [];
+
+    /* TODO: 한 줄로 바꾸기 */
+    for (let i = 1; i <= 10; i++) {
+        if (i <= 3) {
+            backgroundColor.push('#00A700');
+            borderColor.push('#00A700');
+        } else {
+            backgroundColor.push('#979797');
+            borderColor.push('#97979752');
+        }
+    }
+
+    const option = {
+        scales: {
+            y: {
+                grid: {
+                    drawBorder: false,
+                    drawTicks: false,
+                    display: false,
+                },
+            },
+            x: {
+                grid: {
+                    drawBorder: false,
+                    drawTicks: false,
+                    display: false,
+                },
+            },
+        },
+    };
+
+    const barData = {
         labels: labels,
         datasets: [
             {
                 indexAxis: 'y',
-                label: 'My First Dataset',
-                data: [65, 59, 80, 81, 56, 55, 40, 100, 120, 200],
+                data: sortbyDecrease(data),
                 fill: false,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                ],
-                borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)',
-                ],
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
                 borderWidth: 1,
+                borderRadius: 8,
             },
         ],
     };
 
-    return <Bar data={data} />;
+    return <Bar data={barData} />;
 }
 
 export default BarChart;

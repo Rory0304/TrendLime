@@ -11,10 +11,14 @@ Styled.CategoryList = styled.ul`
     display: flex;
     justify-content: space-around;
     margin: 30px auto;
+    justify-content: space-between;
+    margin: 30px auto;
+    border-bottom: 1px solid black;
 `;
 
 Styled.Category = styled.li`
-    border-bottom: ${(props) => (props.active ? '1px solid black' : 'none')};
+    padding-bottom: 1rem;
+    border-bottom: ${(props) => (props.active ? `2px solid ${props.theme.primaryColor}` : 'none')};
 `;
 
 Styled.OptionsWrapper = styled.div`

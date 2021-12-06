@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 import { css, jsx } from '@emotion/react';
 import { Styled } from './styles';
 
+import { featchSongInfoKey, featchSongEmotionKey } from '../../utils/api/queryKeys';
+import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 import tempData from './tempData';
+
+import EmotionSection from './EmotionSection';
+import RecommendSongSection from './RecommendSongSection';
 
 const queryClient = new QueryClient();
 
@@ -16,8 +22,23 @@ function SongInfoPage() {
     );
 }
 
+/* TODO: 컴포넌트 분리 필요 */
 function SongInfoContents() {
+    const { songId } = useParams();
+
     const [lyricsOpen, setLyricscOpen] = useState(false);
+
+    // const {
+    //     isLoading,
+    //     error,
+    //     data: album,
+    // } = useQuery([featchSongInfoKey, { song_id: songId }], useQueryFetch, {
+    //     initialData: [],
+    //     refetchOnWindowFocus: false,
+    //     refetchOnmount: false,
+    //     refetchOnReconnect: false,
+    //     retry: false,
+    // });
 
     const {
         isLoading,
@@ -25,11 +46,11 @@ function SongInfoContents() {
         error,
     } = useQuery('categoryData', () => fetch('').then((res) => tempData));
 
+    const slitedLyrics = useMemo(() => (album?.lyrics ? album.lyrics.split('  ') : []), [album]);
+
     if (isLoading) return <div>'Loading...'</div>;
 
     if (error) return <div>'Error'</div>;
-
-    const slitedLyrics = album.lyrics.split('  ');
 
     return (
         <div>
@@ -80,18 +101,11 @@ function SongInfoContents() {
                                 </ul>
                             </div>
                         </Styled.TopicSongs>
+                        <EmotionSection songId={songId} />
                     </Styled.Topic>
                 </Styled.UpperInfo>
                 <Styled.BottomInfo>
-                    <h3>가사의 표현과 유사한 곡</h3>
-                    <div>
-                        <ul>
-                            <li>유사곡1</li>
-                            <li>유사곡2</li>
-                            <li>유사곡3</li>
-                            <li>유사곡4</li>
-                        </ul>
-                    </div>
+                    <RecommendSongSection songId={songId} />
                 </Styled.BottomInfo>
             </Styled.MainInfo>
         </div>

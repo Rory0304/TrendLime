@@ -15,30 +15,62 @@ function SearchCategories({ searchOption, setSearchOption }) {
     const slideWrapperRef = useRef(null);
     const slideRef = useRef(null);
     const { isLoading, error, data } = useQuery([fetchCategoryKey], useQueryFetch, {
+        initialData: [],
         refetchOnWindowFocus: false,
     });
 
-    /* 캐러샐은 제거될 예정입니다.*/
-    // useEffect(() => {
-    // if (slideRef.current !== null && slideWrapperRef.current !== null) {
-    //     slideRef.current.style.transform = `translateX(-${
-    //         slideWrapperRef.current.clientWidth * selectedCategoryIdx
-    //     }px)`;
-    // }
-    // }, [selectedCategoryIdx]);
+    const categories = [
+        {
+            category_id: '1',
+            category_name: '뮤직 스타일',
+            category_key: '뮤직 스타일',
+        },
+        {
+            category_id: '2',
+            category_name: '계절',
+            category_key: '계절',
+        },
+        {
+            category_id: '3',
+            category_name: '시간',
+            category_key: '시간',
+        },
+        {
+            category_id: '4',
+            category_name: '날씨',
+            category_key: '날씨',
+        },
+        {
+            category_id: '5',
+            category_name: '상황/장소',
+            category_key: '상황/장소',
+        },
+        {
+            category_id: '6',
+            category_name: '감정/기분',
+            category_key: '감정/기분',
+        },
+        {
+            category_id: '7',
+            category_name: '트렌드/연도',
+            category_key: 'trend',
+        },
+    ];
 
-    const categories = useMemo(() => (!data ? [] : data.categories), [data]);
+    // const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
 
     const tags = useMemo(() => {
-        if (data) {
-            const filteredTags = data.tags.filter(
-                (tag) => tag.category_name === searchOption.category,
+        if (data.length !== 0) {
+            const filteredTags = data.tags.filter((tag) =>
+                searchOption.category === 'trend'
+                    ? tag.category_name === '트렌드/연도'
+                    : tag.category_name === searchOption.category,
             );
+
             setSearchOption({
                 ...searchOption,
-                tag: filteredTags[0].tag_name,
+                tag: searchOption.category === 'trend' ? 'trend' : filteredTags[0].tag_name,
             });
-
             return filteredTags;
         } else {
             return [];
@@ -53,37 +85,45 @@ function SearchCategories({ searchOption, setSearchOption }) {
     return (
         <Styled.CategoryWrapper>
             <Styled.CategoryList>
-                {categories.map((category) => (
-                    <Styled.Category
-                        active={category.category_name === searchOption.category}
-                        onClick={() =>
-                            setSearchOption({
-                                ...searchOption,
-                                category: category.category_name,
-                            })
-                        }
-                    >
-                        {category.category_name}
-                    </Styled.Category>
-                ))}
+                {isLoading ? (
+                    <div>loading...</div>
+                ) : (
+                    categories.map((category) => (
+                        <Styled.Category
+                            active={category.category_name === searchOption.category}
+                            onClick={() =>
+                                setSearchOption({
+                                    ...searchOption,
+                                    category: category.category_key,
+                                })
+                            }
+                        >
+                            {category.category_name}
+                        </Styled.Category>
+                    ))
+                )}
             </Styled.CategoryList>
             <Styled.OptionsWrapper>
                 <Styled.OptionsSlider ref={slideRef}>
                     {
                         <Styled.OptionListWrapper ref={slideWrapperRef}>
-                            {tags.map((tag) => (
-                                <Styled.OptionList
-                                    active={tag.tag_name === searchOption.tag}
-                                    onClick={() =>
-                                        setSearchOption({
-                                            ...searchOption,
-                                            tag: tag.tag_name,
-                                        })
-                                    }
-                                >
-                                    {tag.tag_name}
-                                </Styled.OptionList>
-                            ))}
+                            {isLoading ? (
+                                <div>Loading....</div>
+                            ) : (
+                                tags.map((tag) => (
+                                    <Styled.OptionList
+                                        active={tag.tag_name === searchOption.tag}
+                                        onClick={() =>
+                                            setSearchOption({
+                                                ...searchOption,
+                                                tag: tag.tag_name,
+                                            })
+                                        }
+                                    >
+                                        {tag.tag_name}
+                                    </Styled.OptionList>
+                                ))
+                            )}
                         </Styled.OptionListWrapper>
                     }
                 </Styled.OptionsSlider>

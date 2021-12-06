@@ -8,14 +8,8 @@ Styled.SubContentsWrapper = styled.div`
 `;
 
 Styled.SubContentArea = styled.div`
-    display: flex;
+    /* display: flex; */
     margin-top: 5rem;
-
-    div {
-        width: 50%;
-        height: 200px;
-        border: 1px solid black;
-    }
 `;
 
 Styled.AlbumListCarousel = styled.div`

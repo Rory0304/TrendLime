@@ -59,17 +59,15 @@ const SearchBar = ({ onChange, searchInput = '' }) => {
         },
     );
 
-    // const onFocus = () => {
-    //     autoCompleteField.current.style.display = 'block';
-    // };
+    const onFocus = () => {
+        autoCompleteField.current.style.display = 'block';
+    };
 
-    // const onBlur = () => {
-    //     autoCompleteField.current.style.display = 'none';
-    // };
+    const onBlur = () => {
+        autoCompleteField.current.style.display = 'none';
+    };
 
-    // onFocus = { onFocus } onBlur = { onBlur }
-
-    /* todo : 이 부분 깔끔하게 작성하는 방법? */
+    /* todo : 서버로부터 slice data 정보가 들어올 예정 */
     const artists = data?.artist ? data.artist.splice(0, 3) : [];
     const albums = data?.album ? data.album.splice(0, 3) : [];
     const songNames = data?.song_name ? data.song_name.splice(0, 3) : [];
@@ -87,6 +85,8 @@ const SearchBar = ({ onChange, searchInput = '' }) => {
                         name="searchInput"
                         value={searchInput}
                         autocomplete="off"
+                        onFocus={onFocus}
+                        onBlur={onBlur}
                     />
                 </Styled.Input>
                 <Styled.SearchBtn>
