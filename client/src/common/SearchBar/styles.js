@@ -75,6 +75,12 @@ Styled.AutoCompleteResult = styled.div`
         padding: 14px 0;
         p {
             font-weight: bold;
+            text-align: left;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            word-wrap: normal;
+            overflow: hidden;
+            max-width: 20rem;
         }
     }
 `;
