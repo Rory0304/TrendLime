@@ -57,6 +57,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
         },
     ];
 
+    /* TODO : 데이터 수정 필요 */
     // const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
 
     const tags = useMemo(() => {
@@ -132,4 +133,4 @@ function SearchCategories({ searchOption, setSearchOption }) {
     );
 }
 
-export default SearchCategories;
+export default React.memo(SearchCategories);
