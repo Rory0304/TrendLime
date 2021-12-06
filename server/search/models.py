@@ -240,6 +240,23 @@ class Tag(models.Model):
   def __str__(self):
     return self.tag_id
 
+class Word_info_each_category(models.Model):
+  '''
+    word
+    freq
+    category
+  '''
+  word = models.CharField(max_length=100)
+  freq = models.CharField(max_length=100)
+  category = models.CharField(max_length=100)
+
+  class Meta:
+    verbose_name = 'word_info'
+    db_table = 'tb_word_info_each_category'
+
+  def __str__(self):
+    return self.word
+
 
 class Label(models.Model):
   """
