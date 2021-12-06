@@ -6,8 +6,8 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label
-from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer, Song_with_meta_emotionSerializer, LabelSerializer
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label, Song_lyric_based_recommend10
+from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer, Song_with_meta_emotionSerializer, LabelSerializer, Song_lyric_based_recommend10Serializer
 # from detail.views import make_song_info_to_json
 
 # Create your views here.
@@ -183,6 +183,10 @@ class TagViewSet(viewsets.ModelViewSet):
 class LabelViewSet(viewsets.ModelViewSet):
   queryset = Label.objects.all()
   serializer_class = LabelSerializer
+
+class Song_lyric_based_recommend10ViewSet(viewsets.ModelViewSet):
+  queryset = Song_lyric_based_recommend10.objects.all()
+  serializer_class = Song_lyric_based_recommend10Serializer
 
 class Top11ViewSet(viewsets.ModelViewSet):
   queryset = Top11.objects.all().order_by('id')

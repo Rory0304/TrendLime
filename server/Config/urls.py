@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from search.views import UserViewSet, SongViewSet, Latest_100ViewSet, Song_with_meta_emotionViewSet, Song_without_yearViewSet, TagViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags, LabelViewSet
+from search.views import UserViewSet, SongViewSet, Latest_100ViewSet, Song_with_meta_emotionViewSet, Song_without_yearViewSet, TagViewSet, Top11ViewSet, Top11_like100ViewSet, search, categories_and_tags, LabelViewSet, Song_lyric_based_recommend10ViewSet
 from detail.views import detail, recommend_song_info, topic_based_info, emotion_based_info
 from total.views import total
 
@@ -33,6 +33,7 @@ router.register(r'songs_without_year', Song_without_yearViewSet)
 router.register(r'top11', Top11ViewSet)
 router.register(r'top11_like100', Top11_like100ViewSet)
 router.register(r'label', LabelViewSet)
+router.register(r'song_lyric_based_recommend10', Song_lyric_based_recommend10ViewSet)
 # router.register(r'tags', TagViewSet)
 
 

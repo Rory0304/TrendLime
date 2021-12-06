@@ -6,7 +6,7 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion ,Label
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion ,Label, Song_lyric_based_recommend10
 
 
 # Create your views here.
@@ -31,8 +31,20 @@ def detail(request):
 @csrf_exempt
 def recommend_song_info(request):
   song_id = request.GET.get("song_id")
-  # single_song_info_queryset = Song_without_year.objects.filter(song_id__icontains = f'{song_id}')
+  recommend_songs_list = Song_lyric_based_recommend10.objects.filter(rec = song_id)
+  recommend_songs = []
 
+  if recommend_songs_list.exists:
+    for recommend_song in recommend_songs_list:
+      song_info = Song_without_year.objects.filter(song_id = recommend_song.song_id)
+      if song_info.exists:
+        for data in song_info:
+          recommend_songs.append(make_song_info_to_json(data))
+      else:
+        single_song_info = None
+  context = {
+    "recommend_songs" : recommend_songs
+  }
   return JsonResponse(context , status = 200)
 
 
