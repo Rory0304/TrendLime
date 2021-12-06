@@ -100,7 +100,7 @@ def search(request):
     context = {"result" : result_list}
   return JsonResponse(context, status = 200)
 
-
+@csrf_exempt
 def categories_and_tags(request):
   result_list = []
   category_list = []

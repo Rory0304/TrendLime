@@ -27,7 +27,7 @@ def detail(request):
 
 
 ### 아직 미작성된 부분!
-# tf-idf 기반 가사와 유사한 노래 리스트 10개 제공
+# tf-idf 기반 가사와 유사한 노래 리스트 제공
 @csrf_exempt
 def recommend_song_info(request):
   song_id = request.GET.get("song_id")
