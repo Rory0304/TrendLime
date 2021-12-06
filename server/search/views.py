@@ -21,6 +21,8 @@ def search(request):
   topics = []
   total_words_and_freq = [] 
   songs = []  
+  words_and_freq_list = []
+  represent_songs_list = []
 
   """
   scenario:
@@ -35,7 +37,7 @@ def search(request):
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-
+      print('trend')
       ## 토픽 정보 추가 하기!
       # 변경될 부분!!!!!!!!
       queryset_list = Top11_like100.objects.filter(year__icontains = f'{tag_content}') 
@@ -43,7 +45,7 @@ def search(request):
         total_words_and_freq.append(make_json_word_and_freq(queryset))
       
       # 트렌드 대표곡 출력 
-      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').sort_by('-Like_Count')
+      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
           songs.append(make_song_info_to_json_contains_year(queryset))
@@ -57,25 +59,24 @@ def search(request):
       }
     else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
-      words_and_freq = []
-      represent_songs = []
-
+      
+      print('연도')
       queryset_list = Top11.objects.filter(year__icontains = f'{tag_content}') 
       for queryset in queryset_list:
-        words_and_freq.append(make_json_word_and_freq(queryset))
+        words_and_freq_list.append(make_json_word_and_freq(queryset))
 
       # 연도별 대표곡 출력 
-      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}') #.sort_by('-Like_Count')
+      represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
-          represent_songs.append(make_song_info_to_json_contains_year(queryset))
+          represent_songs_list.append(make_song_info_to_json_contains_year(queryset))
       else:
-        represent_songs.append(None) 
+        represent_songs_list.append(None) 
 
-    context = { 
-      'words_and_freq' : words_and_freq,
-      'represent_songs' : represent_songs 
-    }
+      context = { 
+        'words_and_freq' : words_and_freq_list,
+        'represent_songs' : represent_songs_list 
+      }
 
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
@@ -140,7 +141,7 @@ def make_song_info_to_json_contains_year(listname):
       'Lyric' : listname.Lyric,
       'cover_url' : listname.cover_url,
       'tags' : listname.tags,
-      'yaer' : listname.yaer
+      'year' : listname.year
     }
   return output
 
