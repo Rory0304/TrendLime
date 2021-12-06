@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion
 # Create your views here.
 
+@csrf_exempt
 def total(request):
   search_word = request.GET.get("q")
   variable = ['song_name', 'artist', 'album']
@@ -25,7 +26,7 @@ def total(request):
 def make_json(listname, search_word):
   result_list = []
   fieldname_icontains = listname + '__icontains'
-  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word})
+  queryset_list = Song.objects.filter(**{fieldname_icontains : search_word}).sort_by()
 
   if queryset_list.exists():
       for queryset in queryset_list:

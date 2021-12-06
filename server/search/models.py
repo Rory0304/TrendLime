@@ -296,6 +296,32 @@ class Top11_like100(models.Model):
   def __str__(self):
     return self.word
 
+
+class Song_lyric_based_recommend10(models.Model):
+  """
+    Attributes:
+      * song_id : 
+      * song_name : 
+      * artist : 
+      * Lyric : 
+      * year : 
+      * score : cos-similarity 점수
+      * rec : 관련곡 id
+  """
+  song_id = models.CharField(max_length=100)
+  song_name = models.CharField(max_length=100)
+  artist = models.CharField(max_length=100)
+  Lyric = models.CharField(max_length=100)
+  year = models.CharField(max_length=100)
+  score = models.CharField(max_length=100)
+  rec = models.CharField(max_length=100)
+
+  class Meta:
+    verbose_name = 'song_lyric_based_recommend10'
+    db_table = 'tb_song_lyric_based_recommend10'
+
+  def __str__(self):
+    return self.rec
 '''
 -User-
 
