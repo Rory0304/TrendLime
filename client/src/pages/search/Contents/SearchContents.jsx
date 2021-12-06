@@ -11,12 +11,18 @@ import BarChart from '../../../components/BarChart/index';
 import Slider from '../../../components/Slider';
 
 function SearchContents({ searchOption }) {
-    const { isLoading, data } = useQuery([fetchSearchKey, searchOption], useQueryFetch, {
-        refetchOnWindowFocus: false,
-        refetchOnmount: false,
-        refetchOnReconnect: false,
-        retry: false,
-    });
+    const { isLoading, data, isFetching } = useQuery(
+        [fetchSearchKey, searchOption],
+        useQueryFetch,
+        {
+            initialData: [],
+            enabled: !!searchOption,
+            refetchOnWindowFocus: false,
+        },
+    );
+
+    console.log(searchOption);
+    console.log(data, isFetching);
 
     return (
         <div>
@@ -35,12 +41,20 @@ function SearchContents({ searchOption }) {
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>대표곡</Styled.SubTitle>
                 <Styled.AlbumListCarousel>
-                    {isLoading ? (
+                    {isFetching ? (
                         <div>loading...</div>
-                    ) : data?.result?.length === 0 ? (
+                    ) : data?.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
-                        <Slider slideList={data.result.splice(0, 10)} />
+                        <Slider
+                            slideList={
+                                searchOption.tag === 'trend'
+                                    ? data.songs.splice(0, 10)
+                                    : data.result
+                                    ? data.result.splice(0, 10)
+                                    : data.represent_songs.splice(0, 10)
+                            }
+                        />
                     )}
                 </Styled.AlbumListCarousel>
             </Styled.SubContentsWrapper>
