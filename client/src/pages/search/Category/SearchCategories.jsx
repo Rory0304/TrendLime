@@ -19,18 +19,57 @@ function SearchCategories({ searchOption, setSearchOption }) {
         refetchOnWindowFocus: false,
     });
 
-    console.log(data);
+    const categories = [
+        {
+            category_id: '1',
+            category_name: '뮤직 스타일',
+            category_key: '뮤직 스타일',
+        },
+        {
+            category_id: '2',
+            category_name: '계절',
+            category_key: '계절',
+        },
+        {
+            category_id: '3',
+            category_name: '시간',
+            category_key: '시간',
+        },
+        {
+            category_id: '4',
+            category_name: '날씨',
+            category_key: '날씨',
+        },
+        {
+            category_id: '5',
+            category_name: '상황/장소',
+            category_key: '상황/장소',
+        },
+        {
+            category_id: '6',
+            category_name: '감정/기분',
+            category_key: '감정/기분',
+        },
+        {
+            category_id: '7',
+            category_name: '트렌드/연도',
+            category_key: 'trend',
+        },
+    ];
 
-    const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
+    // const categories = useMemo(() => (data.length === 0 ? [] : data.categories), [data]);
+
     const tags = useMemo(() => {
         if (data.length !== 0) {
-            console.log(data);
-            const filteredTags = data.tags.filter(
-                (tag) => tag.category_name === searchOption.category,
+            const filteredTags = data.tags.filter((tag) =>
+                searchOption.category === 'trend'
+                    ? tag.category_name === '트렌드/연도'
+                    : tag.category_name === searchOption.category,
             );
+
             setSearchOption({
                 ...searchOption,
-                tag: filteredTags[0].tag_name,
+                tag: searchOption.category === 'trend' ? 'trend' : filteredTags[0].tag_name,
             });
             return filteredTags;
         } else {
@@ -55,7 +94,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
                             onClick={() =>
                                 setSearchOption({
                                     ...searchOption,
-                                    category: category.category_name,
+                                    category: category.category_key,
                                 })
                             }
                         >
