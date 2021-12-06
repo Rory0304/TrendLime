@@ -111,7 +111,7 @@ def search(request):
       words_and_freq_list.append(None) 
 
     context = {
-      "represnt_songs" : result_list,
+      "result" : result_list,
       "words_and_freq" : words_and_freq_list
     }
   return JsonResponse(context, status = 200)
