@@ -81,10 +81,10 @@ def search(request):
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
-    queryset_list2 = Song.objects.filter(tags__icontains = f'{tag_content}') 
+    queryset_list2 = Song.objects.filter(tags__icontains = tag_content) 
     # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
     # queryset_list4 = Song_without_year.objects.filter(tags__icontains = f'{tag_content}') 
-    queryset_list3 = Word_info_each_category.objects.filter(tags__icontains = f'{tag_content}') 
+    queryset_list3 = Word_info_each_category.objects.filter(category__icontains = tag_content) 
     # if queryset_list1.exists and queryset_list2.exists:
     #   queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
     # elif not queryset_list1.exists:
@@ -100,6 +100,7 @@ def search(request):
       result_list.append(None) 
 
     if queryset_list3.exists():
+      print('1')
       for queryset in queryset_list3:
         words_and_freq_list.append(
           {
