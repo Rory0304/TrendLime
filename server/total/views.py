@@ -28,18 +28,42 @@ def total3(request):
   variable = ['song_name', 'artist', 'album']
 
   context = {
-    "song_name" :  make_json(variable[0], search_word, 3),
-    "artist" : make_json(variable[1], search_word, 3),
-    "album" : make_json(variable[2], search_word, 3)
+    "song_name" :  make_json3(variable[0], search_word),
+    "artist" : make_json3(variable[1], search_word),
+    "album" : make_json3(variable[2], search_word)
   }
 
   return JsonResponse(context , status = 200)
 
 
-def make_json(listname, search_word, number):
+def make_json(listname, search_word):
   result_list = []
   fieldname_icontains = listname + '__icontains'
-  queryset_list = Song_without_year.objects.filter(**{fieldname_icontains : search_word})[:number]
+  queryset_list = Song_without_year.objects.filter(**{fieldname_icontains : search_word}).order_by('-Like_Count')
+
+  if queryset_list.exists():
+      for queryset in queryset_list:
+        result_list.append({
+          'song_id' : queryset.song_id,
+          'song_name' : queryset.song_name,
+          'artist' : queryset.artist,
+          'album' : queryset.album,
+          'Like_Count' : queryset.Like_Count,
+          'Lyric' : queryset.Lyric,
+          'cover_url' : queryset.cover_url,
+          'tags' : queryset.tags,
+          # 'year' : queryset.year,
+        })
+  else:
+    result_list.append(None) 
+
+  return result_list
+
+
+def make_json3(listname, search_word):
+  result_list = []
+  fieldname_icontains = listname + '__icontains'
+  queryset_list = Song_without_year.objects.filter(**{fieldname_icontains : search_word}).order_by('Like_Count')[:3]
 
   if queryset_list.exists():
       for queryset in queryset_list:
