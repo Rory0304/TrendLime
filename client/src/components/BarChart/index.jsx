@@ -2,28 +2,11 @@ import React from 'react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 
-/* 임시로 사용할 react chart js 라이브러리 */
-function BarChart() {
-    const labels = [
-        '단어1',
-        '단어2',
-        '단어3',
-        '단어4',
-        '단어5',
-        '단어6',
-        '단어7',
-        '단어8',
-        '단어9',
-        '단어10',
-    ];
+function BarChart({ data }) {
+    console.log(data);
 
-    const sortbyDecrease = (arr) => {
-        return arr.sort(function (a, b) {
-            return b - a;
-        });
-    };
-
-    const data = [65, 59, 80, 81, 56, 55, 40, 100, 120, 200];
+    const values = data.map((d) => parseInt(d.freq));
+    const labels = data.map((d) => d.word);
 
     const backgroundColor = [];
     const borderColor = [];
@@ -63,7 +46,7 @@ function BarChart() {
         datasets: [
             {
                 indexAxis: 'y',
-                data: sortbyDecrease(data),
+                data: values,
                 fill: false,
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
