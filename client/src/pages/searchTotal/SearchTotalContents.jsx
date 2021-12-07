@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, useLayoutEffect } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
@@ -43,16 +43,12 @@ function SearchTotalSection({ title, contents }) {
 }
 
 function SearchTotalContents({ searchKeyword }) {
-    const [selectedOption, setOption] = useState('');
-
-    const { isLoading, error, data } = useQuery(
-        ['fetchTotalSearch'],
-
-        () =>
-            axios
-                .get(featchTotalSearchKey, { params: { q: searchKeyword } })
-                .then((response) => response.data),
+    /* 한 번만 fetch 해줘도 되기때문에 polling 관련 옵션은 false로 처리*/
+    const { isLoading, data, error } = useQuery(
+        [featchTotalSearchKey, { q: searchKeyword }],
+        useQueryFetch,
         {
+            initialData: [],
             refetchOnWindowFocus: false,
             refetchOnmount: false,
             refetchOnReconnect: false,
@@ -60,67 +56,56 @@ function SearchTotalContents({ searchKeyword }) {
         },
     );
 
-    /* 자동완성을 위한 데이터 패칭과 분리 필요 */
-    // const { isLoading, error, data } = useQuery(
-    //     [featchTotalSearchKey, { q: searchKeyword }],
-    //     useQueryFetch,
-    //     {
-    //         refetchOnWindowFocus: false,
-    //         refetchOnmount: false,
-    //         refetchOnReconnect: false,
-    //         retry: false,
-    //     },
-    // );
-
-    const [{ searchInput }, onChange, reset] = useInput({
-        q: searchKeyword,
-    });
-
     const artists = useMemo(() => (data?.artist ? data.artist : []), [data]);
     const albums = useMemo(() => (data?.album ? data.album : []), [data]);
     const songNames = useMemo(() => (data?.song_name ? data.song_name : []), [data]);
 
     const [searchContents, setContents] = useState({
-        title: '가수',
-        contents: artists,
+        title: '',
+        contents: [],
     });
 
     const { title, contents } = searchContents;
 
-    useEffect(() => {
-        if (selectedOption === '가수') {
+    /* artist 정보가 []에서 바뀌게 되면, 보여줄 contents를 설정해줌 */
+    useLayoutEffect(() => {
+        setContents({ title: '가수', contents: artists });
+    }, [artists]);
+
+    const changeOption = (option) => {
+        if (option === '가수') {
             setContents({
-                title: selectedOption,
+                title: option,
                 contents: artists,
             });
         }
-        if (selectedOption === '제목') {
+        if (option === '제목') {
             setContents({
-                title: selectedOption,
+                title: option,
                 contents: songNames,
             });
         }
-        if (selectedOption === '앨범') {
+        if (option === '앨범') {
             setContents({
-                title: selectedOption,
+                title: option,
                 contents: albums,
             });
         }
-    }, [selectedOption]);
+    };
 
     if (isLoading) {
         <div>loading...</div>;
     }
     return (
         <div>
-            <SearchBar onChange={onChange} searchInput={searchInput} />
+            <SearchBar inputValue={searchKeyword} />
             <Styled.SearchTotalContentsWrapper>
                 <h2>'{searchKeyword}' 검색 결과</h2>
                 <Styled.SearchOptionsWrapper>
                     <ul>
                         {['가수', '제목', '앨범'].map((option) => (
                             <Styled.SearchOption
-                                onClick={() => setOption(option)}
+                                onClick={() => changeOption(option)}
                                 active={option === title}
                             >
                                 {option}
