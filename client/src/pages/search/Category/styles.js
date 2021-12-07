@@ -11,14 +11,13 @@ Styled.CategoryList = styled.ul`
     display: flex;
     justify-content: space-around;
     margin: 30px auto;
-    justify-content: space-between;
-    margin: 30px auto;
     border-bottom: 1px solid black;
 `;
 
 Styled.Category = styled.li`
     padding-bottom: 1rem;
     border-bottom: ${(props) => (props.active ? `2px solid ${props.theme.primaryColor}` : 'none')};
+    font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
 `;
 
 Styled.OptionsWrapper = styled.div`
@@ -29,11 +28,11 @@ Styled.OptionsWrapper = styled.div`
     align-items: baseline;
 `;
 
-Styled.OptionsSlider = styled.div`
-    display: inline-flex;
-    flex-direction: row;
-    transition: all 0.5s ease-in-out;
-`;
+// Styled.OptionsSlider = styled.div`
+//     display: inline-flex;
+//     flex-direction: row;
+//     transition: all 0.5s ease-in-out;
+// `;
 
 Styled.OptionListWrapper = styled.ul`
     display: flex;

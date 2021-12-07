@@ -89,7 +89,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
                 {isLoading ? (
                     <div>loading...</div>
                 ) : (
-                    categories.map((category) => (
+                    categories.reverse().map((category) => (
                         <Styled.Category
                             active={category.category_name === searchOption.category}
                             onClick={() =>
@@ -105,29 +105,27 @@ function SearchCategories({ searchOption, setSearchOption }) {
                 )}
             </Styled.CategoryList>
             <Styled.OptionsWrapper>
-                <Styled.OptionsSlider ref={slideRef}>
-                    {
-                        <Styled.OptionListWrapper ref={slideWrapperRef}>
-                            {isLoading ? (
-                                <div>Loading....</div>
-                            ) : (
-                                tags.map((tag) => (
-                                    <Styled.OptionList
-                                        active={tag.tag_name === searchOption.tag}
-                                        onClick={() =>
-                                            setSearchOption({
-                                                ...searchOption,
-                                                tag: tag.tag_name,
-                                            })
-                                        }
-                                    >
-                                        {tag.tag_name}
-                                    </Styled.OptionList>
-                                ))
-                            )}
-                        </Styled.OptionListWrapper>
-                    }
-                </Styled.OptionsSlider>
+                {
+                    <Styled.OptionListWrapper ref={slideWrapperRef}>
+                        {isLoading ? (
+                            <div>Loading....</div>
+                        ) : (
+                            tags.map((tag) => (
+                                <Styled.OptionList
+                                    active={tag.tag_name === searchOption.tag}
+                                    onClick={() =>
+                                        setSearchOption({
+                                            ...searchOption,
+                                            tag: tag.tag_name,
+                                        })
+                                    }
+                                >
+                                    {tag.tag_name}
+                                </Styled.OptionList>
+                            ))
+                        )}
+                    </Styled.OptionListWrapper>
+                }
             </Styled.OptionsWrapper>
         </Styled.CategoryWrapper>
     );
