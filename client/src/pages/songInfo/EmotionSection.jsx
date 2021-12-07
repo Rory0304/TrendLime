@@ -41,8 +41,8 @@ function EmotionSection({ songId }) {
                 ) : (
                     <p>
                         해당 곡은 <span>{emoji}</span>
-                        {emotion}
-                        {word} {percentage}% 가까워요!
+                        <b>{emotion}</b>
+                        {word} <b>{percentage}%</b> 가까워요!
                     </p>
                 )}
             </div>
