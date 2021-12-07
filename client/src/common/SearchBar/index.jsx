@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Styled } from './styles';
@@ -27,9 +27,7 @@ const SearchBar = ({ inputValue }) => {
      * enabled:데이터 fetch 조건
      * 1) q가 빈스트링이 아님
      * 2) debounce를 거친 debouncedSearchTerm과 현재의 inputValue가 같은 경우
-     */
-
-    /**
+     *
      * initialData를 빈 배열로 설정하여, 첫 렌더링에 undefiend 값이 반환되지 않도록 설정
      */
 
@@ -39,11 +37,11 @@ const SearchBar = ({ inputValue }) => {
         {
             initialData: [],
             refetchOnWindowFocus: false,
-            enabled: q.length !== 0 && q === debouncedInputValue,
+            enabled: q?.length !== 0 && q === debouncedInputValue,
         },
     );
 
-    const onFocus = (e) => {
+    const onFocus = () => {
         autoCompleteField.current.style.display = 'block';
     };
 
@@ -51,6 +49,11 @@ const SearchBar = ({ inputValue }) => {
     const onBlur = (e) => {
         autoCompleteField.current.style.display = 'none';
     };
+
+    // const onEnterKeyPress = (e) => {
+    //     if (e.key === 'Enter') {
+    //     }
+    // };
 
     const artists = data?.artist ? data.artist : [];
     const albums = data?.album ? data.album : [];
@@ -61,7 +64,7 @@ const SearchBar = ({ inputValue }) => {
             <Styled.SearchBar>
                 <Styled.Input>
                     <input
-                        placeholder={q.length !== 0 ? q : '제목, 앨범, 가수를 검색해보세요.'}
+                        placeholder="제목, 앨범, 가수를 검색해보세요."
                         onChange={onChange}
                         name="q"
                         value={q}
@@ -77,27 +80,28 @@ const SearchBar = ({ inputValue }) => {
                 </Styled.SearchBtn>
             </Styled.SearchBar>
 
-            <Styled.AutoCompleteArea ref={autoCompleteField} isEmpty={q.length === 0}>
-                <div onMouseDown={(e) => e.preventDefault()}>
-                    <AutoCompleteResultSection
-                        title="가수"
-                        songs={artists}
-                        isLoading={isLoading}
-                        q={q}
-                    />
-                    <AutoCompleteResultSection
-                        title="제목"
-                        songs={songNames}
-                        isLoading={isLoading}
-                        q={q}
-                    />
-                    <AutoCompleteResultSection
-                        title="앨범"
-                        songs={albums}
-                        isLoading={isLoading}
-                        q={q}
-                    />
-                </div>
+            <Styled.AutoCompleteArea
+                ref={autoCompleteField}
+                onMouseDown={(e) => e.preventDefault()}
+            >
+                <AutoCompleteResultSection
+                    title="가수"
+                    songs={artists}
+                    isLoading={isLoading}
+                    q={q}
+                />
+                <AutoCompleteResultSection
+                    title="제목"
+                    songs={songNames}
+                    isLoading={isLoading}
+                    q={q}
+                />
+                <AutoCompleteResultSection
+                    title="앨범"
+                    songs={albums}
+                    isLoading={isLoading}
+                    q={q}
+                />
             </Styled.AutoCompleteArea>
         </Styled.SearchArea>
     );
@@ -115,7 +119,6 @@ export default React.memo(SearchBar);
   Etc:
     - songs[0] === null : 관련된 결과가 없는 경우를 판단
 */
-
 function AutoCompleteResultSection({ title, songs, isLoading, q }) {
     const highlightKeyword = (sentence, keyword) => (
         <>
