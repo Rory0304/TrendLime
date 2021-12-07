@@ -120,16 +120,13 @@ export default React.memo(SearchBar);
     - songs[0] === null : 관련된 결과가 없는 경우를 판단
 */
 function AutoCompleteResultSection({ title, songs, isLoading, q }) {
-    const highlightKeyword = (sentence, keyword) => (
-        <>
-            {sentence.split(keyword).reduce((prev, current, i) => {
-                if (!i) {
-                    return [current];
-                }
-                return prev.concat(<b style={{ color: '#00DD00' }}>{keyword}</b>, current);
-            }, [])}
-        </>
-    );
+    const highlightKeyword = (sentence, keyword) =>
+        sentence.split(keyword).reduce((prev, current, i) => {
+            if (!i) {
+                return [current];
+            }
+            return prev.concat(<b style={{ color: '#00DD00' }}>{keyword}</b>, current);
+        }, []);
 
     return (
         <Styled.AutoCompleteResult>
