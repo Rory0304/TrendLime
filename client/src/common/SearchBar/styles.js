@@ -59,7 +59,7 @@ Styled.AutoCompleteArea = styled.div`
     width: 450px;
     height: 400px;
     overflow: scroll;
-    display: ${(props) => (props.isEmpty ? 'none' : 'block')};
+    display: none;
     position: absolute;
     background-color: gray;
     top: 50px;
