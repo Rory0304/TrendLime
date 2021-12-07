@@ -143,7 +143,7 @@ function Section3() {
                 type="top"
                 contents={['TOP 10 최신 가요에서 많이 사용하고 있는 표현을 살펴보세요!']}
             >
-                <Slider settings={settings} slideList={data} />
+                <Slider settings={settings} slideList={data} rankShown={true} />
                 <TFChart tfResult={tfResult} />
             </ContentBlock>
         </div>

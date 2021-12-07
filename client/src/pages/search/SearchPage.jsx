@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import ScrollToTop from '../../common/ScrollToTop/index';
 import SearchBar from '../../common/SearchBar/index';
 import SearchCategories from './Category/SearchCategories';
 import SearchContents from './Contents/SearchContents';
@@ -16,6 +17,7 @@ function SearchPage() {
 
     return (
         <QueryClientProvider client={queryClient}>
+            <ScrollToTop />
             <div>
                 <div>
                     <SearchBar inputValue="" />
