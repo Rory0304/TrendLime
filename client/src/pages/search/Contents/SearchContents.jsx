@@ -36,18 +36,10 @@ function SearchContents({ searchOption }) {
                 <Styled.SubTitle>대표곡</Styled.SubTitle>
                 {isFetching ? (
                     <div>loading...</div>
-                ) : data?.length === 0 ? (
+                ) : !!data === false ? (
                     <div>데이터가 없습니다. </div>
                 ) : (
-                    <Slider
-                        slideList={
-                            searchOption.tag === 'trend'
-                                ? data.songs.splice(0, 10)
-                                : data.result
-                                ? data.result.splice(0, 10)
-                                : data.represent_songs.splice(0, 10)
-                        }
-                    />
+                    data?.songs[0] && <Slider slideList={data.songs.slice(0, 40)} />
                 )}
             </Styled.SubContentsWrapper>
         </div>

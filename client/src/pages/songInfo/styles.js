@@ -30,16 +30,20 @@ Styled.SummaryInfoWrapper = styled.div`
 `;
 
 Styled.AlbumCover = styled.div`
-    width: 100%;
+    text-align: left;
 
     img {
         width: 200px;
         height: 200px;
     }
+
+    ${(props) => props.theme.mq.tablet} {
+        text-align: center;
+    }
 `;
 
 Styled.SongInfo = styled.div`
-    width: 100%;
+    text-align: left;
 
     h2 {
         font-size: 1.7rem;
@@ -50,13 +54,14 @@ Styled.SongInfo = styled.div`
     p {
         font-size: 1.2rem;
         text-align: left;
-        ${(props) => props.theme.mq.tablet} {
-            text-align: center;
-        }
+    }
+    ${(props) => props.theme.mq.tablet} {
+        text-align: center;
     }
 `;
 
 Styled.MainInfo = styled.section`
+    position: relative;
     background-color: #f9f9f9;
     padding: 3rem 2.5rem;
     box-sizing: border-box;
@@ -69,8 +74,13 @@ Styled.MainInfo = styled.section`
     h3 {
         font-size: 1.6rem;
         font-weight: bold;
-        color: ${(props) => props.theme.primaryColor};
+        color: black;
         padding-bottom: 1rem;
+        line-height: 2.2rem;
+
+        span {
+            color: ${(props) => props.theme.primaryColor};
+        }
     }
 
     p {
@@ -95,6 +105,9 @@ Styled.RightInfo = styled.div`
     background-color: #fff;
     padding: 1rem;
     margin-bottom: 2rem;
+    position: sticky;
+    right: 0;
+    top: 0;
 
     button {
         width: 100%;
@@ -107,6 +120,7 @@ Styled.RightInfo = styled.div`
 
     ${(props) => props.theme.mq.tablet} {
         width: 100%;
+        position: relative;
     }
 `;
 
@@ -151,6 +165,51 @@ Styled.RecommendSong = styled.div`
     margin-bottom: 2rem;
 `;
 
-Styled.TopicWrodCloud = styled.div``;
+Styled.TopicWordCloud = styled.div`
+    margin-bottom: 2rem;
+`;
 
-Styled.TopicSongs = styled.div``;
+Styled.TopicSongs = styled.ul`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 3rem;
+`;
+
+Styled.TopicSongList = styled.li`
+    div {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1.4rem;
+    }
+
+    div:first-of-type {
+        width: 15%;
+        height: 15%;
+        margin-right: 15px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    div:last-of-type {
+        width: 70%;
+    }
+
+    p {
+        text-align: left;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-wrap: normal;
+        overflow: hidden;
+        font-size: 1rem;
+
+        width: 100%;
+    }
+
+    span {
+        font-size: 0.8rem;
+        color: #0000009c;
+    }
+`;
