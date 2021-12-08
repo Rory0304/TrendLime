@@ -16,15 +16,7 @@ from search.views import make_json_word_freq
 def detail(request):
   song_id = request.GET.get("song_id")
   single_song_info_queryset = Song_without_year.objects.filter(song_id = f'{song_id}')
-
-  if not single_song_info_queryset.exists:
-    print(single_song_info_queryset)
-    for data in single_song_info_queryset:
-      print('2',data)
-      single_song_info = make_song_info_to_json(data)
-  else:
-    print('1')
-    single_song_info = json.dumps(None)
+  single_song_info = make_song_info_to_json(single_song_info_queryset)
 
   return JsonResponse(single_song_info , status = 200 ,safe= False)
 
@@ -40,11 +32,8 @@ def recommend_song_info(request):
   if recommend_songs_list.exists:
     for recommend_song in recommend_songs_list:
       song_info = Song_without_year.objects.filter(song_id = recommend_song.song_id)
-      if song_info.exists:
-        for data in song_info:
-          recommend_songs.append(make_song_info_to_json(data))
-      else:
-        recommend_songs.append({None})
+      recommend_songs = make_song_info_to_json(song_info)
+
   context = {
     "recommend_songs" : recommend_songs
   }
@@ -70,7 +59,6 @@ def topic_based_info(request):
 
   words_freq_queryset_list = Word_info_each_topic.objects.filter(Topic = topic_type).order_by('-freq')[:50]
   if words_freq_queryset_list.exists:
-
     for data in words_freq_queryset_list:
       words_freq.append({
         'Topic': data.Topic,
@@ -79,11 +67,7 @@ def topic_based_info(request):
       })
 
   topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)
-  if topic_related_song_info_list.exists:
-    for topic_related_song_info in topic_related_song_info_list:
-      topic_related_song.append(make_song_info_to_json(topic_related_song_info))
-  else:
-    topic_related_song.append({None})
+  topic_related_song = make_song_info_to_json(topic_related_song_info_list)
 
   context = {
     "topic" : {
@@ -93,7 +77,6 @@ def topic_based_info(request):
       "song": topic_related_song
     }
   }
-
   return JsonResponse(context , status = 200,safe= False)
 
 
@@ -112,7 +95,10 @@ def emotion_based_info(request):
         'percentage' : data.percentage,
       }
   else:
-    emotion_based_song_info = Json.dumps(None)
+    emotion_based_song_info = {
+        'emotion' : None,
+        'percentage' : None,
+      }
   context = {
     "emotion" : emotion_based_song_info
   }
@@ -120,16 +106,29 @@ def emotion_based_info(request):
 
 
 def make_song_info_to_json(listname):
-  if listname:
-    output = {
-        'song_id' : listname.song_id,
-        'song_name' : listname.song_name,
-        'artist' : listname.artist,
-        'album' : listname.album,
-        'Like_Count' : listname.Like_Count,
-        'Lyric' : listname.Lyric,
-        'cover_url' : listname.cover_url,
-        'tags' : listname.tags,
-    }
-
+  output = []
+  if listname.exists:
+    for topic_related_song_info in listname:
+      output.append({
+        'song_id' : topic_related_song_info.song_id,
+        'song_name' : topic_related_song_info.song_name,
+        'artist' : topic_related_song_info.artist,
+        'album' : topic_related_song_info.album,
+        'Like_Count' : topic_related_song_info.Like_Count,
+        'Lyric' : topic_related_song_info.Lyric,
+        'cover_url' : topic_related_song_info.cover_url,
+        'tags' : topic_related_song_info.tags,
+    })
+  else:
+    print('5')
+    output.append({
+        'song_id' : None,
+        'song_name' : None,
+        'artist' : None,
+        'album' : None,
+        'Like_Count' : None,
+        'Lyric' : None,
+        'cover_url' : None,
+        'tags' : None,
+    })
   return output
