@@ -39,18 +39,21 @@ def search(request):
     if tag_content == "trend":
       # 최신 트렌드 토픽 단어 선정 선호 순위
       for i in range(3):
+        words_and_freq = []
         topic_queryset_list = Word_info_each_topic.objects.filter(Topic = i)[:30]
         topic_name = Label.objects.filter(label_id = i)
-
         for data in topic_name:
           label_name = data.label_name
 
         for queryset in topic_queryset_list:
-          topics.append({
-            "label_id" : i,
-            "label_name" : label_name ,
-            "words_and_freq" : make_json_word_freq(queryset)
-          })
+          words_and_freq.append(make_json_word_freq(queryset))
+
+        topics.append({
+          "label_id" : i,
+          "label_name" : label_name ,
+          "words_and_freq" : words_and_freq
+        })
+
       # 최신 트렌드 곡 단어 빈도수
       queryset_list = Top11_like100.objects.filter(year__icontains = 2020)
       for queryset in queryset_list:
