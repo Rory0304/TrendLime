@@ -49,21 +49,32 @@ def topic_based_info(request):
   topic_related_song = []
   words_freq = []
 
-  if topic_based_info_queryset.exists:
+  if topic_based_info_queryset:
     for data in topic_based_info_queryset:
       topic_type = data.Topic
+  else:
+    topic_type = None
 
   topic_info = Label.objects.filter(label_id = topic_type)
-  for data in topic_info:
-    topic_name = data.label_name
-
+  if topic_info:
+    for data in topic_info:
+      topic_name = data.label_name
+  else : 
+    topic_name = None
+    
   words_freq_queryset_list = Word_info_each_topic.objects.filter(Topic = topic_type).order_by('-freq')[:50]
-  if words_freq_queryset_list.exists:
+  if words_freq_queryset_list:
     for data in words_freq_queryset_list:
       words_freq.append({
         'Topic': data.Topic,
         'word' : data.word,
         'freq' : data.freq,
+      })
+  else:
+    words_freq.append({
+        'Topic': None,
+        'word' : None,
+        'freq' : None,
       })
 
   topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)
