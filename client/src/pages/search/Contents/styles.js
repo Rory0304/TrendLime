@@ -8,7 +8,6 @@ Styled.SubContentsWrapper = styled.div`
 `;
 
 Styled.SubContentArea = styled.div`
-    /* display: flex; */
     margin-top: 5rem;
 `;
 
@@ -25,7 +24,6 @@ Styled.AblumList = styled.ul`
     transition: all 0.8s ease-in-out;
 
     li {
-        /* display: inline-block; */
         width: 200px;
         height: 200px;
         border: 1px solid black;
@@ -36,4 +34,10 @@ Styled.AblumList = styled.ul`
 Styled.SubTitle = styled.h3`
     font-size: 1.5rem;
     font-weight: bold;
+`;
+
+Styled.TopicList = styled.ul`
+    display: flex;
+    justify-content: space-around;
+    gap: 5rem;
 `;

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useMemo, useEffect, useState, useLayoutEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
@@ -13,30 +13,75 @@ import { Styled } from './styles';
 /**
  * TODO: 컴포넌트 분리 필요
  */
-function SearchTotalSection({ title, contents }) {
+
+function SearchTotalSection({ searchContents }) {
+    /* searchContents props가 바뀌고 있는데 초기화가 안 된다!? */
+    const UNIT_PAGE = 10;
+    const [page, setPage] = useState({
+        start: 0,
+        end: UNIT_PAGE,
+    });
+    const [currentContents, setCurrentContents] = useState([]);
+
+    useEffect(() => {
+        if (searchContents.contents.length > 0) {
+            const SlicedData = searchContents.contents.slice(0, UNIT_PAGE);
+            setCurrentContents(SlicedData);
+            setPage({
+                start: 0 + UNIT_PAGE,
+                end: UNIT_PAGE + UNIT_PAGE,
+            });
+        }
+    }, [searchContents]);
+
+    const loadData = () => {
+        const SlicedData = searchContents.contents.slice(
+            page.start + UNIT_PAGE,
+            page.end + UNIT_PAGE,
+        );
+        setCurrentContents((current) => current.concat(SlicedData));
+        setPage({
+            start: page.start + UNIT_PAGE,
+            end: page.end + UNIT_PAGE,
+        });
+    };
+
     return (
         <Styled.SearchTotalSection>
             <div>
                 <ul>
-                    {contents.map((song) => (
+                    {currentContents.map((song) => (
                         <Styled.AlbumList>
                             <div>
                                 <img src={song.cover_url} alt={song.song_name} />
                             </div>
                             <div>
-                                <p style={{ color: title === '제목' ? 'red' : 'black' }}>
+                                <p
+                                    style={{
+                                        color: searchContents.title === '제목' ? 'red' : 'black',
+                                    }}
+                                >
                                     {song.song_name}
                                 </p>
-                                <p style={{ color: title === '앨범' ? 'red' : 'black' }}>
+                                <p
+                                    style={{
+                                        color: searchContents.title === '앨범' ? 'red' : 'black',
+                                    }}
+                                >
                                     {song.album}
                                 </p>
-                                <p style={{ color: title === '가수' ? 'red' : 'black' }}>
+                                <p
+                                    style={{
+                                        color: searchContents.title === '가수' ? 'red' : 'black',
+                                    }}
+                                >
                                     {song.artist}
                                 </p>
                             </div>
                         </Styled.AlbumList>
                     ))}
                 </ul>
+                <button onClick={loadData}>더 보기</button>
             </div>
         </Styled.SearchTotalSection>
     );
@@ -65,11 +110,9 @@ function SearchTotalContents({ searchKeyword }) {
         contents: [],
     });
 
-    const { title, contents } = searchContents;
-
     /* artist 정보가 []에서 바뀌게 되면, 보여줄 contents를 설정해줌 */
-    useLayoutEffect(() => {
-        setContents({ title: '가수', contents: artists });
+    useEffect(() => {
+        setContents((current) => (current = { title: '가수', contents: artists }));
     }, [artists]);
 
     const changeOption = (option) => {
@@ -93,9 +136,6 @@ function SearchTotalContents({ searchKeyword }) {
         }
     };
 
-    if (isLoading) {
-        <div>loading...</div>;
-    }
     return (
         <div>
             <SearchBar inputValue={searchKeyword} />
@@ -106,14 +146,18 @@ function SearchTotalContents({ searchKeyword }) {
                         {['가수', '제목', '앨범'].map((option) => (
                             <Styled.SearchOption
                                 onClick={() => changeOption(option)}
-                                active={option === title}
+                                active={option === searchContents.title}
                             >
                                 {option}
                             </Styled.SearchOption>
                         ))}
                     </ul>
                 </Styled.SearchOptionsWrapper>
-                <SearchTotalSection title={title} contents={contents} />
+                {isLoading ? (
+                    <div>loading...</div>
+                ) : (
+                    <SearchTotalSection searchContents={searchContents} />
+                )}
             </Styled.SearchTotalContentsWrapper>
         </div>
     );

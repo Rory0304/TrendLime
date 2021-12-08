@@ -78,6 +78,10 @@ function SearchCategories({ searchOption, setSearchOption }) {
         }
     }, [data, searchOption.category]);
 
+    console.log(searchOption);
+
+    // { q: '', category: 'trend', tag: '트렌드' }
+
     if (isLoading || data.length === 0)
         return <Styled.CategoryWrapper>'Loading...'</Styled.CategoryWrapper>;
 
@@ -116,7 +120,7 @@ function SearchCategories({ searchOption, setSearchOption }) {
                                     onClick={() =>
                                         setSearchOption({
                                             ...searchOption,
-                                            tag: tag.tag_name,
+                                            tag: tag.tag_name === '트렌드' ? 'trend' : tag.tag_name,
                                         })
                                     }
                                 >
