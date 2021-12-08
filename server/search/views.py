@@ -37,16 +37,26 @@ def search(request):
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-      ## 토픽 정보 추가 하기! -> 토픽을 다 보여줄 것인지 세개만 골라서 보여줄 것인지? 이것에 따라 필터 적용 범위가 달라질것 같은데
-      # topic_queryset_list = Word_info_each_topic.objects.filter()
-      # for queryset in topic_queryset_list:
-      #   topic.append(make_json_word_freq(queryset))
-      # 변경될 부분!!!!!!!!
+      # 최신 트렌드 토픽 단어 선정 선호 순위
+      for i in range(3):
+        topic_queryset_list = Word_info_each_topic.objects.filter(Topic = i)[:30]
+        topic_name = Label.objects.filter(label_id = i)
+
+        for data in topic_name:
+          label_name = data.label_name
+
+        for queryset in topic_queryset_list:
+          topics.append({
+            "label_id" : i,
+            "label_name" : label_name ,
+            "words_and_freq" : make_json_word_freq(queryset)
+          })
+      # 최신 트렌드 곡 단어 빈도수
       queryset_list = Top11_like100.objects.filter(year__icontains = 2020)
       for queryset in queryset_list:
         total_words_and_freq.append(make_json_word_freq_year(queryset))
       
-      # 트렌드 대표곡 출력 
+      # 최신 트렌드 대표곡 출력 
       represent_song_queryset_list = Song.objects.filter(year__icontains = 2020).order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
@@ -56,11 +66,11 @@ def search(request):
 
       context = {
         'topics' : topics,
-        'total_words_and_freq' : total_words_and_freq,
+        'words_and_freq' : total_words_and_freq,
         'songs' : songs 
       }
-    else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
+    else:
       queryset_list = Top11.objects.filter(year__icontains = f'{tag_content}') 
       for queryset in queryset_list:
         words_and_freq_list.append(make_json_word_freq_year(queryset))
@@ -75,7 +85,7 @@ def search(request):
 
       context = { 
         'words_and_freq' : words_and_freq_list,
-        'represent_songs' : represent_songs_list 
+        'songs' : represent_songs_list 
       }
 
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
@@ -105,7 +115,7 @@ def search(request):
       words_and_freq_list.append(None) 
 
     context = {
-      "result" : result_list,
+      "songs" : result_list,
       "words_and_freq" : words_and_freq_list
     }
   return JsonResponse(context, status = 200)
