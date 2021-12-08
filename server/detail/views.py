@@ -6,8 +6,8 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion ,Label, Song_lyric_based_recommend10
-
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion ,Label, Song_lyric_based_recommend10, Word_info_each_topic
+from search.views import make_json_word_freq
 
 # Create your views here.
 
@@ -17,13 +17,16 @@ def detail(request):
   song_id = request.GET.get("song_id")
   single_song_info_queryset = Song_without_year.objects.filter(song_id = f'{song_id}')
 
-  if single_song_info_queryset.exists:
+  if not single_song_info_queryset.exists:
+    print(single_song_info_queryset)
     for data in single_song_info_queryset:
+      print('2',data)
       single_song_info = make_song_info_to_json(data)
   else:
-    single_song_info = None
+    print('1')
+    single_song_info = json.dumps(None)
 
-  return JsonResponse(single_song_info , status = 200)
+  return JsonResponse(single_song_info , status = 200 ,safe= False)
 
 
 ### 아직 미작성된 부분!
@@ -41,11 +44,11 @@ def recommend_song_info(request):
         for data in song_info:
           recommend_songs.append(make_song_info_to_json(data))
       else:
-        single_song_info = None
+        recommend_songs.append({None})
   context = {
     "recommend_songs" : recommend_songs
   }
-  return JsonResponse(context , status = 200)
+  return JsonResponse(context , status = 200,safe= False)
 
 
 ### 데이가 일부 없어서 구현 못한 부분 있음
@@ -55,6 +58,7 @@ def topic_based_info(request):
   song_id = request.GET.get("song_id")
   topic_based_info_queryset = Song_without_year.objects.filter(song_id__icontains = f'{song_id}')
   topic_related_song = []
+  words_freq = []
 
   if topic_based_info_queryset.exists:
     for data in topic_based_info_queryset:
@@ -63,9 +67,18 @@ def topic_based_info(request):
   topic_info = Label.objects.filter(label_id = topic_type)
   for data in topic_info:
     topic_name = data.label_name
-    
-  topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)
 
+  words_freq_queryset_list = Word_info_each_topic.objects.filter(Topic = topic_type).order_by('-freq')[:50]
+  if words_freq_queryset_list.exists:
+
+    for data in words_freq_queryset_list:
+      words_freq.append({
+        'Topic': data.Topic,
+        'word' : data.word,
+        'freq' : data.freq,
+      })
+
+  topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)
   if topic_related_song_info_list.exists:
     for topic_related_song_info in topic_related_song_info_list:
       topic_related_song.append(make_song_info_to_json(topic_related_song_info))
@@ -76,12 +89,12 @@ def topic_based_info(request):
     "topic" : {
       "label_id" : topic_type,
       "label" : topic_name,
-# 		"words_freq" : [{word: , count: }, {word: , count: }, {}] //토픽에 속한 단어들, count
+		  "words_freq" : words_freq,#[{word: , count: }, {word: , count: }, {}] //토픽에 속한 단어들, count
       "song": topic_related_song
     }
   }
 
-  return JsonResponse(context , status = 200)
+  return JsonResponse(context , status = 200,safe= False)
 
 
 # 노래에 대한 감정 분류 정보 제공
@@ -99,22 +112,24 @@ def emotion_based_info(request):
         'percentage' : data.percentage,
       }
   else:
-    emotion_based_song_info = None
+    emotion_based_song_info = Json.dumps(None)
   context = {
     "emotion" : emotion_based_song_info
   }
-  return JsonResponse(context , status = 200)
+  return JsonResponse(context , status = 200,safe= False)
 
 
 def make_song_info_to_json(listname):
-  output = {
-      'song_id' : listname.song_id,
-      'song_name' : listname.song_name,
-      'artist' : listname.artist,
-      'album' : listname.album,
-      'Like_Count' : listname.Like_Count,
-      'Lyric' : listname.Lyric,
-      'cover_url' : listname.cover_url,
-      'tags' : listname.tags,
+  if listname:
+    output = {
+        'song_id' : listname.song_id,
+        'song_name' : listname.song_name,
+        'artist' : listname.artist,
+        'album' : listname.album,
+        'Like_Count' : listname.Like_Count,
+        'Lyric' : listname.Lyric,
+        'cover_url' : listname.cover_url,
+        'tags' : listname.tags,
     }
+
   return output

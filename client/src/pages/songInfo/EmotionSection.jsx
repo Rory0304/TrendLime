@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { featchSongEmotionKey } from '../../utils/api/queryKeys';
 import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 
+import { Styled } from './styles';
 import emotionMap from './emotionMap';
 
 function EmotionSection({ songId }) {
@@ -32,7 +33,7 @@ function EmotionSection({ songId }) {
     );
 
     return (
-        <div>
+        <Styled.Emotion>
             <h3>가사의 주요 감정</h3>
             <div>
                 {isLoading ? (
@@ -45,7 +46,7 @@ function EmotionSection({ songId }) {
                     </p>
                 )}
             </div>
-        </div>
+        </Styled.Emotion>
     );
 }
 

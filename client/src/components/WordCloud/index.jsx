@@ -2,14 +2,9 @@ import React, { useCallback } from 'react';
 import WordCloud from 'react-d3-cloud';
 import { Styled } from './styles.js';
 
-function Wordcloud() {
-    const data = [
-        { text: '안녕', value: 1000 },
-        { text: '안녕', value: 200 },
-        { text: '안녕', value: 800 },
-        { text: '안녕', value: 1000000 },
-        { text: '안녕', value: 10 },
-    ];
+function Wordcloud({ data }) {
+    /* TODO : 데이터가 너무 많음!! 워드 클라우드에 표현해줄 데이터 length 지정하기! */
+    const FilteredData = data.map((d) => ({ text: d.word, value: parseInt(d.freq) }));
 
     const sum = data.reduce((a, b) => a.value + b.value, 0);
     const avg = sum / data.length || 0;
@@ -21,7 +16,7 @@ function Wordcloud() {
         <Styled.WordCloudWrapper>
             <WordCloud
                 height={200}
-                data={data}
+                data={FilteredData}
                 fontSize={fontSize}
                 fontWeight={fontWeight}
                 // fill={fill}

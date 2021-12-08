@@ -6,7 +6,7 @@ from django.db import connection
 import json
 
 from django.contrib.auth.models import User
-from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label, Song_lyric_based_recommend10, Word_info_each_category
+from search.models import Song, Latest_100, Category, Tag, Song_without_year, Top11, Top11_like100, Song_with_meta_emotion, Label, Song_lyric_based_recommend10, Word_info_each_category, Word_info_each_topic
 from search.serializers import UserSerializer, SongSerializer, Latest_100Serializer, TagSerializer, Song_without_yearSerializer, Top11Serializer, Top11_like100Serializer, Song_with_meta_emotionSerializer, LabelSerializer, Song_lyric_based_recommend10Serializer
 # from detail.views import make_song_info_to_json
 
@@ -29,7 +29,7 @@ def search(request):
   1. 카테고리 태그에 따라 분류 - 트랜드/연도 카테고리
                         - 그외 카테고리
     2-1. 트렌드 카테고리를 고르면 - 트렌드와 연도 태그가 나오고
-      3-1. 트렌드 태그를 고르면 최신 트랜드의 토픽정보, 토픽에대한 단어 빈도수 정보, 대표곡 정보 나오고
+      3-1. 트렌드 태그를 고르면 최신 트랜드의 토픽정보, 토픽에 대한 단어 빈도수 정보, 대표곡 정보 나오고
       3-2. 연도 태그를 선택하면 해당연도의 곡 정보 해당 연도에 많이 사용된 단어 정보
     2-2. 그외의 카테고리 및 해당 카테고리 하위 태그를 고르면 해당 태그에 맞는 곡 정보 제공
   """
@@ -37,15 +37,27 @@ def search(request):
   if selected_tag == "trend":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
-      print('trend')
-      ## 토픽 정보 추가 하기!
-      # 변경될 부분!!!!!!!!
-      queryset_list = Top11_like100.objects.filter(year__icontains = 2010) 
+      # 최신 트렌드 토픽 단어 선정 선호 순위
+      for i in range(3):
+        topic_queryset_list = Word_info_each_topic.objects.filter(Topic = i)[:30]
+        topic_name = Label.objects.filter(label_id = i)
+
+        for data in topic_name:
+          label_name = data.label_name
+
+        for queryset in topic_queryset_list:
+          topics.append({
+            "label_id" : i,
+            "label_name" : label_name ,
+            "words_and_freq" : make_json_word_freq(queryset)
+          })
+      # 최신 트렌드 곡 단어 빈도수
+      queryset_list = Top11_like100.objects.filter(year__icontains = 2020)
       for queryset in queryset_list:
-        total_words_and_freq.append(make_json_word_and_freq(queryset))
+        total_words_and_freq.append(make_json_word_freq_year(queryset))
       
-      # 트렌드 대표곡 출력 
-      represent_song_queryset_list = Song.objects.filter(year__icontains = 2010).order_by('-Like_Count')
+      # 최신 트렌드 대표곡 출력 
+      represent_song_queryset_list = Song.objects.filter(year__icontains = 2020).order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
           songs.append(make_song_info_to_json_contains_year(queryset))
@@ -54,16 +66,14 @@ def search(request):
 
       context = {
         'topics' : topics,
-        'total_words_and_freq' : total_words_and_freq,
+        'words_and_freq' : total_words_and_freq,
         'songs' : songs 
       }
-    else:
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
-      
-      print('연도')
+    else:
       queryset_list = Top11.objects.filter(year__icontains = f'{tag_content}') 
       for queryset in queryset_list:
-        words_and_freq_list.append(make_json_word_and_freq(queryset))
+        words_and_freq_list.append(make_json_word_freq_year(queryset))
 
       # 연도별 대표곡 출력 
       represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').order_by('-Like_Count')
@@ -75,16 +85,15 @@ def search(request):
 
       context = { 
         'words_and_freq' : words_and_freq_list,
-        'represent_songs' : represent_songs_list 
+        'songs' : represent_songs_list 
       }
 
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
   else:
     # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
     queryset_list2 = Song.objects.filter(tags__icontains = tag_content) 
-    # queryset_list3 = Song_without_year.objects.filter(song_name__icontains = f'{search_word}') 
-    # queryset_list4 = Song_without_year.objects.filter(tags__icontains = f'{tag_content}') 
     queryset_list3 = Word_info_each_category.objects.filter(category__icontains = tag_content) 
+
     # if queryset_list1.exists and queryset_list2.exists:
     #   queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')
     # elif not queryset_list1.exists:
@@ -100,19 +109,13 @@ def search(request):
       result_list.append(None) 
 
     if queryset_list3.exists():
-      print('1')
       for queryset in queryset_list3:
-        words_and_freq_list.append(
-          {
-            "word" : queryset.word,
-            "freq" : queryset.freq
-          }
-        )
+        words_and_freq_list.append(make_json_word_freq(queryset))
     else:
       words_and_freq_list.append(None) 
 
     context = {
-      "result" : result_list,
+      "songs" : result_list,
       "words_and_freq" : words_and_freq_list
     }
   return JsonResponse(context, status = 200)
@@ -162,11 +165,19 @@ def make_song_info_to_json_contains_year(listname):
   return output
 
 
-def make_json_word_and_freq(queryset):
+def make_json_word_freq_year(queryset):
   result = {
     'word' : queryset.word,
     'freq' : queryset.freq,
     'year' : queryset.year
+  }
+  return result
+
+
+def make_json_word_freq(queryset):
+  result = {
+    'word' : queryset.word,
+    'freq' : queryset.freq,
   }
   return result
 

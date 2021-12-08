@@ -10,7 +10,7 @@ from search.models import Song, Latest_100, Category, Tag, Song_without_year, To
 # Create your views here.
 
 @csrf_exempt
-def total(request):
+def get_result(request):
   search_word = request.GET.get("q")
   variable = ['song_name', 'artist', 'album']
 
@@ -23,7 +23,7 @@ def total(request):
   return JsonResponse(context , status = 200)
 
 @csrf_exempt
-def total3(request):
+def get_result_top_3(request):
   search_word = request.GET.get("q")
   variable = ['song_name', 'artist', 'album']
 

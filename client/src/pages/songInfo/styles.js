@@ -61,6 +61,11 @@ Styled.MainInfo = styled.section`
     padding: 3rem 2.5rem;
     box-sizing: border-box;
 
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-start;
+
     h3 {
         font-size: 1.6rem;
         font-weight: bold;
@@ -74,25 +79,22 @@ Styled.MainInfo = styled.section`
 
     ${(props) => props.theme.mq.tablet} {
         padding: 2rem 1.2rem;
+        flex-direction: column-reverse;
     }
 `;
 
-Styled.UpperInfo = styled.div`
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse;
-    align-items: flex-start;
-
+Styled.LeftInfo = styled.div`
+    width: 62%;
     ${(props) => props.theme.mq.tablet} {
-        flex-direction: column;
+        width: 100%;
     }
 `;
 
-Styled.Lyrics = styled.div`
+Styled.RightInfo = styled.div`
+    width: 33%;
     background-color: #fff;
     padding: 1rem;
     margin-bottom: 2rem;
-    width: 30%;
 
     button {
         width: 100%;
@@ -122,10 +124,16 @@ Styled.LyricsWrapper = styled.div`
     }
 `;
 
+Styled.Emotion = styled.div`
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 2rem;
+`;
+
 Styled.Topic = styled.div`
     background-color: #fff;
-    width: 62%;
     padding: 1rem;
+    margin-bottom: 2rem;
 
     div {
         width: 100%;
@@ -137,8 +145,12 @@ Styled.Topic = styled.div`
     }
 `;
 
+Styled.RecommendSong = styled.div`
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 2rem;
+`;
+
 Styled.TopicWrodCloud = styled.div``;
 
 Styled.TopicSongs = styled.div``;
-
-Styled.BottomInfo = styled.div``;

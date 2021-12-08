@@ -1,47 +1,61 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import route from '../../routers/routeConstants';
 
 import { Styled } from './styles';
 
+import useIntersectionObserver from '../../utils/hooks/useIntersectionObserver';
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 
-/* TODO :
- * 1) 반응형 구현하기
- * 2) 페이지네이션 이동마다 영역이 잘리는 앨범 없이 row 구현하기
- */
-
-function Slider({ lastIdx = -1, slideList }) {
+function Slider({ lastIdx = -1, slideList, rankShown = false }) {
     const [slideIdx, setSlideIdx] = useState(0);
+    const slideWrapperRef = useRef(null);
+    const slideRef = useRef(null);
+
+    const firstElemRef = useRef(null);
+    const lastElemRef = useRef(null);
+
+    /* 처음과 끝 인덱스의 앨범이 viewport에 위치해있는지 판단 */
+    const firstElemIntersect = useIntersectionObserver(firstElemRef);
+    const lastElemIntersect = useIntersectionObserver(lastElemRef);
 
     const nextSlide = () => {
-        setSlideIdx(slideIdx === lastIdx ? slideIdx : slideIdx + 1);
+        if (lastElemIntersect) {
+            return;
+        }
+        setSlideIdx(slideIdx + 1);
+        slideRef.current.scrollLeft += slideWrapperRef.current.clientWidth;
     };
 
     const prevSlide = () => {
-        setSlideIdx(slideIdx === 0 ? slideIdx : slideIdx - 1);
+        if (firstElemIntersect) {
+            return;
+        }
+
+        setSlideIdx(slideIdx - 1);
+        slideRef.current.scrollLeft -= slideWrapperRef.current.clientWidth;
     };
 
     return (
-        <>
-            <Styled.PaginationButtons>
-                <button onClick={prevSlide}>
-                    <CaretLeftFilled />
-                    <span className="visually-hidden">이전</span>
-                </button>
-                <button onClick={nextSlide}>
-                    <CaretRightFilled />
-                    <span className="visually-hidden">다음</span>
-                </button>
-            </Styled.PaginationButtons>
-            <Styled.SliderContainer>
-                <Styled.SliderWrapper slideIdx={slideIdx}>
+        <Styled.AlbumListCarousel>
+            <Styled.SliderContainer ref={slideWrapperRef}>
+                <Styled.SliderWrapper ref={slideRef}>
                     {slideList.map((item, index) => (
-                        <Styled.Slide>
+                        <Styled.Slide
+                            ref={
+                                index === 0
+                                    ? firstElemRef
+                                    : index === slideList.length - 1
+                                    ? lastElemRef
+                                    : null
+                            }
+                        >
                             <Link to={`${route.DETAIL}/${item ? item.song_id : ''}`}>
-                                <Styled.Rank>
-                                    <span>{index + 1}.</span>
-                                </Styled.Rank>
+                                {rankShown && (
+                                    <Styled.Rank>
+                                        <span>{index + 1}.</span>
+                                    </Styled.Rank>
+                                )}
                                 <Styled.AlbumCover>
                                     <img src={item.cover_url} alt={item.song_name} />
                                 </Styled.AlbumCover>
@@ -54,7 +68,15 @@ function Slider({ lastIdx = -1, slideList }) {
                     ))}
                 </Styled.SliderWrapper>
             </Styled.SliderContainer>
-        </>
+            <Styled.PrevBtn onClick={prevSlide} firstElemShown={firstElemIntersect}>
+                <CaretLeftFilled />
+                <span className="visually-hidden">이전</span>
+            </Styled.PrevBtn>
+            <Styled.NextBtn onClick={nextSlide} lastElemShown={lastElemIntersect}>
+                <CaretRightFilled />
+                <span className="visually-hidden">다음</span>
+            </Styled.NextBtn>
+        </Styled.AlbumListCarousel>
     );
 }
 

@@ -2,6 +2,10 @@ import styled from '@emotion/styled';
 
 export const Styled = {};
 
+Styled.AlbumListCarousel = styled.div`
+    position: relative;
+`;
+
 Styled.SliderContainer = styled.div`
     /* max-width: ${(props) => props.items * 190}px; */
     margin: 0 auto;
@@ -31,14 +35,14 @@ Styled.SliderWrapper = styled.ul`
     width: 100%;
     display: flex;
     gap: 1.3rem;
-    transition: all 0.5s ease-in-out;
-    transform: ${(props) => `translateX(-${props.slideIdx}00%)`};
+    overflow-x: scroll;
+    scroll-behavior: smooth;
 `;
 
 Styled.Slide = styled.li`
-    box-shadow: -1px 6px 9px 0px #00000036;
+    /* box-shadow: -1px 6px 9px 0px #00000036; */
     padding: 10px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 `;
 
 Styled.Rank = styled.div`
@@ -83,4 +87,24 @@ Styled.SongInfo = styled.div`
     p:last-of-type {
         color: #0000009e;
     }
+`;
+
+Styled.PrevBtn = styled.button`
+    display: ${(props) => (props.firstElemShown ? 'none' : 'block')};
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    z-index: 1;
+    left: 20px;
+    padding: 10px;
+`;
+
+Styled.NextBtn = styled.button`
+    display: ${(props) => (props.lastElemShown ? 'none' : 'block')};
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    z-index: 1;
+    right: 20px;
+    padding: 10px;
 `;
