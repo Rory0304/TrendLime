@@ -261,12 +261,12 @@ class Word_info_each_category(models.Model):
 class Word_info_each_topic(models.Model):
   """
     Attributes:
-      * topic : 주제
+      * Topic : 주제
       * word : 단어
       * freq : 빈도
   """
 
-  topic = models.CharField(max_length=100)
+  Topic = models.CharField(max_length=100)
   word = models.CharField(max_length=100)
   freq = models.CharField(max_length=4)
   class Meta:
@@ -274,7 +274,7 @@ class Word_info_each_topic(models.Model):
     db_table = 'tb_word_info_each_topic'
 
   def __str__(self):
-    return self.topic
+    return self.word
 
 
 class Label(models.Model):
