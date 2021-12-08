@@ -107,7 +107,7 @@ def emotion_based_info(request):
 
 def make_song_info_to_json(listname):
   output = []
-  if listname.exists:
+  if listname:
     for topic_related_song_info in listname:
       output.append({
         'song_id' : topic_related_song_info.song_id,
