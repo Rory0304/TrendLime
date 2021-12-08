@@ -38,19 +38,20 @@ def search(request):
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
     if tag_content == "trend":
       # 최신 트렌드 토픽 단어 선정 선호 순위
-      for i in range(3):
+      label_list = Label.objects.all()
+      
+      for label_data in label_list:
+        i = label_data.label_id
         words_and_freq = []
         topic_queryset_list = Word_info_each_topic.objects.filter(Topic = i)[:30]
-        topic_name = Label.objects.filter(label_id = i)
-        for data in topic_name:
-          label_name = data.label_name
+        label_name = label_data.label_name
 
         for queryset in topic_queryset_list:
           words_and_freq.append(make_json_word_freq(queryset))
 
         topics.append({
           "label_id" : i,
-          "label_name" : label_name ,
+          "label_name" : label_name,
           "words_and_freq" : words_and_freq
         })
 
