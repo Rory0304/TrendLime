@@ -53,12 +53,12 @@ def search(request):
         })
 
       # 최신 트렌드 곡 단어 빈도수
-      queryset_list = Top11_like100.objects.filter(year__icontains = 2020)
+      queryset_list = Top11_like100.objects.filter(year__icontains = 2020)[:30]
       for queryset in queryset_list:
         words_and_freq_list.append(make_json_word_freq_year(queryset))
       
       # 최신 트렌드 대표곡 출력 
-      represent_song_queryset_list = Song.objects.filter(year__icontains = 2020).order_by('-Like_Count')
+      represent_song_queryset_list = Song.objects.filter(year__icontains = 2020).order_by('-Like_Count')[:30]
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
           songs.append(make_song_info_to_json_contains_year(queryset))
@@ -93,7 +93,7 @@ def search(request):
   else:
     # queryset_list1 = Song.objects.filter(song_name__icontains = f'{search_word}') 
     queryset_list2 = Song.objects.filter(tags__icontains = tag_content) 
-    queryset_list3 = Word_info_each_category.objects.filter(category__icontains = tag_content) 
+    queryset_list3 = Word_info_each_category.objects.filter(category__icontains = tag_content)[:30]
 
     # if queryset_list1.exists and queryset_list2.exists:
     #   queryset_list = (queryset_list1 & queryset_list2).order_by('-Like_Count')#, 'year')

@@ -60,7 +60,7 @@ def topic_based_info(request):
   else : 
     topic_name = None
     
-  words_freq_queryset_list = Word_info_each_topic.objects.filter(Topic = topic_type).order_by('-freq')[:50]
+  words_freq_queryset_list = Word_info_each_topic.objects.filter(Topic = topic_type).order_by('-freq')[:30]
   if words_freq_queryset_list:
     for data in words_freq_queryset_list:
       words_freq.append({
