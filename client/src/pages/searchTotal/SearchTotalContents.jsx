@@ -14,7 +14,7 @@ import { Styled } from './styles';
  * TODO: 컴포넌트 분리 필요
  */
 
-function SearchTotalSection({ searchContents }) {
+function SearchTotalSection({ searchContents, searchKeyword }) {
     /* searchContents props가 바뀌고 있는데 초기화가 안 된다!? */
     const UNIT_PAGE = 10;
     const [page, setPage] = useState({
@@ -46,6 +46,14 @@ function SearchTotalSection({ searchContents }) {
         });
     };
 
+    const highlightKeyword = (sentence, keyword) =>
+        sentence.split(keyword).reduce((prev, current, i) => {
+            if (!i) {
+                return [current];
+            }
+            return prev.concat(<b style={{ color: '#00DD00' }}>{keyword}</b>, current);
+        }, []);
+
     return (
         <Styled.SearchTotalSection>
             <div>
@@ -56,26 +64,20 @@ function SearchTotalSection({ searchContents }) {
                                 <img src={song.cover_url} alt={song.song_name} />
                             </div>
                             <div>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '제목' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.song_name}
+                                <p>
+                                    {searchContents.title === '제목'
+                                        ? highlightKeyword(song.song_name, searchKeyword)
+                                        : song.song_name}
                                 </p>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '앨범' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.album}
+                                <p>
+                                    {searchContents.title === '앨범'
+                                        ? highlightKeyword(song.album, searchKeyword)
+                                        : song.album}
                                 </p>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '가수' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.artist}
+                                <p>
+                                    {searchContents.title === '가수'
+                                        ? highlightKeyword(song.artist, searchKeyword)
+                                        : song.artist}
                                 </p>
                             </div>
                         </Styled.AlbumList>
@@ -156,7 +158,10 @@ function SearchTotalContents({ searchKeyword }) {
                 {isLoading ? (
                     <div>loading...</div>
                 ) : (
-                    <SearchTotalSection searchContents={searchContents} />
+                    <SearchTotalSection
+                        searchContents={searchContents}
+                        searchKeyword={searchKeyword}
+                    />
                 )}
             </Styled.SearchTotalContentsWrapper>
         </div>
