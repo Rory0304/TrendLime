@@ -1,150 +1,75 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/react';
+import { useQuery } from 'react-query';
+
+import { fetchSearchKey } from '../../utils/api/queryKeys';
+import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+
+import route from '../../routers/routeConstants';
 
 import ContentBlock from '../../components/ContentBlock/index';
 import Slider from '../../components/Slider/index';
-import TFChart from '../../components/TFChart/index';
+import BarChart from '../../components/BarChart/index';
+
+import { Styled } from '../../components/Slider/styles';
 
 function Section3() {
-    const data = [
+    const { isLoading, data, isFetching, error } = useQuery(
+        [fetchSearchKey, { category: '트렌드/연도', tag: '트렌드' }],
+        useQueryFetch,
         {
-            index: 1,
-            song_id: 481199,
-            artist: '이효리',
-            song_name: '10 Minutes',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/324/32463.jpg?version=20210421040232.0',
+            initialData: [],
+            refetchOnWindowFocus: false,
+            refetchOnmount: false,
+            refetchOnReconnect: false,
+            retry: false,
         },
-        {
-            index: 2,
-            song_id: 481199,
-            artist: '미나',
-            song_name: "Look (feat. Ak'sent) (Radio Edit)",
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/80284/8028436.jpg?version=20170926013258.0,',
-        },
-        {
-            index: 3,
-            song_id: 481199,
-            artist: '유니',
-            song_name: 'Call Call Call',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/324/32463.jpg?version=20210421040232.0',
-        },
-        {
-            index: 4,
-            song_id: 80045409,
-            artist: '아이비(IVY)',
-            song_name: '유혹의 소나타 (Sampling Fur Elise, L.van Beethoven)',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/80035/8003506.jpg?version=20190223184047.0',
-        },
-        {
-            index: 5,
-            song_id: 481199,
-            artist: '이효리',
-            song_name: '10 Minutes',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/324/32463.jpg?version=20210421040232.0',
-        },
-        {
-            index: 6,
-            song_id: 481199,
-            artist: '미나',
-            song_name: "Look (feat. Ak'sent) (Radio Edit)",
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/80284/8028436.jpg?version=20170926013258.0,',
-        },
-        {
-            index: 7,
-            song_id: 481199,
-            artist: '유니',
-            song_name: 'Call Call Call',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/324/32463.jpg?version=20210421040232.0',
-        },
-        {
-            index: 8,
-            song_id: 80045409,
-            artist: '아이비(IVY)',
-            song_name: '유혹의 소나타 (Sampling Fur Elise, L.van Beethoven)',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/80035/8003506.jpg?version=20190223184047.0',
-        },
-        {
-            index: 9,
-            song_id: 481199,
-            artist: '이효리',
-            song_name: '10 Minutes',
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/324/32463.jpg?version=20210421040232.0',
-        },
-        {
-            index: 10,
-            song_id: 481199,
-            artist: '미나',
-            song_name: "Look (feat. Ak'sent) (Radio Edit)",
-            cover_url:
-                'https://image.bugsm.co.kr/album/images/200/80284/8028436.jpg?version=20170926013258.0,',
-        },
-    ];
+    );
 
-    const settings = {
-        total_page: 2,
-        unit_slides: 5,
+    /* TODO : 공통 컴포넌트 생성 */
+    const AlbumSlideItem = ({ songs }) => {
+        const items = songs.slice(0, 10).map((item, index) => (
+            <Link to={`${route.DETAIL}/${item ? item.song_id : ''}`}>
+                <Styled.Rank>
+                    <span>{index + 1}.</span>
+                </Styled.Rank>
+                <Styled.AlbumCover>
+                    <img src={item.cover_url} alt={item.song_name} />
+                </Styled.AlbumCover>
+                <Styled.SongInfo>
+                    <p>{item.song_name}</p>
+                    <p>{item.artist}</p>
+                </Styled.SongInfo>
+            </Link>
+        ));
+        return items;
     };
-
-    const tfResult = [
-        {
-            word: '사랑',
-            count: 1000,
-        },
-        {
-            word: '사랑',
-            count: 900,
-        },
-        {
-            word: '사랑',
-            count: 800,
-        },
-        {
-            word: '사랑',
-            count: 700,
-        },
-        {
-            word: '사랑',
-            count: 600,
-        },
-        {
-            word: '사랑',
-            count: 500,
-        },
-        {
-            word: '사랑',
-            count: 400,
-        },
-        {
-            word: '사랑',
-            count: 300,
-        },
-        {
-            word: '사랑',
-            count: 200,
-        },
-        {
-            word: '사랑',
-            count: 100,
-        },
-    ];
 
     return (
         <div css={Section3Wrapper}>
             <ContentBlock
                 type="top"
-                contents={['TOP 10 최신 가요에서 많이 사용하고 있는 표현을 살펴보세요!']}
+                contents={['최신 TOP10 가요에서 많이 사용하고 있는 표현을 살펴보세요!']}
             >
-                <Slider settings={settings} slideList={data} rankShown={true} />
-                <TFChart tfResult={tfResult} />
+                {isFetching ? (
+                    <div>loading...</div>
+                ) : data?.songs.length === 0 ? (
+                    <div>데이터가 없습니다. </div>
+                ) : (
+                    data?.songs && (
+                        <>
+                            <Slider slideList={AlbumSlideItem({ songs: data.songs })} />
+                            <div css={BarChartSection}>
+                                <BarChart
+                                    data={data?.words_and_freq.slice(1)}
+                                    width="70%"
+                                    height="40%"
+                                />
+                            </div>
+                        </>
+                    )
+                )}
             </ContentBlock>
         </div>
     );
@@ -152,6 +77,10 @@ function Section3() {
 
 const Section3Wrapper = css`
     padding: 8rem 2rem;
+`;
+
+const BarChartSection = css`
+    margin-top: 3rem;
 `;
 
 export default Section3;
