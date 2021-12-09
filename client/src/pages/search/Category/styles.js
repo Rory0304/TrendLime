@@ -10,14 +10,16 @@ Styled.CategoryList = styled.ul`
     width: 70%;
     display: flex;
     justify-content: space-around;
+    flex-direction: row-reverse;
     margin: 30px auto;
-    border-bottom: 1px solid black;
 `;
 
 Styled.Category = styled.li`
     padding-bottom: 1rem;
     border-bottom: ${(props) => (props.active ? `2px solid ${props.theme.primaryColor}` : 'none')};
     font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
+
+    cursor: pointer;
 `;
 
 Styled.OptionsWrapper = styled.div`
@@ -28,12 +30,6 @@ Styled.OptionsWrapper = styled.div`
     align-items: baseline;
 `;
 
-// Styled.OptionsSlider = styled.div`
-//     display: inline-flex;
-//     flex-direction: row;
-//     transition: all 0.5s ease-in-out;
-// `;
-
 Styled.OptionListWrapper = styled.ul`
     display: flex;
     flex-direction: row;
@@ -43,7 +39,7 @@ Styled.OptionListWrapper = styled.ul`
     flex-shrink: 0;
 `;
 
-Styled.OptionList = styled.ul`
+Styled.OptionList = styled.li`
     width: 15%;
     height: 2.5rem;
     padding: 10px;
@@ -53,6 +49,7 @@ Styled.OptionList = styled.ul`
     margin: 10px;
 
     color: ${(props) => (props.active ? props.theme.primaryColor : 'black')};
+    border-color: ${(props) => (props.active ? props.theme.primaryColor : 'black')};
 
     &:hover {
         border-color: ${(props) => props.theme.primaryColor};
