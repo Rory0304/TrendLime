@@ -17,12 +17,9 @@ def search(request):
   search_word = request.GET.get("q")
   selected_tag = request.GET.get("category") 
   tag_content = request.GET.get("tag") 
-  result_list = []
   topics = []
-  total_words_and_freq = [] 
   songs = []  
   words_and_freq_list = []
-  represent_songs_list = []
 
   """
   scenario:
@@ -34,23 +31,23 @@ def search(request):
     2-2. 그외의 카테고리 및 해당 카테고리 하위 태그를 고르면 해당 태그에 맞는 곡 정보 제공
   """
   # 트렌드/연도 카테고리를 선택하면 트렌드 + 1940~2010년대 태그가 나오고 
-  if selected_tag == "trend":
+  if selected_tag == "트렌드/연도":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
-    if tag_content == "trend":
+    if tag_content == "트렌드":
       # 최신 트렌드 토픽 단어 선정 선호 순위
       label_list = Label.objects.all()
       
       for label_data in label_list:
-        i = label_data.label_id
-        words_and_freq = []
-        topic_queryset_list = Word_info_each_topic.objects.filter(Topic = i)[:30]
+        label_id = label_data.label_id
         label_name = label_data.label_name
 
+        words_and_freq = []
+        topic_queryset_list = Word_info_each_topic.objects.filter(Topic = label_id)[:30]
         for queryset in topic_queryset_list:
           words_and_freq.append(make_json_word_freq(queryset))
 
         topics.append({
-          "label_id" : i,
+          "label_id" : label_id,
           "label_name" : label_name,
           "words_and_freq" : words_and_freq
         })
@@ -58,7 +55,7 @@ def search(request):
       # 최신 트렌드 곡 단어 빈도수
       queryset_list = Top11_like100.objects.filter(year__icontains = 2020)
       for queryset in queryset_list:
-        total_words_and_freq.append(make_json_word_freq_year(queryset))
+        words_and_freq_list.append(make_json_word_freq_year(queryset))
       
       # 최신 트렌드 대표곡 출력 
       represent_song_queryset_list = Song.objects.filter(year__icontains = 2020).order_by('-Like_Count')
@@ -70,7 +67,7 @@ def search(request):
 
       context = {
         'topics' : topics,
-        'words_and_freq' : total_words_and_freq,
+        'words_and_freq' : words_and_freq_list,
         'songs' : songs 
       }
     # 연도 태그를 누르면 토픽에 대한 워드 클라우드와 top10 단어 리스트
@@ -83,13 +80,13 @@ def search(request):
       represent_song_queryset_list = Song.objects.filter(year__icontains = f'{tag_content}').order_by('-Like_Count')
       if represent_song_queryset_list.exists():
         for queryset in represent_song_queryset_list:
-          represent_songs_list.append(make_song_info_to_json_contains_year(queryset))
+          songs.append(make_song_info_to_json_contains_year(queryset))
       else:
-        represent_songs_list.append(None) 
+        songs.append(None) 
 
       context = { 
         'words_and_freq' : words_and_freq_list,
-        'songs' : represent_songs_list 
+        'songs' : songs 
       }
 
   # 트랜드/얀도 카테고리 외의 카테고리를 선택하면 일반적인 태그에 따라 필터링된 곡의 정보 표시
@@ -108,9 +105,9 @@ def search(request):
 
     if queryset_list.exists():
       for queryset in queryset_list:
-        result_list.append(make_song_info_to_json_contains_year(queryset))
+        songs.append(make_song_info_to_json_contains_year(queryset))
     else:
-      result_list.append(None) 
+      songs.append(None) 
 
     if queryset_list3.exists():
       for queryset in queryset_list3:
@@ -119,7 +116,7 @@ def search(request):
       words_and_freq_list.append(None) 
 
     context = {
-      "songs" : result_list,
+      "songs" : songs,
       "words_and_freq" : words_and_freq_list
     }
   return JsonResponse(context, status = 200)

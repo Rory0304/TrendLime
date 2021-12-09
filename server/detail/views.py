@@ -27,7 +27,6 @@ def detail(request):
 def recommend_song_info(request):
   song_id = request.GET.get("song_id")
   recommend_songs_list = Song_lyric_based_recommend10.objects.filter(rec = song_id)
-  recommend_songs = []
 
   if recommend_songs_list.exists:
     for recommend_song in recommend_songs_list:
@@ -46,7 +45,6 @@ def recommend_song_info(request):
 def topic_based_info(request):
   song_id = request.GET.get("song_id")
   topic_based_info_queryset = Song_without_year.objects.filter(song_id__icontains = f'{song_id}')
-  topic_related_song = []
   words_freq = []
 
   if topic_based_info_queryset:
@@ -99,7 +97,7 @@ def emotion_based_info(request):
   emotion_based_info_queryset = Song_with_meta_emotion.objects.filter(song_id = song_id)
   print('emotion_based_info_queryset',emotion_based_info_queryset)
 
-  if emotion_based_info_queryset.exists:
+  if emotion_based_info_queryset:
     for data in emotion_based_info_queryset:
       emotion_based_song_info = {
         'emotion' : data.emotion,
@@ -131,7 +129,6 @@ def make_song_info_to_json(listname):
         'tags' : topic_related_song_info.tags,
     })
   else:
-    print('5')
     output.append({
         'song_id' : None,
         'song_name' : None,
