@@ -1,10 +1,9 @@
 import React from 'react';
+import { css, jsx } from '@emotion/react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 
-function BarChart({ data }) {
-    console.log(data);
-
+function BarChart({ data, width = '100%', height = '100%' }) {
     const values = data.map((d) => parseInt(d.freq));
     const labels = data.map((d) => d.word);
 
@@ -14,32 +13,13 @@ function BarChart({ data }) {
     /* TODO: 한 줄로 바꾸기 */
     for (let i = 1; i <= 10; i++) {
         if (i <= 3) {
-            backgroundColor.push('#00A700');
-            borderColor.push('#00A700');
+            backgroundColor.push('#00DD00');
+            borderColor.push('#00DD00');
         } else {
             backgroundColor.push('#979797');
             borderColor.push('#97979752');
         }
     }
-
-    const option = {
-        scales: {
-            y: {
-                grid: {
-                    drawBorder: false,
-                    drawTicks: false,
-                    display: false,
-                },
-            },
-            x: {
-                grid: {
-                    drawBorder: false,
-                    drawTicks: false,
-                    display: false,
-                },
-            },
-        },
-    };
 
     const barData = {
         labels: labels,
@@ -51,12 +31,33 @@ function BarChart({ data }) {
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
                 borderWidth: 1,
-                borderRadius: 8,
             },
         ],
     };
 
-    return <Bar data={barData} />;
+    const options = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: false,
+            },
+            legend: {
+                display: false,
+            },
+        },
+    };
+
+    return (
+        <div css={BarChartWrapper({ width: width, height: height })}>
+            <Bar data={barData} options={options} />
+        </div>
+    );
 }
+
+const BarChartWrapper = ({ width, height }) => css`
+    width: ${width};
+    height: ${height};
+    margin: 0 auto;
+`;
 
 export default BarChart;
