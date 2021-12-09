@@ -11,14 +11,17 @@ Styled.SearchArea = styled.div`
 `;
 
 Styled.SearchBar = styled.div`
-    width: 450px;
+    width: 50%;
     height: 40px;
     margin: 0 auto;
     padding: 5px 20px;
-    border-radius: 18px;
-    border: 2px solid black;
-    border-color: ${(props) => props.theme.primaryColor};
     box-sizing: border-box;
+    border-radius: 18px;
+    /* border-bottom: 2px solid #cecece; */
+    border: 2px solid ${(props) => props.theme.primaryColor};
+    border-bottom-left-radius: ${(props) => (props.onFocusStatus ? '0' : 'none')};
+    border-bottom-right-radius: ${(props) => (props.onFocusStatus ? '0' : 'none')};
+    box-shadow: ${(props) => (props.onFocusStatus ? '0 4px 6px 0 #17171724' : 'none')};
 `;
 
 Styled.Input = styled.span`
@@ -54,18 +57,20 @@ Styled.SearchBtn = styled.span`
     cursor: pointer;
 `;
 
-/* 나중에 ant design auto complete으로 수정 */
 Styled.AutoCompleteArea = styled.div`
-    width: 450px;
+    width: 50%;
     height: 400px;
     overflow: scroll;
-    display: none;
+    display: ${(props) => (props.onFocusStatus ? 'block' : 'none')};
     position: absolute;
     background-color: gray;
-    top: 50px;
-    margin: -7px auto;
-    border: 1px solid #00dd00;
+    top: 39px;
+    border: 2px solid #00dd00;
     background-color: white;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 6px 0 #17171724;
+    border-top: 0;
+    box-sizing: border-box;
 `;
 
 Styled.AutoCompleteResult = styled.div`

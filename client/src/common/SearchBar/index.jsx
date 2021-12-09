@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Styled } from './styles';
@@ -22,7 +22,7 @@ const SearchBar = ({ inputValue }) => {
     });
     const debouncedInputValue = Debounce(q, 400);
     const autoCompleteField = useRef(null);
-
+    const [onFocusStatus, setOnFocusStatus] = useState(false);
     /**
      * enabled:데이터 fetch 조건
      * 1) q가 빈스트링이 아님
@@ -41,15 +41,6 @@ const SearchBar = ({ inputValue }) => {
         },
     );
 
-    const onFocus = () => {
-        autoCompleteField.current.style.display = 'block';
-    };
-
-    /* 이벤트의 진행 순서 : onMouseDown -> onBlur  */
-    const onBlur = (e) => {
-        autoCompleteField.current.style.display = 'none';
-    };
-
     // const onEnterKeyPress = (e) => {
     //     if (e.key === 'Enter') {
     //     }
@@ -61,7 +52,7 @@ const SearchBar = ({ inputValue }) => {
 
     return (
         <Styled.SearchArea>
-            <Styled.SearchBar>
+            <Styled.SearchBar onFocusStatus={onFocusStatus}>
                 <Styled.Input>
                     <input
                         placeholder="제목, 앨범, 가수를 검색해보세요."
@@ -69,8 +60,8 @@ const SearchBar = ({ inputValue }) => {
                         name="q"
                         value={q}
                         autoComplete="off"
-                        onFocus={onFocus}
-                        onBlur={onBlur}
+                        onFocus={() => setOnFocusStatus(true)}
+                        onBlur={() => setOnFocusStatus(false)}
                     />
                 </Styled.Input>
                 <Styled.SearchBtn>
@@ -81,7 +72,7 @@ const SearchBar = ({ inputValue }) => {
             </Styled.SearchBar>
 
             <Styled.AutoCompleteArea
-                ref={autoCompleteField}
+                onFocusStatus={onFocusStatus}
                 onMouseDown={(e) => e.preventDefault()}
             >
                 <AutoCompleteResultSection
