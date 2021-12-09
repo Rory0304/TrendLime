@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import ScrollToTop from '../../common/ScrollToTop/index';
@@ -9,10 +9,14 @@ import SearchContents from './Contents/SearchContents';
 const queryClient = new QueryClient();
 
 function SearchPage() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const [searchOption, setSearchOption] = useState({
         q: '',
-        category: 'trend',
-        tag: 'trend',
+        category: '트렌드/연도',
+        tag: '트렌드',
     });
 
     return (

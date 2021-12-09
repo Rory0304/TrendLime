@@ -4,7 +4,7 @@ import Wordcloud from '../../../components/WordCloud/index';
 import BarChart from '../../../components/BarChart/index';
 import { Styled } from './styles';
 
-function GeneralContents({ isFetching, data }) {
+function GeneralContents({ isFetching, data, year }) {
     const top30Data = data?.length === 0 ? [] : data.words_and_freq.slice(0, 30);
     const top10Data = data?.length === 0 ? [] : data.words_and_freq.slice(0, 10);
 
@@ -18,7 +18,12 @@ function GeneralContents({ isFetching, data }) {
                     ) : data?.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
-                        <Wordcloud data={top30Data} fontsize={8} />
+                        <Wordcloud
+                            data={top30Data}
+                            fontsize={year === false ? 1 : 10}
+                            height={300}
+                            width={1000}
+                        />
                     )}
                 </Styled.SubContentArea>
             </Styled.SubContentsWrapper>
