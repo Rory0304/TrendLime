@@ -28,11 +28,23 @@ def recommend_song_info(request):
   song_id = request.GET.get("song_id")
   recommend_songs_list = Song_lyric_based_recommend10.objects.filter(rec = song_id)
 
+  recommend_songs = []
   if recommend_songs_list.exists:
     for recommend_song in recommend_songs_list:
-      song_info = Song_without_year.objects.filter(song_id = recommend_song.song_id)
-      recommend_songs = make_song_info_to_json(song_info)
+      song_info = Song_without_year.objects.filter(song_id = recommend_song.song_id).order_by('-Like_Count')
+      for topic_related_song_info in song_info:
+        recommend_songs.append({
+          'song_id' : topic_related_song_info.song_id,
+          'song_name' : topic_related_song_info.song_name,
+          'artist' : topic_related_song_info.artist,
+          'album' : topic_related_song_info.album,
+          'Like_Count' : topic_related_song_info.Like_Count,
+          'Lyric' : topic_related_song_info.Lyric,
+          'cover_url' : topic_related_song_info.cover_url,
+          'tags' : topic_related_song_info.tags,
+        })
 
+  print(recommend_songs)
   context = {
     "recommend_songs" : recommend_songs
   }
@@ -127,7 +139,7 @@ def make_song_info_to_json(listname):
         'Lyric' : topic_related_song_info.Lyric,
         'cover_url' : topic_related_song_info.cover_url,
         'tags' : topic_related_song_info.tags,
-    })
+      })
   else:
     output.append({
         'song_id' : None,
