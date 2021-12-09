@@ -75,7 +75,7 @@ def topic_based_info(request):
         'freq' : None,
       })
 
-  topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type)[:10]
+  topic_related_song_info_list = Song_without_year.objects.filter(Topic = topic_type).order_by('-Like_Count')[:10]
   topic_related_song = make_song_info_to_json(topic_related_song_info_list)
 
   context = {
