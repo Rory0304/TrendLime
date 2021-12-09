@@ -131,7 +131,6 @@ def make_song_info_to_json(listname):
         'tags' : topic_related_song_info.tags,
     })
   else:
-    print('5')
     output.append({
         'song_id' : None,
         'song_name' : None,

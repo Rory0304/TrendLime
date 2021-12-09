@@ -34,9 +34,9 @@ def search(request):
     2-2. 그외의 카테고리 및 해당 카테고리 하위 태그를 고르면 해당 태그에 맞는 곡 정보 제공
   """
   # 트렌드/연도 카테고리를 선택하면 트렌드 + 1940~2010년대 태그가 나오고 
-  if selected_tag == "trend":
+  if selected_tag == "트렌드/연도":
     # 트랜드/연도 카테고리의 트랜드 태그를 누르면 ....... 어떤게 나오지???
-    if tag_content == "trend":
+    if tag_content == "트렌드":
       # 최신 트렌드 토픽 단어 선정 선호 순위
       label_list = Label.objects.all()
       
