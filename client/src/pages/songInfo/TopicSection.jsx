@@ -14,7 +14,7 @@ function TopicSection({ songId }) {
         [featchSongTopicKey, { song_id: songId }],
         useQueryFetch,
         {
-            initialData: [],
+            initialData: { topic: { label_id: '', label: '', wrods_freq: [], song: [] } },
             refetchOnWindowFocus: false,
             refetchOnmount: false,
             refetchOnReconnect: false,
@@ -22,17 +22,14 @@ function TopicSection({ songId }) {
         },
     );
 
-    const topicSongs = useMemo(
-        () => (data?.length === 0 ? [] : data.topic.song.splice(0, 10)),
-        [data],
-    );
+    const topicSongs = useMemo(() => data.topic.song, [data.topic.song]);
 
     return (
         <Styled.Topic>
             <Styled.TopicWordCloud>
                 {isFetching ? (
                     <h3>데이터를 불러오고 있습니다.</h3>
-                ) : (
+                ) : data.topic.label !== null ? (
                     <>
                         <h3>
                             해당 곡은,
@@ -40,7 +37,12 @@ function TopicSection({ songId }) {
                             <span>"{data.topic.label}"</span>
                             <br />과 관련이 있어요!
                         </h3>
-                        <Wordcloud data={[{ word: '감정', freq: '24' }]} />
+                        <Wordcloud data={data.topic.words_freq} fontsize={3} fontValue={2} />
+                    </>
+                ) : (
+                    <>
+                        <h3>해당 곡의 토픽 데이터가 존재하지 않습니다.</h3>
+                        <Wordcloud data={[{ word: '', freq: '' }]} />
                     </>
                 )}
             </Styled.TopicWordCloud>
@@ -59,8 +61,9 @@ function TopicSection({ songId }) {
                                                 <img src={song.cover_url} alt={song.song_name} />
                                             </div>
                                             <div>
-                                                <p>{song.song_name}</p>
-                                                <span>{song.artist}</span>
+                                                <p>
+                                                    {song.song_name} <span>{song.artist}</span>
+                                                </p>
                                             </div>
                                         </Link>
                                     </Styled.TopicSongList>
@@ -74,4 +77,4 @@ function TopicSection({ songId }) {
     );
 }
 
-export default TopicSection;
+export default React.memo(TopicSection);

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
@@ -15,6 +15,9 @@ import RecommendSongSection from './RecommendSongSection';
 const queryClient = new QueryClient();
 
 function SongInfoPage() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <QueryClientProvider client={queryClient}>
             <SongInfoContents />
@@ -33,7 +36,7 @@ function SongInfoContents() {
         error,
         data: album,
     } = useQuery([featchSongInfoKey, { song_id: songId }], useQueryFetch, {
-        initialData: { Lyric: '', cover_url: '', song_name: '' },
+        initialData: [{ Lyric: '', cover_url: '', song_name: '' }],
         refetchOnWindowFocus: false,
         refetchOnmount: false,
         refetchOnReconnect: false,
@@ -41,9 +44,14 @@ function SongInfoContents() {
     });
 
     const slitedLyrics = useMemo(
-        () => (album?.Lyric ? album.Lyric.split('  ').filter((sentence) => sentence !== '') : []),
+        () =>
+            album[0]?.Lyric
+                ? album[0].Lyric.split('  ').filter((sentence) => sentence.length !== 0)
+                : [],
         [album],
     );
+
+    const { cover_url, song_name, artist } = album[0];
 
     if (isLoading) return <div>'Loading...'</div>;
 
@@ -54,14 +62,14 @@ function SongInfoContents() {
             <Styled.SummaryInfo>
                 <Styled.SummaryInfoWrapper>
                     <Styled.AlbumCover>
-                        <img src={album.cover_url} alt={album.song_name} />
+                        <img src={cover_url} alt={song_name} />
                     </Styled.AlbumCover>
                     <Styled.SongInfo>
-                        <h2>{album.song_name}</h2>
-                        <p>{album.artist}</p>
+                        <h2>{song_name}</h2>
+                        <p>{artist}</p>
                     </Styled.SongInfo>
                 </Styled.SummaryInfoWrapper>
-                <div css={BackgroundWrapper({ cover_url: album.cover_url })}></div>
+                <div css={BackgroundWrapper({ cover_url: cover_url })}></div>
             </Styled.SummaryInfo>
             <Styled.MainInfo>
                 <Styled.LeftInfo>
