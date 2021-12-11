@@ -60,7 +60,8 @@ Styled.SearchBtn = styled.span`
 Styled.AutoCompleteArea = styled.div`
     width: 50%;
     height: 400px;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     display: ${(props) => (props.onFocusStatus ? 'block' : 'none')};
     position: absolute;
     background-color: gray;

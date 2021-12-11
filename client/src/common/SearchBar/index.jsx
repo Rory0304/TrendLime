@@ -75,7 +75,7 @@ const SearchBar = ({ inputValue }) => {
             <Styled.SearchBar onFocusStatus={onFocusStatus}>
                 <Styled.Input>
                     <input
-                        placeholder="제목, 앨범, 가수를 검색해보세요."
+                        placeholder="가수, 제목, 앨범을 검색해보세요."
                         onChange={onChange}
                         name="q"
                         value={q}
