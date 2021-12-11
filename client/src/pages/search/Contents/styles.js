@@ -11,26 +11,6 @@ Styled.SubContentArea = styled.div`
     margin-top: 5rem;
 `;
 
-Styled.AlbumListCarousel = styled.div`
-    overflow-x: auto;
-    overflow-y: hidden;
-`;
-
-Styled.AblumList = styled.ul`
-    display: flex;
-    width: 100%;
-    scroll-behavior: smooth;
-    white-space: nowrap;
-    transition: all 0.8s ease-in-out;
-
-    li {
-        width: 200px;
-        height: 200px;
-        border: 1px solid black;
-        margin-left: 11px;
-    }
-`;
-
 Styled.SubTitle = styled.h3`
     font-size: 1.5rem;
     font-weight: bold;
@@ -56,21 +36,6 @@ Styled.TopicList = styled.div`
 
 Styled.WordCloudList = styled.div`
     display: flex;
-`;
-
-Styled.AlbumCover = styled.div`
-    width: 160px;
-    height: 160px;
-
-    img {
-        height: 100%;
-        width: 100%;
-    }
-
-    @media only screen and (max-width: 768px) {
-        width: 135px;
-        height: 135px;
-    }
 `;
 
 Styled.SongInfo = styled.div`

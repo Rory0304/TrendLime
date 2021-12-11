@@ -8,7 +8,7 @@ Styled.BannerWrapper = styled.div`
     text-align: center;
     flex-direction: column;
     justify-content: center;
-    padding: 3rem 5rem 3rem 3rem;
+    padding: 3rem;
 
     @media only screen and (max-width: 768px) {
         text-align: left;
