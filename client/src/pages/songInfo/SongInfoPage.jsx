@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
@@ -11,32 +11,29 @@ import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 import TopicSection from './TopicSection';
 import EmotionSection from './EmotionSection';
 import RecommendSongSection from './RecommendSongSection';
+import Spinner from '../../common/Spinner/index';
 
 const queryClient = new QueryClient();
 
 function SongInfoPage() {
+    const { songId } = useParams();
+
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []);
+    }, [songId]);
+
     return (
         <QueryClientProvider client={queryClient}>
-            <SongInfoContents />
+            <SongInfoContents songId={songId} />
         </QueryClientProvider>
     );
 }
 
-/* TODO: 컴포넌트 분리 필요 */
-function SongInfoContents() {
-    const { songId } = useParams();
-
+function SongInfoContents({ songId }) {
     const [lyricsOpen, setLyricscOpen] = useState(false);
 
-    const {
-        isLoading,
-        error,
-        data: album,
-    } = useQuery([featchSongInfoKey, { song_id: songId }], useQueryFetch, {
-        initialData: [{ Lyric: '', cover_url: '', song_name: '' }],
+    const { data: album } = useQuery([featchSongInfoKey, { song_id: songId }], useQueryFetch, {
+        initialData: [{ Lyric: '', cover_url: '', song_name: '', artist: '' }],
         refetchOnWindowFocus: false,
         refetchOnmount: false,
         refetchOnReconnect: false,
@@ -53,16 +50,14 @@ function SongInfoContents() {
 
     const { cover_url, song_name, artist } = album[0];
 
-    if (isLoading) return <div>'Loading...'</div>;
-
-    if (error) return <div>'Error'</div>;
-
     return (
         <div>
             <Styled.SummaryInfo>
                 <Styled.SummaryInfoWrapper>
                     <Styled.AlbumCover>
-                        <img src={cover_url} alt={song_name} />
+                        {(cover_url || cover_url?.length !== 0) && (
+                            <img src={cover_url} alt={song_name} loading="lazy" />
+                        )}
                     </Styled.AlbumCover>
                     <Styled.SongInfo>
                         <h2>{song_name}</h2>
@@ -72,26 +67,30 @@ function SongInfoContents() {
                 <div css={BackgroundWrapper({ cover_url: cover_url })}></div>
             </Styled.SummaryInfo>
             <Styled.MainInfo>
-                <Styled.LeftInfo>
-                    <TopicSection songId={songId} />
-                    <EmotionSection songId={songId} />
-                    <RecommendSongSection songId={songId} />
-                </Styled.LeftInfo>
+                <Suspense fallback={<Spinner />}>
+                    <Styled.LeftInfo>
+                        <TopicSection songId={songId} />
+                        <EmotionSection songId={songId} />
+                        <RecommendSongSection songId={songId} />
+                    </Styled.LeftInfo>
+                </Suspense>
                 <Styled.RightInfo>
-                    <h3>가사정보</h3>
-                    <Styled.LyricsWrapper open={lyricsOpen}>
-                        <p>
-                            {slitedLyrics.map((sentence) => (
-                                <>
-                                    {sentence}
-                                    <br />
-                                </>
-                            ))}
-                        </p>
-                    </Styled.LyricsWrapper>
-                    <button onClick={() => setLyricscOpen(!lyricsOpen)}>
-                        {lyricsOpen ? '접기' : '펼치기'}
-                    </button>
+                    <Suspense fallback={<Spinner />}>
+                        <h3>가사정보</h3>
+                        <Styled.LyricsWrapper open={lyricsOpen}>
+                            <p>
+                                {slitedLyrics.map((sentence) => (
+                                    <>
+                                        {sentence}
+                                        <br />
+                                    </>
+                                ))}
+                            </p>
+                        </Styled.LyricsWrapper>
+                        <button onClick={() => setLyricscOpen(!lyricsOpen)}>
+                            {lyricsOpen ? '접기' : '펼치기'}
+                        </button>
+                    </Suspense>
                 </Styled.RightInfo>
             </Styled.MainInfo>
         </div>
