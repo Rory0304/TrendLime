@@ -3,9 +3,9 @@ import { css, jsx } from '@emotion/react';
 import WordCloud from 'react-d3-cloud';
 import { scaleLinear } from 'd3-scale';
 
-function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue = 8 }) {
+function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue = 5 }) {
     const FilteredData = useMemo(
-        () => data.map((d) => ({ text: d.word, value: parseInt(d.freq) })),
+        () => data.map((d) => ({ text: d.word, value: Math.floor(parseFloat(d.freq) * 10) })),
         [data],
     );
 
@@ -16,15 +16,23 @@ function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue =
     let maxValue = Math.max(...FilteredValue);
     let minValue = Math.min(...FilteredValue);
 
-    let color = scaleLinear().domain([minValue, maxValue]).range(['#ddda30', '#4bc2c4', '#03793e']);
-    const fontSize = useCallback((word) => {
-        const size = Math.log(word.value * fontsize) * fontValue;
-        return size;
-    }, []);
-    const fontWeight = useCallback((word) => (word.value > avg ? 'bold' : 'normal'), []);
-    const fill = useCallback(function (word) {
-        return color(word.value);
-    }, []);
+    let color = scaleLinear().domain([minValue, maxValue]).range(['#d1bd06', '#009c4e']);
+
+    /* avg가 바뀔때마다 갱신 */
+    const fontSize = useCallback(
+        (word) => {
+            const size = Math.log2(word.value) * fontValue;
+            return size;
+        },
+        [avg],
+    );
+    const fontWeight = useCallback((word) => (word.value > avg ? 'bold' : 'normal'), [avg]);
+    const fill = useCallback(
+        (word) => {
+            return color(word.value);
+        },
+        [avg],
+    );
 
     return (
         <div css={WordCloudWrapper({ width: width, height: height })}>

@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 
 function BarChart({ data, width = '100%', height = '100%' }) {
-    const values = data.map((d) => parseInt(d.freq));
+    const values = data.map((d) => parseFloat(d.freq));
     const labels = data.map((d) => d.word);
 
     const backgroundColor = [];
