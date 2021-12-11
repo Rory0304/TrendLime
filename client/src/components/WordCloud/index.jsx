@@ -1,11 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { css, jsx } from '@emotion/react';
 import WordCloud from 'react-d3-cloud';
-import { scaleLinear, scalePow } from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 
 function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue = 8 }) {
-    const FilteredData = data.map((d) => ({ text: d.word, value: parseInt(d.freq) }));
-    console.log(FilteredData);
+    const FilteredData = useMemo(
+        () => data.map((d) => ({ text: d.word, value: parseInt(d.freq) })),
+        [data],
+    );
+
     const FilteredValue = FilteredData.map((fd) => fd.value);
 
     let sum = FilteredData.reduce((a, b) => a + b.value, 0);
@@ -13,8 +16,7 @@ function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue =
     let maxValue = Math.max(...FilteredValue);
     let minValue = Math.min(...FilteredValue);
 
-    let color = scaleLinear().domain([minValue, maxValue]).range(['#ebe86a', '#4bc2c4', '#03793e']);
-
+    let color = scaleLinear().domain([minValue, maxValue]).range(['#ddda30', '#4bc2c4', '#03793e']);
     const fontSize = useCallback((word) => {
         const size = Math.log(word.value * fontsize) * fontValue;
         return size;
