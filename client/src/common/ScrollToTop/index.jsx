@@ -4,7 +4,9 @@ import { Styled } from './styles';
 const ScrollToTop = () => {
     const [showScroll, setShowScroll] = useState(true);
 
-    const scrollUp = () => {};
+    const scrollUp = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
         <Styled.ScrollUpBox onClick={scrollUp} show={showScroll}>
