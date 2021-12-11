@@ -94,7 +94,7 @@ Styled.SongInfo = styled.div`
 `;
 
 Styled.PrevBtn = styled.button`
-    display: ${(props) => (props.firstElemShown ? 'none' : 'block')};
+    display: ${(props) => (props.firstElemIntersect ? 'none' : 'block')};
     position: absolute;
     top: 40%;
     z-index: 1;
@@ -103,7 +103,7 @@ Styled.PrevBtn = styled.button`
 `;
 
 Styled.NextBtn = styled.button`
-    display: ${(props) => (props.lastElemShown ? 'none' : 'block')};
+    display: ${(props) => (props.lastElemIntersect ? 'none' : 'block')};
     position: absolute;
     top: 40%;
     z-index: 1;
