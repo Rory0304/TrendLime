@@ -4,7 +4,7 @@ import { Styled } from './styles';
 import useIntersectionObserver from '../../utils/hooks/useIntersectionObserver';
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 
-function Slider({ lastIdx = -1, slideList, rankShown = false }) {
+function Carousel({ slideList }) {
     const [slideIdx, setSlideIdx] = useState(0);
     const slideWrapperRef = useRef(null);
     const slideRef = useRef(null);
@@ -64,4 +64,4 @@ function Slider({ lastIdx = -1, slideList, rankShown = false }) {
     );
 }
 
-export default Slider;
+export default Carousel;
