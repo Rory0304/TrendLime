@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Wordcloud from '../../../components/WordCloud/index';
 import BarChart from '../../../components/BarChart/index';
 import { Styled } from './styles';
 
-function GeneralContents({ isFetching, data, year }) {
-    const top30Data = data?.length === 0 ? [] : data.words_and_freq.slice(0, 30);
-    const top10Data = data?.length === 0 ? [] : data.words_and_freq.slice(0, 10);
+function GeneralContents({ data, year }) {
+    const top30Data = useMemo(
+        () => (data?.length === 0 ? [] : data.words_and_freq.slice(0, 30)),
+        [data],
+    );
+    const top10Data = useMemo(
+        () => (data?.length === 0 ? [] : data.words_and_freq.slice(0, 10)),
+        [data],
+    );
 
     return (
         <>
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>가사 속 표현 분석</Styled.SubTitle>
                 <Styled.SubContentArea>
-                    {isFetching ? (
-                        <div>loading...</div>
-                    ) : data?.length === 0 ? (
+                    {top30Data[0] === null ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
                         <Wordcloud
@@ -30,9 +34,7 @@ function GeneralContents({ isFetching, data, year }) {
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>노래 가사 TOP10</Styled.SubTitle>
                 <Styled.SubContentArea>
-                    {isFetching ? (
-                        <div>loading...</div>
-                    ) : data?.length === 0 ? (
+                    {top10Data[0] === null ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
                         <BarChart data={top10Data} />

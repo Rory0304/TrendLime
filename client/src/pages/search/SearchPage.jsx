@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, createContext } from 'react';
+import { css, jsx } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import ScrollToTop from '../../common/ScrollToTop/index';
 import SearchBar from '../../common/SearchBar/index';
-import SearchCategories from './Category/SearchCategories';
+import Spinner from '../../common/Spinner/index';
+import ScrollToTop from '../../common/ScrollToTop/index';
+
+import FilterItems from './Filter/FilterItems';
 import SearchContents from './Contents/SearchContents';
 
 const queryClient = new QueryClient();
+export const SearchOptionContext = createContext(null);
 
 function SearchPage() {
     useEffect(() => {
@@ -22,18 +26,27 @@ function SearchPage() {
     return (
         <QueryClientProvider client={queryClient}>
             <ScrollToTop />
-            <div>
-                <div>
-                    <SearchBar inputValue="" />
-                    <SearchCategories
-                        searchOption={searchOption}
-                        setSearchOption={setSearchOption}
-                    />
+            <SearchBar inputValue="" />
+            <SearchOptionContext.Provider
+                value={{ searchOption: searchOption, setSearchOption: setSearchOption }}
+            >
+                <div css={CategoryWrapper}>
+                    <Suspense fallback={<Spinner />}>
+                        <FilterItems />
+                    </Suspense>
                 </div>
-                <SearchContents searchOption={searchOption} />
-            </div>
+
+                <Suspense fallback={<Spinner />}>
+                    <SearchContents />
+                </Suspense>
+            </SearchOptionContext.Provider>
         </QueryClientProvider>
     );
 }
+
+const CategoryWrapper = css`
+    padding-bottom: 2.3rem;
+    border-bottom: 1px solid #0000001c;
+`;
 
 export default SearchPage;

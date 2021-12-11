@@ -1,21 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/react';
 import { useQuery } from 'react-query';
 
 import { fetchSearchKey } from '../../utils/api/queryKeys';
 import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 
-import route from '../../routers/routeConstants';
-
 import ContentBlock from '../../components/ContentBlock/index';
-import Slider from '../../components/Slider/index';
+import Carousel from '../../components/Carousel/index';
+import AlbumList from '../../components/Carousel/AlbumList';
 import BarChart from '../../components/BarChart/index';
 
-import { Styled } from '../../components/Slider/styles';
-
 function Section3() {
-    const { isLoading, data, isFetching, error } = useQuery(
+    const { data, isFetching, error } = useQuery(
         [fetchSearchKey, { category: '트렌드/연도', tag: '트렌드' }],
         useQueryFetch,
         {
@@ -26,25 +22,6 @@ function Section3() {
             retry: false,
         },
     );
-
-    /* TODO : 공통 컴포넌트 생성 */
-    const AlbumSlideItem = ({ songs }) => {
-        const items = songs.slice(0, 10).map((item, index) => (
-            <Link to={`${route.DETAIL}/${item ? item.song_id : ''}`}>
-                <Styled.Rank>
-                    <span>{index + 1}.</span>
-                </Styled.Rank>
-                <Styled.AlbumCover>
-                    <img src={item.cover_url} alt={item.song_name} />
-                </Styled.AlbumCover>
-                <Styled.SongInfo>
-                    <p>{item.song_name}</p>
-                    <p>{item.artist}</p>
-                </Styled.SongInfo>
-            </Link>
-        ));
-        return items;
-    };
 
     return (
         <div css={Section3Wrapper}>
@@ -59,7 +36,12 @@ function Section3() {
                 ) : (
                     data?.songs && (
                         <>
-                            <Slider slideList={AlbumSlideItem({ songs: data.songs })} />
+                            <Carousel
+                                slideList={AlbumList({
+                                    songs: data.songs.slice(0, 10),
+                                    rankShown: true,
+                                })}
+                            />
                             <div css={BarChartSection}>
                                 <BarChart
                                     data={data?.words_and_freq.slice(1)}
