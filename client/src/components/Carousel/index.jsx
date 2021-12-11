@@ -1,13 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import route from '../../routers/routeConstants';
-
 import { Styled } from './styles';
 
 import useIntersectionObserver from '../../utils/hooks/useIntersectionObserver';
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 
-function Slider({ lastIdx = -1, slideList, rankShown = false }) {
+function Carousel({ slideList }) {
     const [slideIdx, setSlideIdx] = useState(0);
     const slideWrapperRef = useRef(null);
     const slideRef = useRef(null);
@@ -50,20 +47,7 @@ function Slider({ lastIdx = -1, slideList, rankShown = false }) {
                                     : null
                             }
                         >
-                            <Link to={`${route.DETAIL}/${item ? item.song_id : ''}`}>
-                                {rankShown && (
-                                    <Styled.Rank>
-                                        <span>{index + 1}.</span>
-                                    </Styled.Rank>
-                                )}
-                                <Styled.AlbumCover>
-                                    <img src={item.cover_url} alt={item.song_name} />
-                                </Styled.AlbumCover>
-                                <Styled.SongInfo>
-                                    <p>{item.song_name}</p>
-                                    <p>{item.artist}</p>
-                                </Styled.SongInfo>
-                            </Link>
+                            {item}
                         </Styled.Slide>
                     ))}
                 </Styled.SliderWrapper>
@@ -80,4 +64,4 @@ function Slider({ lastIdx = -1, slideList, rankShown = false }) {
     );
 }
 
-export default Slider;
+export default Carousel;

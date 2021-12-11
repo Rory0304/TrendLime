@@ -11,11 +11,6 @@ import Section4 from './Section4';
 const queryClient = new QueryClient();
 
 function MainContents() {
-    // const { isLoading, error, data } = useQuery('top10Data', async () => {
-    //     const { data } = await axios.get('/api/songs/');
-    //     return data.slice(0, 10);
-    // });
-
     return (
         <div>
             <ScrollToTop />

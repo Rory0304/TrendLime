@@ -4,31 +4,26 @@ export const Styled = {};
 
 Styled.AlbumListCarousel = styled.div`
     position: relative;
+
+    button {
+        border-radius: 100%;
+        background-color: #c5c5c5db;
+        border: none;
+
+        &:hover {
+            background-color: #726f6fdb;
+        }
+    }
 `;
 
 Styled.SliderContainer = styled.div`
     /* max-width: ${(props) => props.items * 190}px; */
     margin: 0 auto;
     overflow: hidden;
-    padding: 0 2rem;
 
     /* @media only screen and (max-width: 768px) {
         max-width: ${(props) => props.items * 160}px;
     } */
-`;
-
-Styled.PaginationButtons = styled.div`
-    text-align: right;
-    margin-bottom: 30px;
-
-    button {
-        border: 1px solid gray;
-        background-color: #fff;
-
-        span {
-            font-size: 1.2rem;
-        }
-    }
 `;
 
 Styled.SliderWrapper = styled.ul`
@@ -37,12 +32,20 @@ Styled.SliderWrapper = styled.ul`
     gap: 1.3rem;
     overflow-x: scroll;
     scroll-behavior: smooth;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+        background-color: rgb(241 242 243);
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #80808061;
+    }
 `;
 
 Styled.Slide = styled.li`
-    /* box-shadow: -1px 6px 9px 0px #00000036; */
     padding: 10px;
-    /* border-radius: 10px; */
 `;
 
 Styled.Rank = styled.div`
@@ -80,31 +83,30 @@ Styled.SongInfo = styled.div`
     }
 
     p:first-of-type {
-        font-size: 1.2rem;
+        font-size: 1rem;
         margin-bottom: 5px;
     }
 
     p:last-of-type {
         color: #0000009e;
+        font-size: 0.8rem;
     }
 `;
 
 Styled.PrevBtn = styled.button`
     display: ${(props) => (props.firstElemShown ? 'none' : 'block')};
     position: absolute;
-    top: 50%;
-    transform: translateY(-60%);
+    top: 40%;
     z-index: 1;
-    left: 20px;
+    left: -15px;
     padding: 10px;
 `;
 
 Styled.NextBtn = styled.button`
     display: ${(props) => (props.lastElemShown ? 'none' : 'block')};
     position: absolute;
-    top: 50%;
-    transform: translateY(-60%);
+    top: 40%;
     z-index: 1;
-    right: 20px;
+    right: -15px;
     padding: 10px;
 `;

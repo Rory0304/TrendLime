@@ -11,7 +11,7 @@ function EmotionSection({ songId }) {
         [featchSongEmotionKey, { song_id: songId }],
         useQueryFetch,
         {
-            initialData: [],
+            initialData: { emotion: { emotion: '', percentage: '' } },
             refetchOnWindowFocus: false,
             refetchOnmount: false,
             refetchOnReconnect: false,

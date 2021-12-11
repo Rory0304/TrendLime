@@ -4,7 +4,7 @@ import { Fade } from 'react-awesome-reveal';
 import { Styled } from '../styles';
 import MainButton from '../../../common/Button/index';
 
-const RightContentBlock = ({ title, content, button, src }) => {
+const RightContentBlock = ({ title, content, button, src = false }) => {
     return (
         <Styled.ContentSection>
             <Styled.Row top={false}>
@@ -20,7 +20,7 @@ const RightContentBlock = ({ title, content, button, src }) => {
                     <div>
                         {src && (
                             <Styled.ContentWrapper>
-                                <img src="#" alt="이미지 영역" />
+                                <img src={src} alt="이미지 영역" />
                             </Styled.ContentWrapper>
                         )}
                     </div>

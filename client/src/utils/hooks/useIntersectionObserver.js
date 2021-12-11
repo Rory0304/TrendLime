@@ -1,9 +1,9 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * Arguments:
- * - onIntersect : 요소가 viewport에 intersect 되었을 때 값 반환
- * - option : threshold 같은 Intersection Observer 옵션 반환
+ * - ref:  intersectionObserver를 걸어줄 요소 ref
+ * - option: threshold 같은 Intersection Observer 옵션 반환
  */
 
 const useIntersectionObserver = (ref, option = { threshold: 0 }) => {
