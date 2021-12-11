@@ -12,8 +12,7 @@ import AlbumList from '../../../components/Carousel/AlbumList';
 import TrendContents from './TrendContents';
 import GeneralContents from './GeneralContents';
 
-function SearchContents() {
-    const { searchOption } = useContext(SearchOptionContext);
+function Test({ searchOption }) {
     const { data } = useQuery([fetchSearchKey, searchOption], useQueryFetch, {
         refetchOnWindowFocus: false,
         refetchOnmount: false,
@@ -22,7 +21,6 @@ function SearchContents() {
         suspense: true,
     });
     const songs = useMemo(() => data.songs.slice(0, 30), [data]);
-
     return (
         <div>
             {
@@ -47,4 +45,12 @@ function SearchContents() {
     );
 }
 
-export default SearchContents;
+function SearchContents() {
+    const { searchOption } = useContext(SearchOptionContext);
+
+    return useMemo(() => {
+        return <Test searchOption={searchOption} />;
+    }, [searchOption]);
+}
+
+export default React.memo(SearchContents);
