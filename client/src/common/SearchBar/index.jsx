@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Styled } from './styles';
 import { SearchOutlined } from '@ant-design/icons';
@@ -17,12 +17,25 @@ import route from '../../routers/routeConstants';
 */
 
 const SearchBar = ({ inputValue }) => {
-    const [{ q }, onChange, reset] = useInput({
-        q: inputValue,
-    });
-    const debouncedInputValue = Debounce(q, 400);
-    const autoCompleteField = useRef(null);
+    const navigate = useNavigate();
+
+    const [q, setQuery] = useState(inputValue);
+    // const [{ q }, onChange, reset] = useInput({
+    //     q: inputValue,
+    // });
+
     const [onFocusStatus, setOnFocusStatus] = useState(false);
+    const debouncedInputValue = Debounce(q, 400);
+
+    const onChange = (e) => {
+        if (e.target.value.length === 0) {
+            setOnFocusStatus(false);
+        } else {
+            setOnFocusStatus(true);
+        }
+        setQuery(e.target.value);
+    };
+
     /**
      * enabled:데이터 fetch 조건
      * 1) q가 빈스트링이 아님
@@ -41,10 +54,17 @@ const SearchBar = ({ inputValue }) => {
         },
     );
 
-    // const onEnterKeyPress = (e) => {
-    //     if (e.key === 'Enter') {
-    //     }
-    // };
+    const onEnterKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if (debouncedInputValue.length !== 0) {
+                e.preventDefault();
+                setOnFocusStatus(false);
+                navigate(`${route.SEARCHTOTAL}/${debouncedInputValue}`);
+            } else {
+                alert('검색어를 입력해주세요!');
+            }
+        }
+    };
 
     const artists = data?.artist ? data.artist : [];
     const albums = data?.album ? data.album : [];
@@ -60,8 +80,11 @@ const SearchBar = ({ inputValue }) => {
                         name="q"
                         value={q}
                         autoComplete="off"
-                        onFocus={() => setOnFocusStatus(true)}
+                        onFocus={() =>
+                            q.length !== 0 ? setOnFocusStatus(true) : setOnFocusStatus(false)
+                        }
                         onBlur={() => setOnFocusStatus(false)}
+                        onKeyDown={(e) => onEnterKeyPress(e)}
                     />
                 </Styled.Input>
                 <Styled.SearchBtn>
