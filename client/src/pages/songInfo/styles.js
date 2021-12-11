@@ -72,7 +72,7 @@ Styled.MainInfo = styled.section`
     align-items: flex-start;
 
     h3 {
-        font-size: 1.6rem;
+        font-size: 1.3rem;
         font-weight: bold;
         color: black;
         padding-bottom: 1rem;
@@ -131,6 +131,7 @@ Styled.LyricsWrapper = styled.div`
         line-height: 2rem;
         overflow: hidden;
         text-align: center;
+        font-size: 1rem;
 
         ${(props) => props.theme.mq.tablet} {
             max-height: ${(props) => (props.open ? 'none' : '20rem')};
@@ -148,12 +149,6 @@ Styled.Topic = styled.div`
     background-color: #fff;
     padding: 1rem;
     margin-bottom: 2rem;
-
-    div {
-        width: 100%;
-        height: 300px;
-    }
-
     ${(props) => props.theme.mq.tablet} {
         width: 100%;
     }
@@ -173,13 +168,37 @@ Styled.TopicSongs = styled.ul`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 3rem;
+
+    ${(props) => props.theme.mq.tablet} {
+        grid-template-columns: repeat(1, 1fr);
+    }
 `;
 
 Styled.TopicSongList = styled.li`
+    border-top: 1px solid #c5c5c580;
+    padding: 0.3rem 0;
+
+    &:hover {
+        background-color: #c5c5c580;
+        p,
+        span {
+            color: ${(props) => props.theme.primaryColor};
+        }
+    }
+
+    /* 마지막에서 2개의 요소 선택 */
+    &:nth-last-of-type(-n + 2) {
+        border-bottom: 1px solid #c5c5c580;
+    }
+
     div {
         display: inline-block;
         vertical-align: middle;
         line-height: 1.4rem;
+
+        img {
+            vertical-align: middle;
+        }
     }
 
     div:first-of-type {
@@ -204,12 +223,12 @@ Styled.TopicSongList = styled.li`
         word-wrap: normal;
         overflow: hidden;
         font-size: 1rem;
-
         width: 100%;
-    }
 
-    span {
-        font-size: 0.8rem;
-        color: #0000009c;
+        span {
+            display: block;
+            font-size: 0.8rem;
+            color: #0000009c;
+        }
     }
 `;

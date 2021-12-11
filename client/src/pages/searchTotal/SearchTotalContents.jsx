@@ -1,10 +1,8 @@
 import React, { useMemo, useEffect, useState, useLayoutEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 
 import { featchTotalSearchKey } from '../../utils/api/queryKeys';
 import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
-import useInput from '../../utils/hooks/useInput';
 
 import SearchBar from '../../common/SearchBar/index';
 
@@ -14,7 +12,7 @@ import { Styled } from './styles';
  * TODO: 컴포넌트 분리 필요
  */
 
-function SearchTotalSection({ searchContents }) {
+function SearchTotalSection({ searchContents, searchKeyword, isFetching }) {
     /* searchContents props가 바뀌고 있는데 초기화가 안 된다!? */
     const UNIT_PAGE = 10;
     const [page, setPage] = useState({
@@ -46,42 +44,52 @@ function SearchTotalSection({ searchContents }) {
         });
     };
 
+    const highlightKeyword = (sentence, keyword) =>
+        sentence.split(keyword).reduce((prev, current, i) => {
+            if (!i) {
+                return [current];
+            }
+            return prev.concat(<b style={{ color: '#00DD00' }}>{keyword}</b>, current);
+        }, []);
+
     return (
         <Styled.SearchTotalSection>
             <div>
-                <ul>
-                    {currentContents.map((song) => (
-                        <Styled.AlbumList>
-                            <div>
-                                <img src={song.cover_url} alt={song.song_name} />
-                            </div>
-                            <div>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '제목' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.song_name}
-                                </p>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '앨범' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.album}
-                                </p>
-                                <p
-                                    style={{
-                                        color: searchContents.title === '가수' ? 'red' : 'black',
-                                    }}
-                                >
-                                    {song.artist}
-                                </p>
-                            </div>
-                        </Styled.AlbumList>
-                    ))}
-                </ul>
-                <button onClick={loadData}>더 보기</button>
+                {!isFetching && (currentContents.length === 0 || currentContents[0] === null) ? (
+                    <div>
+                        <p>검색 결과가 없습니다!</p>
+                    </div>
+                ) : (
+                    <>
+                        <ul>
+                            {currentContents.map((song) => (
+                                <Styled.AlbumList>
+                                    <div>
+                                        <img src={song.cover_url} alt={song.song_name} />
+                                    </div>
+                                    <div>
+                                        <p>
+                                            {searchContents.title === '제목'
+                                                ? highlightKeyword(song.song_name, searchKeyword)
+                                                : song.song_name}
+                                        </p>
+                                        <p>
+                                            {searchContents.title === '앨범'
+                                                ? highlightKeyword(song.album, searchKeyword)
+                                                : song.album}
+                                        </p>
+                                        <p>
+                                            {searchContents.title === '가수'
+                                                ? highlightKeyword(song.artist, searchKeyword)
+                                                : song.artist}
+                                        </p>
+                                    </div>
+                                </Styled.AlbumList>
+                            ))}
+                        </ul>
+                        <Styled.LoadButton onClick={loadData}>더 보기</Styled.LoadButton>
+                    </>
+                )}
             </div>
         </Styled.SearchTotalSection>
     );
@@ -89,7 +97,7 @@ function SearchTotalSection({ searchContents }) {
 
 function SearchTotalContents({ searchKeyword }) {
     /* 한 번만 fetch 해줘도 되기때문에 polling 관련 옵션은 false로 처리*/
-    const { isLoading, data, error } = useQuery(
+    const { isFetching, data, error } = useQuery(
         [featchTotalSearchKey, { q: searchKeyword }],
         useQueryFetch,
         {
@@ -153,10 +161,13 @@ function SearchTotalContents({ searchKeyword }) {
                         ))}
                     </ul>
                 </Styled.SearchOptionsWrapper>
-                {isLoading ? (
-                    <div>loading...</div>
+                {isFetching ? (
+                    <div>검색 결과를 불러오고 있습니다.</div>
                 ) : (
-                    <SearchTotalSection searchContents={searchContents} />
+                    <SearchTotalSection
+                        searchContents={searchContents}
+                        searchKeyword={searchKeyword}
+                    />
                 )}
             </Styled.SearchTotalContentsWrapper>
         </div>

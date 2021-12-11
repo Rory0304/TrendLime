@@ -10,29 +10,21 @@ import Wordcloud from '../../components/WordCloud/index';
 import route from '../../routers/routeConstants';
 
 function TopicSection({ songId }) {
-    const { isFetching, error, data } = useQuery(
-        [featchSongTopicKey, { song_id: songId }],
-        useQueryFetch,
-        {
-            initialData: [],
-            refetchOnWindowFocus: false,
-            refetchOnmount: false,
-            refetchOnReconnect: false,
-            retry: false,
-        },
-    );
+    const { data } = useQuery([featchSongTopicKey, { song_id: songId }], useQueryFetch, {
+        refetchOnWindowFocus: false,
+        refetchOnmount: false,
+        refetchOnReconnect: false,
+        retry: false,
+        suspense: true,
+    });
 
-    const topicSongs = useMemo(
-        () => (data?.length === 0 ? [] : data.topic.song.splice(0, 10)),
-        [data],
-    );
+    const topicWordsFreq = useMemo(() => data.topic.words_freq, [data.topic.words_freq]);
+    const topicSongs = useMemo(() => data.topic.song, [data.topic.song]);
 
     return (
         <Styled.Topic>
             <Styled.TopicWordCloud>
-                {isFetching ? (
-                    <h3>데이터를 불러오고 있습니다.</h3>
-                ) : (
+                {data.topic.label !== null ? (
                     <>
                         <h3>
                             해당 곡은,
@@ -40,14 +32,17 @@ function TopicSection({ songId }) {
                             <span>"{data.topic.label}"</span>
                             <br />과 관련이 있어요!
                         </h3>
-                        <Wordcloud data={[{ word: '감정', freq: '24' }]} />
+                        <Wordcloud data={topicWordsFreq} fontsize={2} fontValue={2} />
+                    </>
+                ) : (
+                    <>
+                        <h3>해당 곡의 토픽 데이터가 존재하지 않습니다.</h3>
+                        <Wordcloud data={[{ word: '', freq: '' }]} />
                     </>
                 )}
             </Styled.TopicWordCloud>
             <div>
-                {isFetching ? (
-                    <h3>데이터를 불러오고 있습니다.</h3>
-                ) : (
+                {
                     <>
                         <h3>관련 플레이리스트</h3>
                         <div>
@@ -59,8 +54,9 @@ function TopicSection({ songId }) {
                                                 <img src={song.cover_url} alt={song.song_name} />
                                             </div>
                                             <div>
-                                                <p>{song.song_name}</p>
-                                                <span>{song.artist}</span>
+                                                <p>
+                                                    {song.song_name} <span>{song.artist}</span>
+                                                </p>
                                             </div>
                                         </Link>
                                     </Styled.TopicSongList>
@@ -68,10 +64,10 @@ function TopicSection({ songId }) {
                             </Styled.TopicSongs>
                         </div>
                     </>
-                )}
+                }
             </div>
         </Styled.Topic>
     );
 }
 
-export default TopicSection;
+export default React.memo(TopicSection);

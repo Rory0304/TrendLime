@@ -32,6 +32,23 @@ Styled.Content = styled.p`
     margin: 1rem 0 3rem 0;
     font-weight: 600;
     font-size: 1.3rem;
-
     text-align: center;
+    line-height: 1.8rem;
+`;
+
+Styled.LeftContent = styled.p`
+    margin: 1rem 0 3rem 0;
+    font-weight: 600;
+    font-size: 1.3rem;
+    text-align: left;
+    line-height: 1.8rem;
+`;
+
+Styled.LeftImagContent = styled.div`
+    width: 68%;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
 `;

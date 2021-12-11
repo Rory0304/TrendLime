@@ -56,3 +56,12 @@ Styled.AlbumList = styled.li`
         }
     }
 `;
+
+Styled.LoadButton = styled.button`
+    border: 1px solid ${(props) => props.theme.primaryColor};
+    display: block;
+    width: 43%;
+    height: 40px;
+    margin: 2rem auto;
+    background-color: white;
+`;

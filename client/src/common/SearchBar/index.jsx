@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Styled } from './styles';
 import { SearchOutlined } from '@ant-design/icons';
@@ -17,11 +17,24 @@ import route from '../../routers/routeConstants';
 */
 
 const SearchBar = ({ inputValue }) => {
-    const [{ q }, onChange, reset] = useInput({
-        q: inputValue,
-    });
+    const navigate = useNavigate();
+
+    const [q, setQuery] = useState(inputValue);
+    // const [{ q }, onChange, reset] = useInput({
+    //     q: inputValue,
+    // });
+
+    const [onFocusStatus, setOnFocusStatus] = useState(false);
     const debouncedInputValue = Debounce(q, 400);
-    const autoCompleteField = useRef(null);
+
+    const onChange = (e) => {
+        if (e.target.value.length === 0) {
+            setOnFocusStatus(false);
+        } else {
+            setOnFocusStatus(true);
+        }
+        setQuery(e.target.value);
+    };
 
     /**
      * enabled:데이터 fetch 조건
@@ -41,19 +54,17 @@ const SearchBar = ({ inputValue }) => {
         },
     );
 
-    const onFocus = () => {
-        autoCompleteField.current.style.display = 'block';
+    const onEnterKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if (debouncedInputValue.length !== 0) {
+                e.preventDefault();
+                setOnFocusStatus(false);
+                navigate(`${route.SEARCHTOTAL}/${debouncedInputValue}`);
+            } else {
+                alert('검색어를 입력해주세요!');
+            }
+        }
     };
-
-    /* 이벤트의 진행 순서 : onMouseDown -> onBlur  */
-    const onBlur = (e) => {
-        autoCompleteField.current.style.display = 'none';
-    };
-
-    // const onEnterKeyPress = (e) => {
-    //     if (e.key === 'Enter') {
-    //     }
-    // };
 
     const artists = data?.artist ? data.artist : [];
     const albums = data?.album ? data.album : [];
@@ -61,7 +72,7 @@ const SearchBar = ({ inputValue }) => {
 
     return (
         <Styled.SearchArea>
-            <Styled.SearchBar>
+            <Styled.SearchBar onFocusStatus={onFocusStatus}>
                 <Styled.Input>
                     <input
                         placeholder="제목, 앨범, 가수를 검색해보세요."
@@ -69,8 +80,11 @@ const SearchBar = ({ inputValue }) => {
                         name="q"
                         value={q}
                         autoComplete="off"
-                        onFocus={onFocus}
-                        onBlur={onBlur}
+                        onFocus={() =>
+                            q.length !== 0 ? setOnFocusStatus(true) : setOnFocusStatus(false)
+                        }
+                        onBlur={() => setOnFocusStatus(false)}
+                        onKeyDown={(e) => onEnterKeyPress(e)}
                     />
                 </Styled.Input>
                 <Styled.SearchBtn>
@@ -81,7 +95,7 @@ const SearchBar = ({ inputValue }) => {
             </Styled.SearchBar>
 
             <Styled.AutoCompleteArea
-                ref={autoCompleteField}
+                onFocusStatus={onFocusStatus}
                 onMouseDown={(e) => e.preventDefault()}
             >
                 <AutoCompleteResultSection
