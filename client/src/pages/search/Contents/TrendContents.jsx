@@ -37,7 +37,7 @@ function TrendContents({ data }) {
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>2000년대 ‘좋아요👍’가 많았던 곡들의 주제</Styled.SubTitle>
                 <Styled.SubContentArea>
-                    {topics.length === 0 ? (
+                    {topics === undefined || topics.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
                         <Carousel slideList={wordCloudList({ topics: topics })} />
@@ -47,7 +47,7 @@ function TrendContents({ data }) {
             <Styled.SubContentsWrapper>
                 <Styled.SubTitle>2000년대 '좋아요👍'가 많았던 곡들의 가사 TOP10</Styled.SubTitle>
                 <Styled.SubContentArea>
-                    {data?.length === 0 ? (
+                    {top10Data === undefined || top10Data.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
                         <BarChart data={top10Data} />

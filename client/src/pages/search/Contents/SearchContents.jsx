@@ -20,7 +20,8 @@ function Test({ searchOption }) {
         retry: false,
         suspense: true,
     });
-    const songs = useMemo(() => data.songs.slice(0, 30), [data]);
+    const songs = useMemo(() => (typeof data === undefined ? [] : data.songs.slice(0, 30)), [data]);
+
     return (
         <div>
             {
