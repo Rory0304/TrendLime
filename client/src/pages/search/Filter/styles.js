@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 export const Styled = {};
 
-
 Styled.CategoryList = styled.ul`
     width: 70%;
     display: flex;
@@ -44,10 +43,18 @@ Styled.OptionList = styled.li`
     border-radius: 5px;
     margin: 10px;
 
-    color: ${(props) => (props.active ? props.theme.primaryColor : 'black')};
-    border-color: ${(props) => (props.active ? props.theme.primaryColor : 'black')};
+    color: ${(props) => (props.active ? props.theme.primaryColor : 'white')};
+    border-color: ${(props) => (props.active ? props.theme.primaryColor : 'gray')};
 
     &:hover {
         border-color: ${(props) => props.theme.primaryColor};
     }
+
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.3);
+    background-image: url(${(props) => props.url});
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: darken;
 `;

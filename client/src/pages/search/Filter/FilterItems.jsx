@@ -7,6 +7,8 @@ import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
 import { SearchOptionContext } from '../SearchPage';
 import { Styled } from './styles';
 
+import filterBackground from './filterBackground';
+
 function FilterItems() {
     const { searchOption, setSearchOption } = useContext(SearchOptionContext);
     const { data } = useQuery([fetchCategoryKey], useQueryFetch, {
@@ -58,6 +60,11 @@ function FilterItems() {
                                         ...searchOption,
                                         tag: tag.tag_name,
                                     })
+                                }
+                                url={
+                                    filterBackground[tag.tag_name]
+                                        ? filterBackground[tag.tag_name].url
+                                        : ''
                                 }
                             >
                                 {tag.tag_name}
