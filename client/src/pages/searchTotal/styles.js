@@ -29,6 +29,7 @@ Styled.SearchOption = styled.li`
         props.active ? `1.4px solid ${props.theme.primaryColor}` : 'none'};
     padding: 0.5rem 1.5rem;
     text-align: center;
+    cursor: pointer;
 `;
 
 Styled.SearchTotalSection = styled.section`
@@ -40,6 +41,7 @@ Styled.AlbumList = styled.li`
     align-items: center;
     border-bottom: 1px solid #80808017;
     padding: 1.2rem 0;
+    cursor: pointer;
 
     div {
         line-height: 1.4rem;

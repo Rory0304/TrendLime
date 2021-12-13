@@ -1,5 +1,6 @@
-import React, { useMemo, useEffect, useState, useLayoutEffect, useCallback } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 
 import { featchTotalSearchKey } from '../../utils/api/queryKeys';
 import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
@@ -7,6 +8,7 @@ import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 import SearchBar from '../../common/SearchBar/index';
 
 import { Styled } from './styles';
+import route from '../../routers/routeConstants';
 
 /**
  * TODO: 컴포넌트 분리 필요
@@ -63,28 +65,33 @@ function SearchTotalSection({ searchContents, searchKeyword, isFetching }) {
                     <>
                         <ul>
                             {currentContents.map((song) => (
-                                <Styled.AlbumList>
-                                    <div>
-                                        <img src={song.cover_url} alt={song.song_name} />
-                                    </div>
-                                    <div>
-                                        <p>
-                                            {searchContents.title === '제목'
-                                                ? highlightKeyword(song.song_name, searchKeyword)
-                                                : song.song_name}
-                                        </p>
-                                        <p>
-                                            {searchContents.title === '앨범'
-                                                ? highlightKeyword(song.album, searchKeyword)
-                                                : song.album}
-                                        </p>
-                                        <p>
-                                            {searchContents.title === '가수'
-                                                ? highlightKeyword(song.artist, searchKeyword)
-                                                : song.artist}
-                                        </p>
-                                    </div>
-                                </Styled.AlbumList>
+                                <Link to={`${route.DETAIL}/${song ? song.song_id : ''}`}>
+                                    <Styled.AlbumList>
+                                        <div>
+                                            <img src={song.cover_url} alt={song.song_name} />
+                                        </div>
+                                        <div>
+                                            <p>
+                                                {searchContents.title === '제목'
+                                                    ? highlightKeyword(
+                                                          song.song_name,
+                                                          searchKeyword,
+                                                      )
+                                                    : song.song_name}
+                                            </p>
+                                            <p>
+                                                {searchContents.title === '앨범'
+                                                    ? highlightKeyword(song.album, searchKeyword)
+                                                    : song.album}
+                                            </p>
+                                            <p>
+                                                {searchContents.title === '가수'
+                                                    ? highlightKeyword(song.artist, searchKeyword)
+                                                    : song.artist}
+                                            </p>
+                                        </div>
+                                    </Styled.AlbumList>
+                                </Link>
                             ))}
                         </ul>
                         <Styled.LoadButton onClick={loadData}>더 보기</Styled.LoadButton>
