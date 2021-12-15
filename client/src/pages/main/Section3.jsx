@@ -36,12 +36,7 @@ function Section3() {
                 ) : (
                     data?.songs && (
                         <>
-                            <Carousel
-                                slideList={AlbumList({
-                                    songs: data.songs.slice(0, 10),
-                                    rankShown: true,
-                                })}
-                            />
+                            <Carousel songs={data.songs.slice(0, 10)} rankShown={true} />
                             <div css={BarChartSection}>
                                 <BarChart
                                     data={data?.words_and_freq.slice(1)}

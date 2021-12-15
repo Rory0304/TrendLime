@@ -5,7 +5,6 @@ import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
 
 import { Styled } from './styles';
 import Carousel from '../../components/Carousel/index';
-import AlbumList from '../../components/Carousel/AlbumList';
 
 function RecommendSongSection({ songId }) {
     const { isLoading, error, data } = useQuery(
@@ -31,7 +30,7 @@ function RecommendSongSection({ songId }) {
             {isLoading ? (
                 <div>유사한 곡을 불러오는 중입니다. </div>
             ) : (
-                <Carousel slideList={AlbumList({ songs: recommendSongs.slice(0, 40) })} />
+                <Carousel songs={recommendSongs} />
             )}
         </Styled.RecommendSong>
     );
