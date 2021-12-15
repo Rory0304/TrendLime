@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Styled } from './styles';
 
 import route from '../../routers/routeConstants';
 
-function AlbumSlideItem({ songs, rankShown = false }) {
-    if (songs[0] === null) {
-        return [];
-    } else {
-        const items = songs.map((item, index) => (
+function AlbumSlideItem({ index, item, rankShown = false }) {
+    useEffect(() => {
+        console.log('Item rendering...');
+    });
+
+    return (
+        <Styled.Slide>
             <Link to={`${route.DETAIL}/${item ? item.song_id : ''}`}>
                 {rankShown && (
                     <Styled.Rank>
@@ -23,9 +25,8 @@ function AlbumSlideItem({ songs, rankShown = false }) {
                     <p>{item.artist}</p>
                 </Styled.SongInfo>
             </Link>
-        ));
-        return items;
-    }
+        </Styled.Slide>
+    );
 }
 
-export default AlbumSlideItem;
+export default memo(AlbumSlideItem);

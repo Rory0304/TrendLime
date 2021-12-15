@@ -8,7 +8,6 @@ import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
 import { SearchOptionContext } from '../SearchPage';
 
 import Carousel from '../../../components/Carousel/index';
-import AlbumList from '../../../components/Carousel/AlbumList';
 import TrendContents from './TrendContents';
 import GeneralContents from './GeneralContents';
 
@@ -20,7 +19,7 @@ function Test({ searchOption }) {
         retry: false,
         suspense: true,
     });
-    const songs = useMemo(() => (typeof data === undefined ? [] : data.songs.slice(0, 30)), [data]);
+    const songs = useMemo(() => (typeof data === undefined ? [] : data.songs, [data]);
 
     return (
         <div>
@@ -37,7 +36,7 @@ function Test({ searchOption }) {
                     <Styled.SubContentsWrapper>
                         <>
                             <Styled.SubTitle>대표곡</Styled.SubTitle>
-                            <Carousel slideList={AlbumList({ songs: songs })} />
+                            <Carousel songs={songs} />
                         </>
                     </Styled.SubContentsWrapper>
                 </>

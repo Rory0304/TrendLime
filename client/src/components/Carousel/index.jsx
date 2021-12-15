@@ -1,46 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Styled } from './styles';
 
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
+import AlbumSlideItem from './AlbumList';
 
-function Carousel({ slideList }) {
-    const [slideIdx, setSlideIdx] = useState(0);
-    const [firstElemIntersect, setFirstElemIntersect] = useState(true);
-    const [lastElemIntersect, setLastElemIntersect] = useState(false);
+import useHorizontalScroll from './useHorizontalScroll';
+import useScrollButtonController from './useScrollButtonContainer';
 
-    const slideWrapperRef = useRef(null);
-    const slideRef = useRef(null);
+function Carousel({ songs, rankShown }) {
+    const { scroll, slideRef, slideWrapperRef } = useHorizontalScroll();
 
-    const nextSlide = () => {
-        if (lastElemIntersect) {
-            return;
-        }
-        setSlideIdx(slideIdx + 1);
-        slideRef.current.scrollLeft += slideWrapperRef.current.clientWidth;
-    };
-
-    const prevSlide = () => {
-        if (firstElemIntersect) {
-            return;
-        }
-        setSlideIdx(slideIdx - 1);
-        slideRef.current.scrollLeft -= slideWrapperRef.current.clientWidth;
-    };
-
-    /* 성능 측정 TEST 용 */
-    // const onScrollTest = (e) => {
-    //     if (e.target.scrollLeft === 0) {
-    //         /* 스크롤이 맨 왼쪽에 위치함 */
-    //         setFirstElemIntersect(true);
-    //     } else if (e.target.scrollWidth <= e.target.scrollLeft + e.target.offsetWidth) {
-    //         /* 스크롤이 맨 오른쪽에 위치함 */
-    //         setLastElemIntersect(true);
-    //     } else {
-    //         /* 스크롤이 가운데에 위치하는 경우 */
-    //         setFirstElemIntersect(false);
-    //         setLastElemIntersect(false);
-    //     }
-    // };
+    const { onScroll, prevButtonShown, nextButtonShown } = useScrollButtonController({ slideRef });
 
     /*
      * Arguments : cb (스크롤 시, 발생할 이벤트)
@@ -63,38 +33,23 @@ function Carousel({ slideList }) {
         };
     };
 
-    const onScroll = (e) => {
-        if (e.target.scrollLeft === 0) {
-            /* 스크롤이 맨 왼쪽에 위치함 */
-            setFirstElemIntersect(true);
-        } else if (e.target.scrollWidth <= e.target.scrollLeft + e.target.offsetWidth) {
-            /* 스크롤이 맨 오른쪽에 위치함 */
-            setLastElemIntersect(true);
-        } else {
-            /* 스크롤이 가운데에 위치하는 경우 */
-            setFirstElemIntersect(false);
-            setLastElemIntersect(false);
-        }
-    };
-
     return (
         <Styled.AlbumListCarousel>
             <Styled.SliderContainer ref={slideWrapperRef}>
                 <Styled.SliderWrapper
                     ref={slideRef}
                     onScroll={(e) => onScrollActiveBtn(onScroll(e))}
-                    // onScroll={(e) => onScrollTest(e)}
                 >
-                    {slideList.map((item, index) => (
-                        <Styled.Slide>{item}</Styled.Slide>
+                    {songs.map((item, index) => (
+                        <AlbumSlideItem item={item} index={index} rankShown={rankShown} />
                     ))}
                 </Styled.SliderWrapper>
             </Styled.SliderContainer>
-            <Styled.PrevBtn onClick={prevSlide} firstElemIntersect={firstElemIntersect}>
+            <Styled.PrevBtn onClick={() => scroll(-1)} firstElemIntersect={prevButtonShown}>
                 <CaretLeftFilled />
                 <span className="visually-hidden">이전</span>
             </Styled.PrevBtn>
-            <Styled.NextBtn onClick={nextSlide} lastElemIntersect={lastElemIntersect}>
+            <Styled.NextBtn onClick={() => scroll(1)} lastElemIntersect={nextButtonShown}>
                 <CaretRightFilled />
                 <span className="visually-hidden">다음</span>
             </Styled.NextBtn>
@@ -102,4 +57,4 @@ function Carousel({ slideList }) {
     );
 }
 
-export default Carousel;
+export default React.memo(Carousel);

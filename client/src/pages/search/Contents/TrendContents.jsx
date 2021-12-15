@@ -40,7 +40,7 @@ function TrendContents({ data }) {
                     {topics === undefined || topics.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
-                        <Carousel slideList={wordCloudList({ topics: topics })} />
+                        <Carousel songs={wordCloudList({ topics: topics })} />
                     )}
                 </Styled.SubContentArea>
             </Styled.SubContentsWrapper>
