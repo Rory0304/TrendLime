@@ -1,28 +1,22 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Styled } from './styles';
 import { SearchOutlined } from '@ant-design/icons';
 
-import useInput from '../../utils/hooks/useInput';
-
 import { fetchAutoCompleteSearchKey } from '../../utils/api/queryKeys';
 import Debounce from '../../utils/hooks/useDebounce';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 import route from '../../routers/routeConstants';
 
 /*
   Arguments:
     - inputValue: 검색창에 입력되는 첫 input value
 */
-
 const SearchBar = ({ inputValue }) => {
     const navigate = useNavigate();
 
     const [q, setQuery] = useState(inputValue);
-    // const [{ q }, onChange, reset] = useInput({
-    //     q: inputValue,
-    // });
 
     const [onFocusStatus, setOnFocusStatus] = useState(false);
     const debouncedInputValue = Debounce(q, 400);
@@ -43,10 +37,9 @@ const SearchBar = ({ inputValue }) => {
      *
      * initialData를 빈 배열로 설정하여, 첫 렌더링에 undefiend 값이 반환되지 않도록 설정
      */
-
     const { isLoading, data, error } = useQuery(
         [fetchAutoCompleteSearchKey, { q: debouncedInputValue }],
-        useQueryFetch,
+        queryFetch,
         {
             initialData: [],
             refetchOnWindowFocus: false,
@@ -129,6 +122,7 @@ export default React.memo(SearchBar);
     - title: 가수/ 곡 제목 / 앨범/ 순 타이틀
     - songs: 타이틀과 관련된 샘플 데이터 3개
     - isLoading: 데이터를 가져오고 있는지 확인
+    - q: 검색창에 입력된 쿼리
 
   Etc:
     - songs[0] === null : 관련된 결과가 없는 경우를 판단

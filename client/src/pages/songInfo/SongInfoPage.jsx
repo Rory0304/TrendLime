@@ -6,7 +6,7 @@ import { css, jsx } from '@emotion/react';
 import { Styled } from './styles';
 
 import { featchSongInfoKey } from '../../utils/api/queryKeys';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 
 import TopicSection from './TopicSection';
 import EmotionSection from './EmotionSection';
@@ -32,7 +32,7 @@ function SongInfoPage() {
 function SongInfoContents({ songId }) {
     const [lyricsOpen, setLyricscOpen] = useState(false);
 
-    const { data: album } = useQuery([featchSongInfoKey, { song_id: songId }], useQueryFetch, {
+    const { data: album } = useQuery([featchSongInfoKey, { song_id: songId }], queryFetch, {
         initialData: [{ Lyric: '', cover_url: '', song_name: '', artist: '' }],
         refetchOnWindowFocus: false,
         refetchOnmount: false,

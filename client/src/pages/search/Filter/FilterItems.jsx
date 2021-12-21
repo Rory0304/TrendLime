@@ -2,7 +2,7 @@ import React, { useMemo, useContext } from 'react';
 import { useQuery } from 'react-query';
 
 import { fetchCategoryKey } from '../../../utils/api/queryKeys';
-import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
+import queryFetch from '../../../utils/api/queryFetch';
 
 import { SearchOptionContext } from '../SearchPage';
 import { Styled } from './styles';
@@ -11,7 +11,7 @@ import filterBackground from './filterBackground';
 
 function FilterItems() {
     const { searchOption, setSearchOption } = useContext(SearchOptionContext);
-    const { data } = useQuery([fetchCategoryKey], useQueryFetch, {
+    const { data } = useQuery([fetchCategoryKey], queryFetch, {
         refetchOnWindowFocus: false,
         suspense: true,
     });

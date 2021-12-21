@@ -1,70 +1,64 @@
 import React from 'react';
 import { css, jsx } from '@emotion/react';
-import { AttentionSeeker } from 'react-awesome-reveal';
+import { useQuery } from 'react-query';
+
+import { fetchSearchKey } from '../../utils/api/queryKeys';
+import queryFetch from '../../utils/api/queryFetch';
 
 import ContentBlock from '../../components/ContentBlock/index';
-import tag1 from '../../assets/images/tag1.png';
-import tag2 from '../../assets/images/tag2.png';
-import tag3 from '../../assets/images/tag3.png';
-import tag4 from '../../assets/images/tag4.png';
+import Carousel from '../../components/Carousel/index';
+import BarChart from '../../components/BarChart/index';
 
 function Section2() {
+    const { data, isFetching, error } = useQuery(
+        [fetchSearchKey, { category: '트렌드/연도', tag: '트렌드' }],
+        queryFetch,
+        {
+            initialData: [],
+            refetchOnWindowFocus: false,
+            refetchOnmount: false,
+            refetchOnReconnect: false,
+            retry: false,
+        },
+    );
+
+    const carouselOption = { rankShown: true, type: 'song' };
+
     return (
-        <div css={Section2Wrapper}>
-            <AttentionSeeker effect="pulse" css={labelsBackground}>
-                <div>
-                    <img src={tag1} alt="태그 백그라운드1" />
-                    <img src={tag2} alt="태그 백그라운드2" />
-                    <img src={tag3} alt="태그 백그라운드3" />
-                    <img src={tag4} alt="태그 백그라운드4" />
-                </div>
-            </AttentionSeeker>
+        <div css={Section3Wrapper}>
             <ContentBlock
                 type="top"
-                contents={[
-                    '최신 국내 가요부터 테마별 / 연도별 가요까지,',
-                    '모든 가사의 트렌드와 핵심 소재를 분석해드려요.',
-                ]}
-            />
+                contents={['최신 TOP10 가요에서 많이 사용하고 있는 표현을 살펴보세요!']}
+            >
+                {isFetching ? (
+                    <div>loading...</div>
+                ) : data?.songs.length === 0 ? (
+                    <div>데이터가 없습니다. </div>
+                ) : (
+                    data?.songs && (
+                        <>
+                            <Carousel items={data.songs.slice(0, 10)} option={carouselOption} />
+                            <div css={BarChartSection}>
+                                <BarChart
+                                    data={data?.words_and_freq.slice(1)}
+                                    width="70%"
+                                    height="40%"
+                                />
+                            </div>
+                        </>
+                    )
+                )}
+            </ContentBlock>
         </div>
     );
 }
 
-const Section2Wrapper = css`
-    height: 400px;
-    line-height: 2rem;
-    text-align: center;
-    background-color: #8080800a;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+const Section3Wrapper = css`
+    padding: 8rem 2rem;
 `;
 
-const labelsBackground = css`
-    img {
-        width: 8%;
-        position: absolute;
-    }
-
-    img:nth-of-type(1) {
-        top: 0;
-        right: 10%;
-    }
-
-    img:nth-of-type(2) {
-        top: 0;
-        left: 10%;
-    }
-
-    img:nth-of-type(3) {
-        bottom: 10%;
-        right: 20%;
-    }
-
-    img:nth-of-type(4) {
-        bottom: 10%;
-        left: 20%;
-    }
+const BarChartSection = css`
+    margin-top: 3rem;
 `;
 
 export default Section2;

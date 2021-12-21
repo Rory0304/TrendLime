@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import { featchRecommendSongKey } from '../../utils/api/queryKeys';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 
 import { Styled } from './styles';
 import Carousel from '../../components/Carousel/index';
@@ -9,7 +9,7 @@ import Carousel from '../../components/Carousel/index';
 function RecommendSongSection({ songId }) {
     const { isLoading, error, data } = useQuery(
         [featchRecommendSongKey, { song_id: songId }],
-        useQueryFetch,
+        queryFetch,
         {
             initialData: [],
             refetchOnWindowFocus: false,
@@ -30,7 +30,7 @@ function RecommendSongSection({ songId }) {
             {isLoading ? (
                 <div>유사한 곡을 불러오는 중입니다. </div>
             ) : (
-                <Carousel songs={recommendSongs} />
+                <Carousel items={recommendSongs} />
             )}
         </Styled.RecommendSong>
     );

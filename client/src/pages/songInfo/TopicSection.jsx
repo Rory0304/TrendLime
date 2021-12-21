@@ -4,13 +4,13 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 
 import { featchSongTopicKey } from '../../utils/api/queryKeys';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 
 import Wordcloud from '../../components/WordCloud/index';
 import route from '../../routers/routeConstants';
 
 function TopicSection({ songId }) {
-    const { data } = useQuery([featchSongTopicKey, { song_id: songId }], useQueryFetch, {
+    const { data } = useQuery([featchSongTopicKey, { song_id: songId }], queryFetch, {
         refetchOnWindowFocus: false,
         refetchOnmount: false,
         refetchOnReconnect: false,

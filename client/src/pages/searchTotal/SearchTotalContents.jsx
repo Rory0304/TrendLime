@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 
 import { featchTotalSearchKey } from '../../utils/api/queryKeys';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 
 import SearchBar from '../../common/SearchBar/index';
 
@@ -106,7 +106,7 @@ function SearchTotalContents({ searchKeyword }) {
     /* 한 번만 fetch 해줘도 되기때문에 polling 관련 옵션은 false로 처리*/
     const { isFetching, data, error } = useQuery(
         [featchTotalSearchKey, { q: searchKeyword }],
-        useQueryFetch,
+        queryFetch,
         {
             initialData: [],
             refetchOnWindowFocus: false,

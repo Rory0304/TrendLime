@@ -3,7 +3,7 @@ import { Styled } from './styles';
 import { useQuery } from 'react-query';
 
 import { fetchSearchKey } from '../../../utils/api/queryKeys';
-import { useQueryFetch } from '../../../utils/hooks/useQueryFetch';
+import queryFetch from '../../../utils/api/queryFetch';
 
 import { SearchOptionContext } from '../SearchPage';
 
@@ -12,14 +12,13 @@ import TrendContents from './TrendContents';
 import GeneralContents from './GeneralContents';
 
 function Test({ searchOption }) {
-    const { data } = useQuery([fetchSearchKey, searchOption], useQueryFetch, {
+    const { data } = useQuery([fetchSearchKey, searchOption], queryFetch, {
         refetchOnWindowFocus: false,
         refetchOnmount: false,
         refetchOnReconnect: false,
         retry: false,
         suspense: true,
     });
-    const songs = useMemo(() => (typeof data === undefined ? [] : data.songs, [data]);
 
     return (
         <div>
@@ -36,7 +35,7 @@ function Test({ searchOption }) {
                     <Styled.SubContentsWrapper>
                         <>
                             <Styled.SubTitle>대표곡</Styled.SubTitle>
-                            <Carousel songs={songs} />
+                            <Carousel items={data.songs} />
                         </>
                     </Styled.SubContentsWrapper>
                 </>

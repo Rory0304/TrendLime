@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import Wordcloud from '../../../components/WordCloud/index';
 import BarChart from '../../../components/BarChart/index';
 import Carousel from '../../../components/Carousel/index';
 import { Styled } from './styles';
@@ -8,29 +7,7 @@ import { Styled } from './styles';
 function TrendContents({ data }) {
     const topics = useMemo(() => data.topics, [data]);
     const top10Data = useMemo(() => data.words_and_freq.slice(0, 10), [data]);
-
-    const wordCloudList = useCallback(
-        ({ topics }) => {
-            const items = topics.map((topic, index) => (
-                <Styled.TopicList>
-                    <h4>
-                        주제#{index + 1}
-                        <br />
-                        {topic.label_name}
-                    </h4>
-                    <Wordcloud
-                        data={topic.words_and_freq}
-                        height={200}
-                        width={650}
-                        fontsize={3}
-                        fontValue={2}
-                    />
-                </Styled.TopicList>
-            ));
-            return items;
-        },
-        [topics],
-    );
+    const carouselOption = { rankShown: false, type: 'wordcloud' };
 
     return (
         <>
@@ -40,7 +17,7 @@ function TrendContents({ data }) {
                     {topics === undefined || topics.length === 0 ? (
                         <div>데이터가 없습니다. </div>
                     ) : (
-                        <Carousel songs={wordCloudList({ topics: topics })} />
+                        <Carousel items={topics} option={carouselOption} />
                     )}
                 </Styled.SubContentArea>
             </Styled.SubContentsWrapper>

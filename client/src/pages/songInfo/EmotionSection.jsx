@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import { featchSongEmotionKey } from '../../utils/api/queryKeys';
-import { useQueryFetch } from '../../utils/hooks/useQueryFetch';
+import queryFetch from '../../utils/api/queryFetch';
 
 import { Styled } from './styles';
 import emotionMap from './emotionMap';
@@ -9,7 +9,7 @@ import emotionMap from './emotionMap';
 function EmotionSection({ songId }) {
     const { isLoading, error, data } = useQuery(
         [featchSongEmotionKey, { song_id: songId }],
-        useQueryFetch,
+        queryFetch,
         {
             initialData: { emotion: { emotion: '', percentage: '' } },
             refetchOnWindowFocus: false,
