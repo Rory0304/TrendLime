@@ -31,20 +31,13 @@ function BarChart({ data, width = '100%', height = '100%' }) {
                 backgroundColor: backgroundColor,
                 borderColor: borderColor,
                 borderWidth: 1,
+                label: '단어 빈도수',
             },
         ],
     };
 
     const options = {
         responsive: true,
-        plugins: {
-            title: {
-                display: false,
-            },
-            legend: {
-                display: false,
-            },
-        },
     };
 
     return (
