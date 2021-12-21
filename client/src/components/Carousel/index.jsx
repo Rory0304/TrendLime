@@ -1,15 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Styled } from './styles';
 
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 import AlbumSlideItem from './AlbumList';
-
+import WordCloudList from './WordCloudList';
 import useHorizontalScroll from './useHorizontalScroll';
 import useScrollButtonController from './useScrollButtonContainer';
 
-function Carousel({ songs, rankShown }) {
+function Carousel({ option = { rankShown: false, type: 'song' }, items }) {
     const { scroll, slideRef, slideWrapperRef } = useHorizontalScroll();
-
     const { onScroll, prevButtonShown, nextButtonShown } = useScrollButtonController({ slideRef });
 
     /*
@@ -40,9 +39,15 @@ function Carousel({ songs, rankShown }) {
                     ref={slideRef}
                     onScroll={(e) => onScrollActiveBtn(onScroll(e))}
                 >
-                    {songs.map((item, index) => (
-                        <AlbumSlideItem item={item} index={index} rankShown={rankShown} />
-                    ))}
+                    {option.type === 'song'
+                        ? items.map((item, index) => (
+                              <AlbumSlideItem
+                                  item={item}
+                                  index={index}
+                                  rankShown={option.rankShown}
+                              />
+                          ))
+                        : items.map((item, index) => <WordCloudList item={item} index={index} />)}
                 </Styled.SliderWrapper>
             </Styled.SliderContainer>
             <Styled.PrevBtn onClick={() => scroll(-1)} firstElemIntersect={prevButtonShown}>
