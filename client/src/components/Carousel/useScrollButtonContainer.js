@@ -17,11 +17,6 @@ export default function useScrollButtonController({ slideRef }) {
         checkButtonState(e.target.scrollWidth, e.target.offsetWidth, e.target.scrollLeft);
     }, []);
 
-    /* next, prev 버튼 활성화 여부  */
-    useEffect(() => {
-        console.log('useScrollButtonController rendering....');
-    });
-
     return {
         prevButtonShown,
         nextButtonShown,
