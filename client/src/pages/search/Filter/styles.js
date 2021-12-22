@@ -1,23 +1,46 @@
 import styled from '@emotion/styled';
 export const Styled = {};
 
+Styled.CategoryContainer = styled.div`
+    position: relative;
+`;
+
 Styled.CategoryList = styled.ul`
     width: 70%;
     display: flex;
     justify-content: space-around;
     flex-direction: row-reverse;
     margin: 30px auto;
+
+    ${(props) => props.theme.mq.tablet} {
+        flex-direction: column-reverse;
+    }
 `;
 
 Styled.Category = styled.li`
-    padding-bottom: 1rem;
+    padding: 1rem 0;
     border-bottom: ${(props) => (props.active ? `2px solid ${props.theme.primaryColor}` : 'none')};
     font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
 
     cursor: pointer;
+
+    ${(props) => props.theme.mq.tablet} {
+        width: 100%;
+        display: ${(props) => (props.openDropdown ? 'block' : props.active ? 'block' : 'none')};
+    }
 `;
 
-Styled.OptionsWrapper = styled.div`
+Styled.DropdownIcon = styled.div`
+    display: none;
+    ${(props) => props.theme.mq.tablet} {
+        position: absolute;
+        top: 16px;
+        right: 114px;
+        display: inline-block;
+    }
+`;
+
+Styled.OptionsContainer = styled.div`
     width: 70%;
     display: flex;
     margin: 0 auto;
