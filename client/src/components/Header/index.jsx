@@ -7,6 +7,7 @@ import trendLimeLogo from '../../assets/images/trend_lime_logo.PNG';
 
 function Header() {
     const [menuStatus, setMenuStatus] = useState(false);
+
     return (
         <header>
             <Styled.HeaderWrapper>
@@ -20,10 +21,14 @@ function Header() {
                 <Styled.HeaderMenu>
                     <Styled.HeaderMenuWrapper menuStatus={menuStatus}>
                         <li>
-                            <NavLink to={route.SEARCH}>곡 검색</NavLink>
+                            <NavLink to={route.SEARCH} onClick={() => setMenuStatus(false)}>
+                                곡 검색
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink to={route.ABOUT}>서비스 소개</NavLink>
+                            <NavLink to={route.ABOUT} onClick={() => setMenuStatus(false)}>
+                                서비스 소개
+                            </NavLink>
                         </li>
                     </Styled.HeaderMenuWrapper>
                     <Styled.MenuIcon>
@@ -36,4 +41,5 @@ function Header() {
     );
 }
 
-export default Header;
+/* 페이지 이동할 때마다 헤더가 계속 렌더링되기 때문에 memo 사용 */
+export default React.memo(Header);
