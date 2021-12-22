@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/react';
 import WordCloud from 'react-d3-cloud';
 import { scaleLinear } from 'd3-scale';
 
-function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue = 5 }) {
+function Wordcloud({ data, height = 200, width = 600, fontValue = 5 }) {
     const FilteredData = useMemo(
         () => data.map((d) => ({ text: d.word, value: Math.floor(parseFloat(d.freq) * 10) })),
         [data],
@@ -35,7 +35,7 @@ function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue =
     );
 
     return (
-        <div css={WordCloudWrapper({ width: width, height: height })}>
+        <div css={WordCloudWrapper}>
             <WordCloud
                 width={width}
                 height={height}
@@ -51,12 +51,10 @@ function Wordcloud({ data, height = 200, width = 600, fontsize = 15, fontValue =
     );
 }
 
-const WordCloudWrapper = ({ width, height }) => css`
+const WordCloudWrapper = css`
     background-color: #f5f8fc;
     border: 1px solid #cecece;
     border-radius: 8px;
-    width: ${width}px;
-    height: ${height}px;
 `;
 
 export default Wordcloud;

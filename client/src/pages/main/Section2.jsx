@@ -41,7 +41,7 @@ function Section2() {
                             <div css={BarChartSection}>
                                 <BarChart
                                     data={data?.words_and_freq.slice(1)}
-                                    width="70%"
+                                    width="90%"
                                     height="40%"
                                 />
                             </div>

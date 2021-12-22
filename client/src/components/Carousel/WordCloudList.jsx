@@ -5,7 +5,7 @@ import Wordcloud from '../WordCloud/index';
 
 function WordCloudItem({ index, item }) {
     return (
-        <div css={TopicList}>
+        <li css={TopicList}>
             <h4>
                 주제#{index + 1}
                 <br />
@@ -14,11 +14,11 @@ function WordCloudItem({ index, item }) {
             <Wordcloud
                 data={item.words_and_freq}
                 height={200}
-                width={650}
+                width={600}
                 fontsize={3}
                 fontValue={2}
             />
-        </div>
+        </li>
     );
 }
 
@@ -28,6 +28,9 @@ const TopicList = css`
     box-shadow: -2px 7px 4px 2px #0000001c;
     margin: 2rem 0;
     padding: 1.2rem;
+    flex-basis: 600px;
+    flex-grow: 0;
+    flex-shrink: 0;
 
     h4 {
         text-decoration: underline;
