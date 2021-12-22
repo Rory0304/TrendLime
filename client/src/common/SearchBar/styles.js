@@ -72,6 +72,7 @@ Styled.AutoCompleteArea = styled.div`
     box-shadow: 0 4px 6px 0 #17171724;
     border-top: 0;
     box-sizing: border-box;
+    z-index: 1;
 `;
 
 Styled.AutoCompleteResult = styled.div`
