@@ -8,7 +8,12 @@ AI 자연어 처리 기능으로 노래 가사 속 유의미한 표현과 트렌
 
 ## 1. 프로젝트 소개
 
-### 1) 제작 배경
+### 1) 바로가기
+[프론트엔드](https://github.com/Rory0304/TrendLime/tree/develop/client)  
+[백엔드](https://github.com/Rory0304/TrendLime/tree/develop/server)  
+[인공지능](https://github.com/Rory0304/TrendLime/tree/develop/ai)
+
+### 2) 제작 배경
 
 - 타겟층: 노래 가사 분석 정보가 필요한 아마추어/전문 작사가, 노래 가사에 관심이 있는 일반 사용자
 
@@ -19,12 +24,12 @@ AI 자연어 처리 기능으로 노래 가사 속 유의미한 표현과 트렌
     - 가사 데이터 분석 결과를 차트 시각화를 통해 한 눈에 확인할 수 있도록 합니다.
     - "이 곡과 비슷한 느낌의 가사" 곡을 추천하여, 유사한 곡 정보 탐색 과정을 단축합니다.
 
-### 2) 사용하려는 데이터   
+### 3) 사용하려는 데이터   
 - 벅스 연도 앨범 정보 크롤링 (10-20년도 TOP100 차트 노래 데이터)     
 - 벅스 차트 앨범 정보 크롤링   
 - 벅스 뮤직PD 앨범 정보 크롤링 (감정/기분 등 음악 특징이 라벨링된 벅스 데이터)      
 
-### 3) 기술 스택 / 사용 라이브러리 
+### 4) 기술 스택 / 사용 라이브러리 
 - 프론트엔드 : react, react-query, emotion  
 - 백엔드: flask, django  
 - 인공지능 : bert , (komoran, okt) , TF-IDF , sentencepeice    
