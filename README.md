@@ -1,7 +1,9 @@
-# 트렌드라임 (TrendLime)
+<p align='center'><img src="https://user-images.githubusercontent.com/42709747/147240920-bf1329fd-3ab5-4048-b0b9-8d9f45fdd9ba.png" height=100 /></p>
 
-- 연도/테마/장르별 노래 가사 분석 정보를 제공하고, 유사한 분위기의 가사를 가진 노래를 찾아주는 서비스입니다.  
-- AI 자연어 처리 기능으로 노래 가사 속 유의미한 표현과 트렌드를 파악합니다.
+<h1 align='center'>트렌드라임 (TrendLime)</h1>
+
+<p align='center'>연도/테마/장르별 노래 가사 분석 정보를 제공하고, 유사한 분위기의 가사를 가진 노래를 찾아주는 서비스입니다. <br/>
+AI 자연어 처리 기능으로 노래 가사 속 유의미한 표현과 트렌드를 파악합니다. </p>
 
 
 ## 1. 프로젝트 소개
