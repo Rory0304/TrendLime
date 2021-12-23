@@ -5,7 +5,6 @@
 2) npm install (or) yarn install
 
 3) npm start (or) yarn start
-
 ```
 
 <br/>
@@ -61,3 +60,6 @@ chore : 쓸모 없는 파일 제거 등 그 외의 자잘한 커밋
 `react-query: "^3.33.2"`        
 
 <br />
+
+## 프로젝트 소개
+https://github.com/Rory0304/TrendLime
